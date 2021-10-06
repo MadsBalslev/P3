@@ -1,0 +1,41 @@
+<div class="posterContainer">
+  <BasicInfo />
+  <div class="imgContainer">
+    <img class="poster" src="@imageSource">
+  </div>
+</div>
+
+@code
+{
+  System.Timers.Timer ImageTimer;
+  int currentPictureNumber = 0;
+  List<string> ImageSourceList = new List<string>()
+{
+"https://cdn.discordapp.com/attachments/755020353201373244/895224365711511612/image0.png",
+"http://via.placeholder.com/1920x1080",
+"http://via.placeholder.com/2560x1440",
+"https://wallpaperaccess.com/full/2703803.jpg",
+
+};
+
+  string imageSource { get => ImageSourceList[currentPictureNumber]; }
+
+  void nextPic(Object source, System.Timers.ElapsedEventArgs e)
+  {
+    if (currentPictureNumber < (ImageSourceList.Count - 1)) currentPictureNumber += 1;
+    else currentPictureNumber = 0;
+    InvokeAsync(StateHasChanged);
+  }
+
+  protected override void OnAfterRender(bool firstRender)
+  {
+    if (firstRender)
+    {
+      ImageTimer = new System.Timers.Timer(4000);
+      ImageTimer.Elapsed += nextPic;
+      ImageTimer.AutoReset = true;
+      ImageTimer.Start();
+    }
+
+  }
+}

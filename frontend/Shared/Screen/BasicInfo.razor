@@ -1,0 +1,23 @@
+@inject IJSRuntime JsRuntime
+
+<div class="info">
+  <h3 class="date"></h3>
+</div>
+
+@code {
+  System.Timers.Timer clockUpdateTimer;
+  protected override void OnInitialized()
+  {
+    clockUpdateTimer = new System.Timers.Timer(1000);
+    clockUpdateTimer.Elapsed += UpdateClock;
+    clockUpdateTimer.AutoReset = true;
+    clockUpdateTimer.Start();
+  }
+
+  void UpdateClock(object source, System.Timers.ElapsedEventArgs e) 
+  { 
+    JsRuntime.InvokeVoidAsync("GetDateTime");
+  } 
+ }
+
+

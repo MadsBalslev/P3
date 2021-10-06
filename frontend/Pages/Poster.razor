@@ -1,46 +1,5 @@
+@using frontend.Shared.Screen
+
 @page "/screen"
 
-<div class="imageContainer">
-  <img class="img" src="@imageSource">
-</div>
-
-@code
-{
-  System.Timers.Timer ImageTimer;
-  int currentPictureNumber = 0;
-  string newImg;
-  List<string> ImageSourceList = new List<string>()
-  {
-    "https://wallpaperaccess.com/full/2029165.jpg",
-    "https://cdn.discordapp.com/attachments/884376312079327262/894519937270423552/image0.png",
-    "https://cdn.discordapp.com/attachments/884376312079327262/890529560611934238/EwPMJ7TWYAQDCvP.png",
-    "https://cdn.discordapp.com/attachments/755020353201373244/886612139928866816/profilepicture.png",
-  };
-
-  string imageSource { get => ImageSourceList[currentPictureNumber]; }
-
-  void nextPic(Object source, System.Timers.ElapsedEventArgs e)
-  {
-    if (currentPictureNumber < (ImageSourceList.Count - 1)) currentPictureNumber += 1;
-    else currentPictureNumber = 0;
-
-    System.Console.WriteLine(currentPictureNumber);
-    InvokeAsync(StateHasChanged);
-  }
-
-  void AddImg()
-  {
-    ImageSourceList.Add(newImg);
-  }
-
-  protected override void OnAfterRender(bool firstRender)
-  {
-    if (firstRender)
-    {
-      ImageTimer = new System.Timers.Timer(4000);
-      ImageTimer.Elapsed += nextPic;
-      ImageTimer.AutoReset = true;
-      ImageTimer.Start();
-    }
-  }
-}
+<PosterShower />
