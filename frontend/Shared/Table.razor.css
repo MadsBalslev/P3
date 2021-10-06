@@ -1,0 +1,19 @@
+.compTable {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    table-layout: fixed;
+    empty-cells: show;
+    border: 1px solid black;    
+    max-width: 800px;
+}
+
+.compTable > td, th {
+    border: 1px solid #000000;
+    text-align: left;
+    padding-right: 50px;
+    padding-left: 5px;
+}
+  
+.compTable > tr:nth-child(even) {
+    background-color: #ff0000;
+}

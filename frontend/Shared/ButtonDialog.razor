@@ -1,0 +1,14 @@
+<button @onclick="OnPress">@BtnText</button>
+
+
+@code {
+    [Parameter]
+    public string BtnText { get; set; }
+
+    private GenerateDiv GenDiv;
+
+    private void OnPress()
+    {
+        Console.WriteLine("sussy");
+    }
+}
