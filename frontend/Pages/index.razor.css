@@ -1,0 +1,24 @@
+.Login{
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+#Log{
+    background-color: black;
+    border-color: black;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 1px 78px;
+    cursor: pointer;
+    border-radius: 7px;
+    
+}
+#Log:hover{
+    background-color: white;
+    border-color: black;
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
