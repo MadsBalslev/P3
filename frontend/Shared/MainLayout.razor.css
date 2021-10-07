@@ -88,6 +88,7 @@
     cursor: pointer;
     padding: 8px 4px;
     border-radius: 7px;
+    transition: 0.3s;
 }
 
 .top-row-btn:hover {
@@ -101,6 +102,7 @@
     margin: 4px 2px;
     cursor: pointer;
     padding: 8px 4px; 
+    transition: 0.3s;
 }
 
 #log{
@@ -117,6 +119,7 @@
     border-radius: 7px;
     position: relative;
     left: 50%;
+    transition: 0.3s;
     
 }
 #log:hover{
@@ -131,6 +134,7 @@
     cursor: pointer;
     position: relative;
     left: 50%;
+    transition: 0.3s;
 }
 
 #Gear{
@@ -144,6 +148,7 @@
     position: absolute;
     left: 91%;
     display: block;
+    transition: 0.3s;
 }
 
 .dropdown-content{
@@ -154,12 +159,14 @@
     z-index: 1;
     border-color: black;
     text-align: center;
+    transition: 0.3s;
 }
 #DropdownBTN{
     position: absolute;
     background-color: white;
     color: black;
     border-color: black;
+    transition: 0.3s;
 }
 
 #DropdownBTN:hover{
@@ -168,16 +175,23 @@
     color: white;
     z-index: 1;
     text-align: center;
+    transition: 0.3s;
 }
 
 .dropdown:hover .dropdown-content{
     display: block;
     border-color: black;
     text-align: left;
+    transition: 0.3s;
 }
 
 #Home{
     font-size: 70px;
     position: relative;
     bottom: 5px;
+}
+
+#Home:hover{
+    transform: scale(1.1);
+    transition: 0.3s;
 }
