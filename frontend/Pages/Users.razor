@@ -1,5 +1,6 @@
 @page "/users/"
 
+
 <div class="UserContainer">
     <div class = "UserView">
         <div class = "Btn">
@@ -7,38 +8,40 @@
         </div>
         <div class = "Table">
             <TableTemplate Items="users" Context="user">
-            <TableHeader>
-                <th>Fornavn</th>
-                <th>Efternavn</th>
-                <th>Email</th>
-                <th>Institution</th>
-                <th>Rolle</th>
-            </TableHeader>
-            <RowTemplate>
-                <td>@user.Fornavn</td>
-                <td>@user.Efternavn</td>
-                <td>@user.Email</td>
-                <td>@user.Institution</td>
-                <td>@user.Rolle</td>
-            </RowTemplate>
-        </TableTemplate>
+                <TableHeader>
+                    <th>Fornavn</th>
+                    <th>Efternavn</th>
+                    <th>Email</th>
+                    <th>Institution</th>
+                    <th>Rolle</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@user.Fornavn</td>
+                    <td>@user.Efternavn</td>
+                    <td>@user.Email</td>
+                    <td>@user.Institution</td>
+                    <td>@user.Rolle</td>
+                </RowTemplate>
+            </TableTemplate>
         </div>
     </div>
 
-    <div class="UserManagement">
-        @if (CurrentMode == Mode.Initial)
-        {
-            <h1>Test</h1>
-        }
-        else if (CurrentMode == Mode.Edit)
-        {
-            <EditUser />
-        }
-        else if (CurrentMode == Mode.Create)
-        {
-            <CreateUser />
-        }
-    </div>
+        <div class="UserManagement">
+            @if (CurrentMode == Mode.Initial)
+            {
+                <h1>Test</h1>
+            }
+            else if (CurrentMode == Mode.Edit)
+            {
+                <EditUser />
+            }
+            else if (CurrentMode == Mode.Create)
+            {
+                <CascadingValue Value="users">
+                    <CreateUser />
+                </CascadingValue>
+            }
+        </div>
 </div>
 
 @code
@@ -51,23 +54,14 @@
         "Rolle",
         " ",
     }; *@
-    private List<User> users = new()
-    {
-        new User { Fornavn = "Simon", Efternavn = "", Institution = "", Rolle = "", },
-        new User { Fornavn = "Patrick", Efternavn = "Bertelsen", Email = "test@test.dk", Institution = "Gamer", Rolle = "System admin" },
-    };
-
-    private class User
-    {
-        public string Fornavn { get; set; }
-        public string Efternavn { get; set; }
-        public string Email { get; set; }
-        public string Institution {get; set; }
-        public string Rolle {get; set; }
-    }
-
-
-
+    
+    public List<User> users = new List<User>();
+    
+    @* {
+        new User ("Simon", "Andersen", "gaming@gaming.dk", "Nordkraft", "Gamer"),
+        new User ("Patrick", "Bertelsen", "test@test.dk",  "Gamer", "System admin"),
+        new User ("Nicolai", "Bertelsen", "test@test.dk",  "Gamer", "System admin"),
+    }; *@
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
