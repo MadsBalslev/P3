@@ -1,10 +1,52 @@
 @page "/users/"
 
-<div class = "UserView">
-    <div class = "Btn">
-        <ButtonDialog BtnText="Create user"></ButtonDialog>
+<div class="UserContainer">
+    <div class = "UserView">
+        <div class = "Btn">
+            <button @onclick="CreateUser">Create user</button>
+        </div>
+        <div class = "Table">
+            <Table Columns="List"></Table>
+        </div>
     </div>
-    <div class = "Table">
-        <Table Column1="Fornavn" Column2="Efternavn" Column3="Rolle" Column4="Institution" Column5="Edit"></Table>
+
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1>Test</h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            <EditUser />
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreateUser />
+        }
     </div>
 </div>
+
+@code
+{
+    List<string> List = new List<string>()
+    {
+        "Fornavn",
+        "Efternavn",
+        "Institution",
+        "Rolle",
+        " ",
+    };
+
+    Mode CurrentMode { get; set; } = Mode.Initial;
+    enum Mode
+    {
+        Initial,
+        Edit,
+        Create
+    }
+    
+    private void CreateUser()
+    {
+        CurrentMode = Mode.Create;   
+    }
+}

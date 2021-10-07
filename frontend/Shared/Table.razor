@@ -1,11 +1,10 @@
 <table class = "compTable">
 <thead>
     <tr>
-        <th>@Column1</th>
-        <th>@Column2</th>
-        <th>@Column3</th>
-        <th>@Column4</th>
-        <th>@Column5</th>
+        @foreach (string header in Columns)
+        {
+            <th>@header</th>
+        }
     </tr>
 </thead>
 <tbody>
@@ -14,7 +13,7 @@
         <td>1</td>
         <td>asd</td>
         <td>1</td>
-        <td>2</td>
+        <td class="tableBtn">Edit</td>
     </tr>
     <tr>
         <td>1</td>
@@ -29,16 +28,5 @@
 
 @code{
     [Parameter]
-    public string Column1 { get; set; }
-    [Parameter]
-    public string Column2 { get; set; }
-    [Parameter]
-    public string Column3 { get; set; }
-    [Parameter]
-    public string Column4 { get; set; }
-    [Parameter]
-    public string Column5 { get; set; }
-
-
-
-}
+    public IReadOnlyList<string> Columns {get; set;}
+};

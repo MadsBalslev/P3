@@ -1,10 +1,10 @@
 .compTable {
-    font-family: arial, sans-serif;
+    font-size: 1em;
     border-collapse: collapse;
     table-layout: fixed;
     empty-cells: show;
-    border: 1px solid black;    
-    max-width: 800px;
+    border: 1px solid black;
+    width: 100%;
 }
 
 .compTable > td, th {
@@ -16,4 +16,19 @@
   
 .compTable > tr:nth-child(even) {
     background-color: #ff0000;
+}
+
+.tableBtn {
+    color: blue;
+}
+
+.tableBtn:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1030px) {
+    .compTable {
+        max-width: 100%;
+    }
 }
