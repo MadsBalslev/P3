@@ -1,3 +1,5 @@
+@using System.Collections.ObjectModel
+
 <form>
     <label for="fname">Fornavn:</label>
     <input type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
@@ -9,7 +11,7 @@
     <label for="institution">Vælg institution:</label>
     <select name="institution" id="institution" required>
         <option value="Nordkraft">Nordkraft</option>
-        <option value="DGI_Huset">DGI Huset</option>
+        <option value="DGI_Huset">DGI Huset</option>    
         <option value="Nicolai_Mor">Nicolai's Mor</option>
     </select>
 
@@ -22,4 +24,37 @@
 
     <input class="CUSER_submit"type="submit" value="Submit">
 </form>
- 
+
+@code {
+    
+    ObservableCollection<ListDataModel> UserData = new ObservableCollection<ListDataModel>()
+    {
+        new ListDataModel{ Id = 1, Fornavn = "Simon", Efternavn = "", Institution = "", Rolle = "", },
+    };
+
+    void OnDelete(ListDataModel listDataModel)
+    {
+        UserData.RemoveAt(UserData.ToList<ListDataModel>().FindIndex(e => e.Id == listDataModel.Id  ));
+    }
+
+    void AddItem(int Id, string FName, string LName, string Email, string Institution, string Role)
+    {
+        UserData.Add(new ListDataModel
+        {
+            Id = Id,
+            Fornavn = FName,
+            Efternavn = LName,
+            Institution = Institution,
+            Rolle = Role,
+        });
+    }
+
+    public class ListDataModel
+    {
+        public int Id { get; set; }
+        public string Fornavn { get; set; }
+        public string Efternavn { get; set; }
+        public string Institution { get; set; }
+        public string Rolle { get; set; }
+    }
+}

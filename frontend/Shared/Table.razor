@@ -9,19 +9,18 @@
 </thead>
 <tbody>
     <tr>
+        @foreach (string row in Rows)
+        {
+            <td>@row</td>
+        }
+    </tr>
+    <tr>
         <td>1 </td>
         <td>1</td>
         <td>asd</td>
         <td>1</td>
         <td class="tableBtn">Edit</td>
     </tr>
-    <tr>
-        <td>1</td>
-        <td>1</td>
-        <td>asd</td>
-        <td>1</td>
-        <td>2</td>
-    </tr>  
 </tbody>
 </table>
 
@@ -29,4 +28,11 @@
 @code{
     [Parameter]
     public IReadOnlyList<string> Columns {get; set;}
-};
+
+    [Parameter]
+    public IReadOnlyList<string> Rows {get; set; }
+
+
+
+
+}

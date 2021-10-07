@@ -6,7 +6,20 @@
             <button @onclick="CreateUser">Create user</button>
         </div>
         <div class = "Table">
-            <Table Columns="List"></Table>
+            <TableTemplate Items="users" Context="user">
+            <TableHeader>
+                <th>Fornavn</th>
+                <th>Efternavn</th>
+                <th>Institution</th>
+                <th>Rolle</th>
+            </TableHeader>
+            <RowTemplate>
+                <td>@user.Fornavn</td>
+                <td>@user.Efternavn</td>
+                <td>@user.Institution</td>
+                <td>@user.Rolle</td>
+            </RowTemplate>
+        </TableTemplate>
         </div>
     </div>
 
@@ -28,14 +41,30 @@
 
 @code
 {
-    List<string> List = new List<string>()
+    @* List<string> HeaderData = new List<string>()
     {
         "Fornavn",
         "Efternavn",
         "Institution",
         "Rolle",
         " ",
+    }; *@
+    private List<User> users = new()
+    {
+        new User { Fornavn = "Simon", Efternavn = "", Institution = "", Rolle = "", },
+        new User{ Fornavn = "Patrick", Efternavn = "Bertelsen", Institution = "Gamer", Rolle = "System admin" },
     };
+
+    private class User
+    {
+        public string Fornavn { get; set; }
+        public string Efternavn { get; set; }
+        public string Institution {get; set; }
+        public string Rolle {get; set; }
+    }
+
+
+
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
