@@ -11,7 +11,7 @@
     <label for="institution">Vælg institution:</label>
     <select @bind="BindInstitution" name="institution" id="institution" required>
         <option value="Nordkraft">Nordkraft</option>
-        <option value="DGI_Huset">DGI Huset</option>    
+        <option value="DGI_Huset">DGI Huset</option>
         <option value="Nicolai_Mor">Nicolai's Mor</option>
     </select>
 
@@ -22,7 +22,7 @@
         <option value="Institution_user">Institution Bruger</option>
     </select>
 
-    <input @onclick="AddUser" class="CUSER_submit" type="submit" value="Submit">
+    <input @onclick="OnAddUser" class="CUSER_submit" type="button" value="Submit">
 </form>
 
 @code {
@@ -32,16 +32,13 @@
     private string BindInstitution { get; set; }
     private string BindRole { get; set; }
 
-    [CascadingParameter]
-    public List<User> users { get; set;}
-
-    private void AddUser()
+    private void OnAddUser()
     {
-        User user1 = new User(BindName, BindLastname, BindEmail, BindInstitution, BindRole);
-        users.Add(user1);
-        foreach (User user in users)
-        {
-            Console.WriteLine(user.Fornavn);
-        }
+        User user = new User(BindName, BindLastname, BindEmail, BindInstitution, BindRole);
+        OnAddUserCallback.InvokeAsync(user);
     }
+
+    [Parameter]
+    public EventCallback<User> OnAddUserCallback {get; set;}
+
 }

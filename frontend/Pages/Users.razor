@@ -37,31 +37,14 @@
             }
             else if (CurrentMode == Mode.Create)
             {
-                <CascadingValue Value="users">
-                    <CreateUser />
-                </CascadingValue>
+                <CreateUser OnAddUserCallback="@users.Add"></CreateUser>
             }
         </div>
 </div>
 
 @code
 {
-    @* List<string> HeaderData = new List<string>()
-    {
-        "Fornavn",
-        "Efternavn",
-        "Institution",
-        "Rolle",
-        " ",
-    }; *@
-    
     public List<User> users = new List<User>();
-    
-    @* {
-        new User ("Simon", "Andersen", "gaming@gaming.dk", "Nordkraft", "Gamer"),
-        new User ("Patrick", "Bertelsen", "test@test.dk",  "Gamer", "System admin"),
-        new User ("Nicolai", "Bertelsen", "test@test.dk",  "Gamer", "System admin"),
-    }; *@
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
