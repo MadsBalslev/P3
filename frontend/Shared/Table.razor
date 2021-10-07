@@ -1,0 +1,32 @@
+<table class = "compTable">
+<thead>
+    <tr>
+        @foreach (string header in Columns)
+        {
+            <th>@header</th>
+        }
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>1 </td>
+        <td>1</td>
+        <td>asd</td>
+        <td>1</td>
+        <td class="tableBtn">Edit</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1</td>
+        <td>asd</td>
+        <td>1</td>
+        <td>2</td>
+    </tr>  
+</tbody>
+</table>
+
+
+@code{
+    [Parameter]
+    public IReadOnlyList<string> Columns {get; set;}
+};
