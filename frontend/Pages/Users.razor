@@ -10,12 +10,14 @@
             <TableHeader>
                 <th>Fornavn</th>
                 <th>Efternavn</th>
+                <th>Email</th>
                 <th>Institution</th>
                 <th>Rolle</th>
             </TableHeader>
             <RowTemplate>
                 <td>@user.Fornavn</td>
                 <td>@user.Efternavn</td>
+                <td>@user.Email</td>
                 <td>@user.Institution</td>
                 <td>@user.Rolle</td>
             </RowTemplate>
@@ -52,13 +54,14 @@
     private List<User> users = new()
     {
         new User { Fornavn = "Simon", Efternavn = "", Institution = "", Rolle = "", },
-        new User{ Fornavn = "Patrick", Efternavn = "Bertelsen", Institution = "Gamer", Rolle = "System admin" },
+        new User { Fornavn = "Patrick", Efternavn = "Bertelsen", Email = "test@test.dk", Institution = "Gamer", Rolle = "System admin" },
     };
 
     private class User
     {
         public string Fornavn { get; set; }
         public string Efternavn { get; set; }
+        public string Email { get; set; }
         public string Institution {get; set; }
         public string Rolle {get; set; }
     }

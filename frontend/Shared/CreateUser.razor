@@ -2,58 +2,67 @@
 
 <form>
     <label for="fname">Fornavn:</label>
-    <input type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
+    <input @bind="BindFornavn" type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
     <label for="lname">Efternavn:</label>
-    <input type="text" id="lname" name="lname" placeholder="Indtast efternavn..." required><br>
+    <input @bind="BindEfternavn" type="text" id="lname" name="lname" placeholder="Indtast efternavn..." required><br>
     <label for="email">Email:</label>
-    <input type="text" id="email" name="email" placeholder="Indtast email..." required><br>
+    <input @bind="BindEmail" type="text" id="email" name="email" placeholder="Indtast email..." required><br>
 
     <label for="institution">Vælg institution:</label>
-    <select name="institution" id="institution" required>
+    <select @bind="BindInstitution" name="institution" id="institution" required>
         <option value="Nordkraft">Nordkraft</option>
         <option value="DGI_Huset">DGI Huset</option>    
         <option value="Nicolai_Mor">Nicolai's Mor</option>
     </select>
 
     <label for="role">Vælg rolle:</label>
-    <select name="institution" id="institution" required>
+    <select @bind="BindRolle" name="role" id="role" required>
         <option value="System_admin">System Admin</option>
         <option value="Institution_admin">Institutions Admin</option>
         <option value="Institution_user">Institution Bruger</option>
     </select>
 
-    <input class="CUSER_submit"type="submit" value="Submit">
+    <input @onclick="@AddItem" class="CUSER_submit" type="submit" value="Submit">
 </form>
 
 @code {
+
+    private string BindFornavn { get; set; }
+    private string BindEfternavn { get; set; }
+    private string BindEmail { get; set; }
+    private string BindRolle { get; set; }
+    private string BindInstitution { get; set; }
+    
     
     ObservableCollection<ListDataModel> UserData = new ObservableCollection<ListDataModel>()
     {
-        new ListDataModel{ Id = 1, Fornavn = "Simon", Efternavn = "", Institution = "", Rolle = "", },
+        new ListDataModel("Simon", "Pronk", "tis", "tis", "tis"),
     };
 
-    void OnDelete(ListDataModel listDataModel)
+    @*void OnDelete(ListDataModel listDataModel)
     {
         UserData.RemoveAt(UserData.ToList<ListDataModel>().FindIndex(e => e.Id == listDataModel.Id  ));
-    }
+    }*@
 
-    void AddItem(int Id, string FName, string LName, string Email, string Institution, string Role)
+    void AddItem()
     {
-        UserData.Add(new ListDataModel
-        {
-            Id = Id,
-            Fornavn = FName,
-            Efternavn = LName,
-            Institution = Institution,
-            Rolle = Role,
-        });
+        UserData.Add(new ListDataModel(BindFornavn, BindEfternavn, BindEmail, BindInstitution, BindRolle));
     }
 
     public class ListDataModel
     {
-        public int Id { get; set; }
+        public ListDataModel(string fornavn, string efternavn, string email, string institution, string rolle)
+        {
+            Fornavn = fornavn;
+            Efternavn = efternavn;
+            Email = email;
+            Institution = institution;
+            Rolle = rolle;
+        }
+
         public string Fornavn { get; set; }
         public string Efternavn { get; set; }
+        public string Email { get; set; }
         public string Institution { get; set; }
         public string Rolle { get; set; }
     }
