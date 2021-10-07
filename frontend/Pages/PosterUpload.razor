@@ -1,9 +1,19 @@
 @page "/screen/upload"
+@inject AppState AppState
 
 <div class="container">
   <h2>Enter Url to upload image</h2>
   <div class="form">
-    <input id="urlInput" class="form-control" type="text" placeholder="Link to an image...">
-    <button type="button" class="btn btn-success">Upload</button>
+    <input @bind="source" id="urlInput" class="form-control" type="text" placeholder="Link to an image...">
+    <button type="button" class="btn btn-success" @onclick="AddSource">Upload</button>
   </div>
 </div>
+
+@code {
+
+  string source {get; set; }
+  public void AddSource() {
+    AppState.Add(source);
+    source = "";
+  }
+}

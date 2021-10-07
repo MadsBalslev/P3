@@ -1,3 +1,5 @@
+@inject AppState AppState
+
 <div class="posterContainer">
   <BasicInfo />
   <div class="imgContainer">
@@ -9,14 +11,8 @@
 {
   System.Timers.Timer ImageTimer;
   int currentPictureNumber = 0;
-  List<string> ImageSourceList = new List<string>()
-{
-"https://cdn.discordapp.com/attachments/755020353201373244/895224365711511612/image0.png",
-"http://via.placeholder.com/1920x1080",
-"http://via.placeholder.com/2560x1440",
-"https://wallpaperaccess.com/full/2703803.jpg",
 
-};
+  IReadOnlyList<String> ImageSourceList;
 
   string imageSource { get => ImageSourceList[currentPictureNumber]; }
 
@@ -37,5 +33,10 @@
       ImageTimer.Start();
     }
 
+  }
+
+  protected override void OnInitialized()
+  {
+    ImageSourceList = AppState.ImgSources;
   }
 }
