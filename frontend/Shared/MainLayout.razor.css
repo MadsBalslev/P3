@@ -8,41 +8,190 @@
     flex: 1;
 }
 
-@media (max-width: 640.98px) {
-    .top-row:not(.auth) {
-        display: none;
-    }
-
-    .top-row.auth {
-        justify-content: space-between;
-    }
-
-    .top-row a,
-    .top-row .btn-link {
-        margin-left: 0;
-    }
+.top-row {
+    background-color: #e7e7e7; 
+    color: black;
+    border-bottom: 1px solid #d6d5d5;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
 }
 
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
+    .top-row ::deep a, .top-row .btn-link {
+        white-space: nowrap;
+        margin-left: 10.5rem;
     }
 
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+    .top-row a:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
+/* #pmanager {
+    background-color: white;
+    border-color: black;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
 
-    .main>div {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
+
+#umanager {
+    background-color: white;
+    border-color: black;
+    color: black;
+   text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#imanager {
+    background-color: white;
+    border-color: black;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#smanager {
+    background-color: white;
+    border-color: black;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+*/
+.top-row-btn {
+    background-color: white;
+    border-color: black;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    padding: 8px 4px;
+    border-radius: 7px;
+    transition: 0.3s;
+}
+
+.top-row-btn:hover {
+    background-color: black;
+    border-color: black;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    padding: 8px 4px; 
+    transition: 0.3s;
+}
+
+#log{
+    background-color: white;
+    border-color: black;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    padding: 8px 4px;
+    border-radius: 7px;
+    position: relative;
+    left: 50%;
+    transition: 0.3s;
+    
+}
+#log:hover{
+    background-color: black;
+    border-color: black;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    position: relative;
+    left: 50%;
+    transition: 0.3s;
+}
+
+#Gear{
+    font-size: 50px;
+    display: block;
+    position: relative;
+    left: 3%;
+}
+
+.dropdown{
+    position: absolute;
+    left: 91%;
+    display: block;
+    transition: 0.3s;
+}
+
+.dropdown-content{
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    z-index: 1;
+    border-color: black;
+    text-align: center;
+    transition: 0.3s;
+}
+#DropdownBTN{
+    position: absolute;
+    background-color: white;
+    color: black;
+    border-color: black;
+    transition: 0.3s;
+}
+
+#DropdownBTN:hover{
+    position: absolute;
+    background-color: black;
+    color: white;
+    z-index: 1;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.dropdown:hover .dropdown-content{
+    display: block;
+    border-color: black;
+    text-align: left;
+    transition: 0.3s;
+}
+
+#Home{
+    font-size: 70px;
+    position: relative;
+    bottom: 5px;
+}
+
+#Home:hover{
+    transform: scale(1.1);
+    transition: 0.3s;
 }

@@ -1,0 +1,24 @@
+.UserContainer {
+    margin: 0;
+    height: calc(100vh - 5rem);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.UserView, .UserManagement {
+    width: 49%;
+    border: 2px solid #000000;
+}
+
+.Btn {
+    padding: 5px 0 0 10px;
+}
+
+.Table {
+    margin-top: 10px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
