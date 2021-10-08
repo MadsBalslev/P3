@@ -1,0 +1,16 @@
+.posterContainer {
+  text-align: center;
+  background-color: black;
+  height: 100vh;
+  width: 100vw;
+}
+
+.imgContainer {
+  height: calc(100% - 40px);
+  width: 100%;
+}
+
+.poster {
+  max-height: 100%;
+  width: auto;
+}

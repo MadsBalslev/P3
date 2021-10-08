@@ -4,11 +4,14 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100vh;
 }
 
-a, .btn-link {
+a,
+.btn-link {
     color: #0366d6;
 }
 
@@ -46,9 +49,9 @@ a, .btn-link {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
