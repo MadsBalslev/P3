@@ -1,5 +1,6 @@
 @page "/screen/upload"
 @inject AppState AppState
+@inject NavigationManager NavManager
 
 <div class="container">
   <h2>Enter Url to upload image</h2>
@@ -10,10 +11,10 @@
 </div>
 
 @code {
-
   string source {get; set; }
   public void AddSource() {
     AppState.Add(source);
     source = "";
+    NavManager.NavigateTo("/screen");
   }
 }
