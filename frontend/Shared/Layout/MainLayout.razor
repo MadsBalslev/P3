@@ -9,7 +9,6 @@
       @if (AppState.Auth)
       {
         <div class="left-nav">
-          <span id="Home" type="submit" @onclick='() => GoTo("/home")'>&#8962;</span>
           @if (AppState.Role == "user" || AppState.Role == "inst_admin" || AppState.Role == "sys_admin")
           {
             <button type="submit" id="pmanager" class="top-row-btn" @onclick='() => GoTo("/PosterManagement")'>Poster
@@ -29,14 +28,14 @@
           }
         </div>
         <div class="right-nav">
-          <button type="submit" id="log" @onclick="LogOut">Logout</button>
           <div class="dropdown">
             <span id="Gear">&#9881;</span>
             <div class="dropdown-content">
-              <p><button type="submit" style="position: relative;" id="DropdownBTN"
-                @onclick='() => GoTo("/EditInformation")'>Change Password</button></p>
+              <button class="top-row-btn" type="submit" style="position: relative;"
+                @onclick='() => GoTo("/EditInformation")'>Change Password</button>
             </div>
           </div>
+          <button type="submit" class="top-row-btn" @onclick="LogOut">Logout</button>
         </div>
       }
 
