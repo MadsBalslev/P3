@@ -9,10 +9,12 @@
         <div class="Table">
             <TableTemplate Items="institutions" Context="institution">
                 <TableHeader>
-                    <th>Institution Navn</th>
+                    <th>Institution</th>
+                    <th>Admin</th>
                 </TableHeader>
                 <RowTemplate>
-                    <td>@institution.InstitutionNavn</td>
+                    <td>@institution.Navn</td>
+                    <td>@institution.Admin</td>
                 </RowTemplate>
             </TableTemplate>
         </div>

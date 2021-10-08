@@ -1,9 +1,11 @@
 public class Institution
 {
-    public Institution(string institutionNavn)
+    public Institution(string institutionNavn, string admin )
     {
-        InstitutionNavn = institutionNavn;
+        Navn = institutionNavn;
+        Admin = admin; 
     }
-    public string InstitutionNavn { get; set; }
+    public string Navn { get; set; }
+    public string Admin { get; set; }
 
 }
