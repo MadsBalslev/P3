@@ -2,23 +2,24 @@
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
-<div class="Login">
-    <input type="text" id="Usernamebox" placeholder="Enter Username" name="Uname" required>
-</div>
-<div class="Login">
-    <input type="text" id="Passwordbox" placeholder="Enter Password" name="Pword" required>
-</div>
-<div class="Login">
-    <button type="submit" id="Log" @onclick="MoveMeToHome">Login</button>
-</div>
-<div class="Login">
-    <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
-</div>
-<div class="Login">
+<!-- Skal være en form istedet for mange forskellige div's -->
+<div class="container">
+    <form action="" @onsubmit="MoveMeToHome">
+        <div class="form-group">
+            <input type="email" id="Usernamebox" placeholder="Enter email" name="Uname" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="Passwordbox" placeholder="Enter Password" name="Pword" required>
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
+        </div>
+        <button type="submit" id="Log" @onclick="MoveMeToHome">Login</button>
+    </form>
     <span class="psw"><a href="/ForgotPassword">Forgot password?</a></span>
 </div>
 
-@code{
+@code {
     void MoveMeToHome()
     {
         NavigationManager.NavigateTo(uri: "/Home");

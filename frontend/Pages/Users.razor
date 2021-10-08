@@ -2,11 +2,11 @@
 
 
 <div class="UserContainer">
-    <div class = "UserView">
-        <div class = "Btn">
+    <div class="UserView">
+        <div class="Btn">
             <button @onclick="CreateUser">Create user</button>
         </div>
-        <div class = "Table">
+        <div class="Table">
             <TableTemplate Items="users" Context="user">
                 <TableHeader>
                     <th>Fornavn</th>
@@ -26,20 +26,20 @@
         </div>
     </div>
 
-        <div class="UserManagement">
-            @if (CurrentMode == Mode.Initial)
-            {
-                <h1>Test</h1>
-            }
-            else if (CurrentMode == Mode.Edit)
-            {
-                <EditUser />
-            }
-            else if (CurrentMode == Mode.Create)
-            {
-                <CreateUser OnAddUserCallback="@users.Add"></CreateUser>
-            }
-        </div>
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1>Test</h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            <!-- <EditUser /> -->
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreateUser OnAddUserCallback="@users.Add"></CreateUser>
+        }
+    </div>
 </div>
 
 @code
@@ -53,9 +53,9 @@
         Edit,
         Create
     }
-    
+
     private void CreateUser()
     {
-        CurrentMode = Mode.Create;   
+        CurrentMode = Mode.Create;
     }
 }
