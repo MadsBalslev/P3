@@ -1,16 +1,24 @@
-.table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
+.UserContainer {
+    margin: 0;
+    height: calc(100vh - 5rem);
     width: 100%;
-    table-layout: fixed;
+    display: flex;
+    justify-content: space-between;
 }
 
-.td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding-right: 100px;
+.UserView, .UserManagement {
+    width: 49%;
+    border: 2px solid #000000;
 }
-  
-.tr:nth-child(even) {
-    background-color: #dddddd;
+
+.Btn {
+    padding: 5px 0 0 10px;
 }
+
+.Table {
+    margin-top: 10px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
