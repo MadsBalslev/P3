@@ -26,10 +26,5 @@
 }
 #Log:hover {
   background-color: rgba(0, 0, 0, 0.582);
-  border-color: black;
-  color: black;
-  text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
+  color: white;
 }
