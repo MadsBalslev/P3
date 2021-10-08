@@ -1,41 +1,50 @@
 @page "/users/"
 
+
 <div class="UserContainer">
     <div class = "UserView">
         <div class = "Btn">
             <button @onclick="CreateUser">Create user</button>
         </div>
         <div class = "Table">
-            <Table Columns="List"></Table>
+            <TableTemplate Items="users" Context="user">
+                <TableHeader>
+                    <th>Fornavn</th>
+                    <th>Efternavn</th>
+                    <th>Email</th>
+                    <th>Institution</th>
+                    <th>Rolle</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@user.Fornavn</td>
+                    <td>@user.Efternavn</td>
+                    <td>@user.Email</td>
+                    <td>@user.Institution</td>
+                    <td>@user.Rolle</td>
+                </RowTemplate>
+            </TableTemplate>
         </div>
     </div>
 
-    <div class="UserManagement">
-        @if (CurrentMode == Mode.Initial)
-        {
-            <h1>Test</h1>
-        }
-        else if (CurrentMode == Mode.Edit)
-        {
-            <EditUser />
-        }
-        else if (CurrentMode == Mode.Create)
-        {
-            <CreateUser />
-        }
-    </div>
+        <div class="UserManagement">
+            @if (CurrentMode == Mode.Initial)
+            {
+                <h1>Test</h1>
+            }
+            else if (CurrentMode == Mode.Edit)
+            {
+                <EditUser />
+            }
+            else if (CurrentMode == Mode.Create)
+            {
+                <CreateUser OnAddUserCallback="@users.Add"></CreateUser>
+            }
+        </div>
 </div>
 
 @code
 {
-    List<string> List = new List<string>()
-    {
-        "Fornavn",
-        "Efternavn",
-        "Institution",
-        "Rolle",
-        " ",
-    };
+    public List<User> users = new List<User>();
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode

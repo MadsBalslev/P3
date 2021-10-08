@@ -1,25 +1,44 @@
+@using System.Collections.ObjectModel
+
 <form>
     <label for="fname">Fornavn:</label>
-    <input type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
+    <input @bind="BindName" type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
     <label for="lname">Efternavn:</label>
-    <input type="text" id="lname" name="lname" placeholder="Indtast efternavn..." required><br>
+    <input @bind="BindLastname" type="text" id="lname" name="lname" placeholder="Indtast efternavn..." required><br>
     <label for="email">Email:</label>
-    <input type="text" id="email" name="email" placeholder="Indtast email..." required><br>
+    <input @bind="BindEmail" type="text" id="email" name="email" placeholder="Indtast email..." required><br>
 
     <label for="institution">Vælg institution:</label>
-    <select name="institution" id="institution" required>
+    <select @bind="BindInstitution" name="institution" id="institution" required>
         <option value="Nordkraft">Nordkraft</option>
         <option value="DGI_Huset">DGI Huset</option>
         <option value="Nicolai_Mor">Nicolai's Mor</option>
     </select>
 
     <label for="role">Vælg rolle:</label>
-    <select name="institution" id="institution" required>
+    <select @bind="BindRole" name="role" id="role" required>
         <option value="System_admin">System Admin</option>
         <option value="Institution_admin">Institutions Admin</option>
         <option value="Institution_user">Institution Bruger</option>
     </select>
 
-    <input class="CUSER_submit"type="submit" value="Submit">
+    <input @onclick="OnAddUser" class="CUSER_submit" type="button" value="Submit">
 </form>
- 
+
+@code {
+    private string BindName { get; set; }
+    private string BindLastname { get; set; }
+    private string BindEmail { get; set; }
+    private string BindInstitution { get; set; }
+    private string BindRole { get; set; }
+
+    private void OnAddUser()
+    {
+        User user = new User(BindName, BindLastname, BindEmail, BindInstitution, BindRole);
+        OnAddUserCallback.InvokeAsync(user);
+    }
+
+    [Parameter]
+    public EventCallback<User> OnAddUserCallback {get; set;}
+
+}
