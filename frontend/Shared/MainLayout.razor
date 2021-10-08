@@ -5,21 +5,31 @@
 
     <div class="main">
         <div class="top-row">
-            <span id="Home" type="submit" @onclick="MoveMeToHome">&#8962;</span>
-            <button type="submit" style="margin:5px;" id="pmanager" class="top-row-btn" @onclick="MoveMeToPosterManagement">Poster Management</button>
-            <button type="submit" style="margin:5px;" id="umanager" class="top-row-btn" @onclick="MoveMeToUserManagement">User Management</button>
-            <button type="submit" style="margin:5px;" id="imanager" class="top-row-btn" @onclick="MoveMeToInstitutionManagement">Institution Management</button>
-            <button type="submit" style="margin:5px;" id="smanager" class="top-row-btn" @onclick="MoveMeToScreenManagement">Screen Management</button>
-            <button type="submit" style="position: right;" id="log" @onclick="MoveMeToLogin">Logout</button>
-            <div class="dropdown">
-                <span id="Gear">&#9881;</span>
-                <div class="dropdown-content">
-                    <p><button type="submit" style="position: relative;" id="DropdownBTN" @onclick="MoveMeToChangePassword">Change Password</button></p>
+            <div class="left-nav">
+                <span id="Home" type="submit" @onclick="MoveMeToHome">&#8962;</span>
+                <button type="submit" id="pmanager" class="top-row-btn" @onclick="MoveMeToPosterManagement">Poster
+                    Management</button>
+                <button type="submit" id="umanager" class="top-row-btn" @onclick="MoveMeToUserManagement">User
+                    Management</button>
+                <button type="submit" id="imanager" class="top-row-btn"
+                    @onclick="MoveMeToInstitutionManagement">Institution
+                    Management</button>
+                <button type="submit" id="smanager" class="top-row-btn" @onclick="MoveMeToScreenManagement">Screen
+                    Management</button>
+            </div>
+            <div class="right-nav">
+                <button type="submit" id="log" @onclick="MoveMeToLogin">Logout</button>
+                <div class="dropdown">
+                    <span id="Gear">&#9881;</span>
+                    <div class="dropdown-content">
+                        <p><button type="submit" style="position: relative;" id="DropdownBTN"
+                                @onclick="MoveMeToChangePassword">Change Password</button></p>
+                    </div>
                 </div>
             </div>
 
         </div>
-        
+
         <div class="content">
             @Body
         </div>
@@ -27,43 +37,45 @@
 </div>
 
 
-@code 
+@code
 {
-void MoveMeToPosterManagement() 
-{
-    NavigationManager.NavigateTo(uri:"/PosterManagement");
-}
+    void MoveMeToPosterManagement()
+    {
+        NavigationManager.NavigateTo(uri: "/PosterManagement");
+    }
 
-void MoveMeToUserManagement() 
-{
-    NavigationManager.NavigateTo(uri: "/Users");
-}
+    void MoveMeToUserManagement()
+    {
+        NavigationManager.NavigateTo(uri: "/Users");
+    }
 
-void MoveMeToInstitutionManagement() 
-{
-    NavigationManager.NavigateTo(uri: "/InstitutionManagement");
-}
+    void MoveMeToInstitutionManagement()
+    {
+        NavigationManager.NavigateTo(uri: "/InstitutionManagement");
+    }
 
-void MoveMeToScreenManagement() 
-{
-    NavigationManager.NavigateTo(uri: "/ScreenManagement");
-}
+    void MoveMeToScreenManagement()
+    {
+        NavigationManager.NavigateTo(uri: "/ScreenManagement");
+    }
 
-void MoveMeToLogin()
-{
-    NavigationManager.NavigateTo(uri: "/");
-}
+    void MoveMeToLogin()
+    {
+        NavigationManager.NavigateTo(uri: "/");
+    }
 
-void MoveMeToChangePassword(){
-    NavigationManager.NavigateTo(uri: "/EditInformation");
-}
+    void MoveMeToChangePassword()
+    {
+        NavigationManager.NavigateTo(uri: "/EditInformation");
+    }
 
-void MoveMeToHome(){
-    NavigationManager.NavigateTo(uri: "/Home");
-}
+    void MoveMeToHome()
+    {
+        NavigationManager.NavigateTo(uri: "/Home");
+    }
 
-@* void NavigateToPage()
-{
-    NavigationManager.NavigateTo(uri: "");
-} *@
+    @* void NavigateToPage()
+        {
+        NavigationManager.NavigateTo(uri: "");
+        } *@
 }

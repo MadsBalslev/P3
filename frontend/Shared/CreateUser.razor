@@ -10,7 +10,7 @@
 
     <label for="institution">Vælg institution:</label>
     <select @bind="BindInstitution" name="institution" id="institution" required>
-        <option value="Nordkraft">Nordkraft</option>
+        <option selected value="Nordkraft">Nordkraft</option>
         <option value="DGI_Huset">DGI Huset</option>
         <option value="Nicolai_Mor">Nicolai's Mor</option>
     </select>
@@ -39,6 +39,6 @@
     }
 
     [Parameter]
-    public EventCallback<User> OnAddUserCallback {get; set;}
+    public EventCallback<User> OnAddUserCallback { get; set; }
 
 }
