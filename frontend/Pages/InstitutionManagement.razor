@@ -1,21 +1,53 @@
-@page "/InstitutionManagement"
+@page "/InstitutionManagement/"
 
-<div>
-    <button class="button" type="button">New Institution</button>
 
-    <div class="search">
-        <input type="text" placeholder="Search...">
+<div class="UserContainer">
+    <div class="UserView">
+        <div class="Btn">
+            <button @onclick="CreateInstitution">Create institution</button>
+        </div>
+        <div class="Table">
+            <TableTemplate Items="institutions" Context="institution">
+                <TableHeader>
+                    <th>Institution Navn</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@institution.InstitutionNavn</td>
+                </RowTemplate>
+            </TableTemplate>
+        </div>
+    </div>
+
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1>Test</h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            <!-- <EditUser /> -->
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreateInstitution OnAddInstitutionCallback="@institutions.Add"></CreateInstitution>
+        }
     </div>
 </div>
 
-<table class="table">
-<tr>
-    <th>Institution Name</th>
-    <th></th>
-</tr>
-<tr>
-    <td>Biffen</td>
-    <td>Delete</td>
-</tr>
+@code
+{
+    public List<Institution> institutions = new List<Institution>();
 
-</table>
+    Mode CurrentMode { get; set; } = Mode.Initial;
+    enum Mode
+    {
+        Initial,
+        Edit,
+        Create
+    }
+
+    private void CreateInstitution()
+    {
+        CurrentMode = Mode.Create;
+    }
+}

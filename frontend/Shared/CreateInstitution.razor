@@ -1,0 +1,22 @@
+@using System.Collections.ObjectModel
+
+<form>
+    <label for="IName">Institutionsnavn:</label>
+    <input @bind="BindIName" type="text" id="IName" name="IName" placeholder="Indtast institutionsnavn..." required><br>
+
+    <input @onclick="OnAddInstitution" class="CUSER_submit" type="button" value="Submit">
+</form>
+
+@code {
+    private string BindIName { get; set; }
+
+    private void OnAddInstitution()
+    {
+        Institution institution = new Institution(BindIName);
+        OnAddInstitutionCallback.InvokeAsync(institution);
+    }
+
+    [Parameter]
+    public EventCallback<Institution> OnAddInstitutionCallback { get; set; }
+
+}
