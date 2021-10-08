@@ -11,10 +11,12 @@
                 <TableHeader>
                     <th>Institution</th>
                     <th>Admin</th>
+                    <th>Edit</th>
                 </TableHeader>
                 <RowTemplate>
                     <td>@institution.Navn</td>
                     <td>@institution.Admin</td>
+                    <td><a href="/InstitutionManagement/" @onclick="EditInstitution">Edit</a></td>
                 </RowTemplate>
             </TableTemplate>
         </div>
@@ -27,11 +29,13 @@
         }
         else if (CurrentMode == Mode.Edit)
         {
-            <!-- <EditUser /> -->
+            <EditInstitution OnAddInstitutionCallback="@test_inst.Add"></EditInstitution>;
+            CurrentMode = Mode.Initial;
         }
         else if (CurrentMode == Mode.Create)
         {
             <CreateInstitution OnAddInstitutionCallback="@institutions.Add"></CreateInstitution>
+            CurrentMode = Mode.Initial;
         }
     </div>
 </div>
@@ -39,6 +43,7 @@
 @code
 {
     public List<Institution> institutions = new List<Institution>();
+    public List<Institution> test_inst = new List<Institution>();
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
@@ -48,8 +53,24 @@
         Create
     }
 
+    public void EditValues(Institution Institution)
+    {
+        int index = institutions.FindIndex(item => item.Navn == "test");
+        if (index >= 0) 
+        {
+            Console.WriteLine("bang");
+            institutions[index].Navn = "GAMING?";
+        }
+    }
+
     private void CreateInstitution()
     {
         CurrentMode = Mode.Create;
+    }
+
+    private void EditInstitution()
+    {
+        CurrentMode = Mode.Edit;
+        
     }
 }
