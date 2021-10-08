@@ -1,5 +1,18 @@
 @page "/PosterManagement"
+@inject NavigationManager NavigationManager
+@inject AppState AppState
 
 <h1>Poster management</h1>
+
+@code
+{
+  protected override void OnInitialized()
+  {
+    if (!AppState.Auth)
+    {
+        NavigationManager.NavigateTo("/");
+    }
+  }
+}
 
 

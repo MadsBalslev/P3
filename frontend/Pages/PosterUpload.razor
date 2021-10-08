@@ -13,7 +13,7 @@
 @code {
   string source {get; set; }
   public void AddSource() {
-    AppState.Add(source);
+    AppState.AddPoster(source);
     source = "";
     NavManager.NavigateTo("/screen");
   }

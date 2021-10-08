@@ -1,0 +1,94 @@
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject AppState AppState
+
+<div class="page">
+
+  <div class="main">
+    <div class="top-row">
+      @if (AppState.Auth)
+      {
+        <div class="left-nav">
+          <span id="Home" type="submit" @onclick="MoveMeToHome">&#8962;</span>
+          @if (AppState.Role == "user" || AppState.Role == "inst_admin" || AppState.Role == "sys_admin")
+          {
+            <button type="submit" id="pmanager" class="top-row-btn" @onclick="MoveMeToPosterManagement">Poster
+              Management</button>
+          }
+          @if (AppState.Role == "inst_admin" || AppState.Role == "sys_admin")
+          {
+            <button type="submit" id="umanager" class="top-row-btn" @onclick="MoveMeToUserManagement">User
+              Management</button>
+          }
+          @if (AppState.Role == "sys_admin")
+          {
+            <button type="submit" id="imanager" class="top-row-btn" @onclick="MoveMeToInstitutionManagement">Institution
+              Management</button>
+            <button type="submit" id="smanager" class="top-row-btn" @onclick="MoveMeToScreenManagement">Screen
+              Management</button>
+          }
+        </div>
+        <div class="right-nav">
+          <button type="submit" id="log" @onclick="MoveMeToLogin">Logout</button>
+          <div class="dropdown">
+            <span id="Gear">&#9881;</span>
+            <div class="dropdown-content">
+              <p><button type="submit" style="position: relative;" id="DropdownBTN"
+                @onclick="MoveMeToChangePassword">Change Password</button></p>
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <div class="content">
+      @Body
+    </div>
+  </div>
+</div>
+
+
+@code
+{
+  void MoveMeToPosterManagement()
+  {
+    NavigationManager.NavigateTo(uri: "/PosterManagement");
+  }
+
+  void MoveMeToUserManagement()
+  {
+    NavigationManager.NavigateTo(uri: "/Users");
+  }
+
+  void MoveMeToInstitutionManagement()
+  {
+    NavigationManager.NavigateTo(uri: "/InstitutionManagement");
+  }
+
+  void MoveMeToScreenManagement()
+  {
+    NavigationManager.NavigateTo(uri: "/ScreenManagement");
+  }
+
+  void MoveMeToLogin()
+  {
+    AppState.LogOut();
+    NavigationManager.NavigateTo(uri: "/");
+  }
+
+  void MoveMeToChangePassword()
+  {
+    NavigationManager.NavigateTo(uri: "/EditInformation");
+  }
+
+  void MoveMeToHome()
+  {
+    NavigationManager.NavigateTo(uri: "/Home");
+  }
+
+  @* void NavigateToPage()
+    {
+    NavigationManager.NavigateTo(uri: "");
+    } *@
+}
