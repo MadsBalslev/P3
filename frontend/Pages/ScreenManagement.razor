@@ -1,42 +1,52 @@
 @page "/ScreenManagement"
 
-    <div class ="Wrapper">
-        <div class="myDivs">
-            <button type="button">Create Screen</button>
-            <table>
-            <tr>
-                <th>Screen Name </th>
-                <th>Zone</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>Biffen</td>
-                <td>Indgang</td>
-                <td>Edit</td>
-            </tr>
-            <tr>
-                <td>Aalborg</td>
-                <td>BagIndgang</td>
-                <td>Edit</td>
-            </tr>
-            </table>
+<div class="UserContainer">
+    <div class="UserView">
+        <div class="Btn">
+            <button @onclick="CreateZone">Create Zone</button>
         </div>
-
-        <div class="myDivs">
-            <button type="button">Create Zone</button>
-            <table>
-            <tr>
-                <th> Zone Name </th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>Zone1</td>
-                <td>Delete</td>
-            </tr>
-            <tr>
-                <td>Aalborg</td>
-                <td>Delete</td>
-            </tr>
-            </table>
+        <div class="Table">
+            <TableTemplate Items="_zone" Context="Zone">
+                <TableHeader>
+                    <th>Zonename</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@Zone.Zones</td>
+                </RowTemplate>
+            </TableTemplate>
         </div>
     </div>
+
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1></h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            <!-- <Editzone-->
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreateZone OnAddZoneCallback="@_zone.Add"></CreateZone>
+        }
+    </div>
+</div>
+
+@code
+{
+    public List<Zone> _zone = new List<Zone>();
+
+    Mode CurrentMode { get; set; } = Mode.Initial;
+    enum Mode
+    {
+        Initial,
+        Edit,
+        Create
+    }
+
+    private void CreateZone()
+    {
+        CurrentMode = Mode.Create;
+    }
+}

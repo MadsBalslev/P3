@@ -1,0 +1,42 @@
+@using System.Collections.ObjectModel
+
+<form>
+    <label for="pname">Plakatnavn:</label>
+    <input @bind="BindPosterName" type="text" id="pname" name="pname" placeholder="Indtast plakatnavn..." required><br>
+    <label for="sdate">Slutdato:</label>
+    <input @bind="BindStartDate" type="text" id="sdate" name="sdate" placeholder="Indtast startdato..." required><br>
+    <label for="edate">Slutdato:</label>
+    <input @bind="BindEndDate" type="text" id="edate" name="edate" placeholder="Indtast slutdato..." required><br>
+
+    @* <label for="institution">Vælg institution:</label>
+    <select @bind="BindInstitution" name="institution" id="institution" required>
+        <option selected value="Nordkraft">Nordkraft</option>
+        <option value="DGI_Huset">DGI Huset</option>
+        <option value="Nicolai_Mor">Nicolai's Mor</option>
+    </select>
+
+    <label for="role">Vælg rolle:</label>
+    <select @bind="BindRole" name="role" id="role" required>
+        <option value="System_admin">System Admin</option>
+        <option value="Institution_admin">Institutions Admin</option>
+        <option value="Institution_user">Institution Bruger</option>
+    </select> *@
+
+    <input @onclick="OnAddPoster" class="CPOSTER_submit" type="button" value="Submit">
+</form>
+
+@code {
+    private string BindPosterName { get; set; }
+    private string BindStartDate { get; set; }
+    private string BindEndDate { get; set; }
+
+    private void OnAddPoster()
+    {
+        CPoster PosterList = new CPoster(BindPosterName, BindStartDate, BindEndDate);
+        OnAddPosterCallback.InvokeAsync(PosterList);
+    }
+
+    [Parameter]
+    public EventCallback<CPoster> OnAddPosterCallback { get; set; }
+
+}
