@@ -1,5 +1,56 @@
 @page "/PosterManagement"
 
-<h1>Poster management</h1>
+<div class="UserContainer">
+    <div class="UserView">
+        <div class="Btn">
+            <button @onclick="CreatePoster">Create Poster</button>
+        </div>
+        <div class="Table">
+            <TableTemplate Items="PosterList" Context="poster">
+                <TableHeader>
+                    <th>Poster name</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@poster.PosterNavn</td>
+                    <td>@poster.StartDato</td>
+                    <td>@poster.SlutDato</td>
+                </RowTemplate>
+            </TableTemplate>
+        </div>
+    </div>
 
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1></h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            <!-- <Editzone-->
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreatePoster OnAddPosterCallback="@PosterList.Add"></CreatePoster>
+        }
+    </div>
+</div>
 
+@code
+{
+    public List<CPoster> PosterList = new List<CPoster>();
+
+    Mode CurrentMode { get; set; } = Mode.Initial;
+    enum Mode
+    {
+        Initial,
+        Edit,
+        Create
+    }
+
+    private void CreatePoster()
+    {
+        CurrentMode = Mode.Create;
+    }
+}

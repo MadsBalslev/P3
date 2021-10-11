@@ -15,15 +15,9 @@
     padding: 5px 0 0 10px;
 }
 
-.Table{
+.Table {
     margin-top: 10px;
     display: block;
     overflow-x: auto;
     white-space: nowrap;
-    border-collapse: collapse;
-    border: 2px #000000;
-}
-.table td{
-    width: fit-content;
-    border: 2px black;
 }
