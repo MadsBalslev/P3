@@ -29,7 +29,7 @@
         }
         else if (CurrentMode == Mode.Edit)
         {
-            <EditInstitution OnAddInstitutionCallback="@test_inst.Add"></EditInstitution>;
+            <EditInstitution OnAddInstitutionCallback="@institutions.Add"></EditInstitution>;
             CurrentMode = Mode.Initial;
         }
         else if (CurrentMode == Mode.Create)
@@ -43,7 +43,6 @@
 @code
 {
     public List<Institution> institutions = new List<Institution>();
-    public List<Institution> test_inst = new List<Institution>();
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
