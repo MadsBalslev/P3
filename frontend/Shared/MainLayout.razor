@@ -6,28 +6,25 @@
     <div class="main">
         <div class="top-row">
             <div class="left-nav">
-                <span id="Home" type="submit" @onclick="MoveMeToHome">&#8962;</span>
-                <button type="submit" id="pmanager" class="top-row-btn" @onclick="MoveMeToPosterManagement">Poster
+                <button class="top-row-btn" @onclick='() => GoTo("/PosterManagement")'>Poster
                     Management</button>
-                <button type="submit" id="umanager" class="top-row-btn" @onclick="MoveMeToUserManagement">User
+                <button class="top-row-btn" @onclick='() => GoTo("/users")'>User
                     Management</button>
-                <button type="submit" id="imanager" class="top-row-btn"
-                    @onclick="MoveMeToInstitutionManagement">Institution
+                <button class="top-row-btn" @onclick='() => GoTo("/InstitutionManagement")'>Institution
                     Management</button>
-                <button type="submit" id="smanager" class="top-row-btn" @onclick="MoveMeToScreenManagement">Screen
+                <button class="top-row-btn" @onclick='() => GoTo("/ScreenManagement")'>Screen
                     Management</button>
             </div>
             <div class="right-nav">
-                <button type="submit" id="log" @onclick="MoveMeToLogin">Logout</button>
                 <div class="dropdown">
                     <span id="Gear">&#9881;</span>
                     <div class="dropdown-content">
-                        <p><button type="submit" style="position: relative;" id="DropdownBTN"
-                                @onclick="MoveMeToChangePassword">Change Password</button></p>
+                        <button class="top-row-btn" @onclick='() => GoTo("/EditInformation")'>Change
+                            Password</button>
                     </div>
                 </div>
+                <button class="top-row-btn" @onclick="MoveMeToLogin">Logout</button>
             </div>
-
         </div>
 
         <div class="content">
@@ -39,43 +36,13 @@
 
 @code
 {
-    void MoveMeToPosterManagement()
-    {
-        NavigationManager.NavigateTo(uri: "/PosterManagement");
-    }
-
-    void MoveMeToUserManagement()
-    {
-        NavigationManager.NavigateTo(uri: "/Users");
-    }
-
-    void MoveMeToInstitutionManagement()
-    {
-        NavigationManager.NavigateTo(uri: "/InstitutionManagement");
-    }
-
-    void MoveMeToScreenManagement()
-    {
-        NavigationManager.NavigateTo(uri: "/ScreenManagement");
-    }
-
     void MoveMeToLogin()
     {
         NavigationManager.NavigateTo(uri: "/");
     }
 
-    void MoveMeToChangePassword()
+    void GoTo(string route) 
     {
-        NavigationManager.NavigateTo(uri: "/EditInformation");
+        NavigationManager.NavigateTo(route);
     }
-
-    void MoveMeToHome()
-    {
-        NavigationManager.NavigateTo(uri: "/Home");
-    }
-
-    @* void NavigateToPage()
-        {
-        NavigationManager.NavigateTo(uri: "");
-        } *@
 }

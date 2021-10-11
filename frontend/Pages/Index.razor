@@ -4,7 +4,7 @@
 
 <!-- Skal være en form istedet for mange forskellige div's -->
 <div class="container">
-    <form action="" @onsubmit="MoveMeToHome">
+    <form action="" @onsubmit="Login">
         <div class="form-group">
             <input type="email" id="Usernamebox" placeholder="Enter email" name="Uname" required>
         </div>
@@ -14,14 +14,14 @@
         <div class="form-group">
             <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
         </div>
-        <button type="submit" id="Log" @onclick="MoveMeToHome">Login</button>
+        <button type="submit" class="btn btn-primary btn-block" @onclick="Login">Login</button>
     </form>
     <span class="psw"><a href="/ForgotPassword">Forgot password?</a></span>
 </div>
 
 @code {
-    void MoveMeToHome()
+    void Login()
     {
-        NavigationManager.NavigateTo(uri: "/Home");
+        NavigationManager.NavigateTo("/");
     }
 }
