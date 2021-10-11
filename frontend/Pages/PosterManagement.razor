@@ -1,4 +1,6 @@
 @page "/PosterManagement"
+@inject NavigationManager NavigationManager
+@inject AppState AppState
 
 <div class="UserContainer">
     <div class="UserView">
@@ -21,21 +23,17 @@
         </div>
     </div>
 
-    <div class="UserManagement">
-        @if (CurrentMode == Mode.Initial)
-        {
-            <h1></h1>
-        }
-        else if (CurrentMode == Mode.Edit)
-        {
-            <!-- <Editzone-->
-        }
-        else if (CurrentMode == Mode.Create)
-        {
-            <CreatePoster OnAddPosterCallback="@PosterList.Add"></CreatePoster>
-        }
-    </div>
-</div>
+@code
+{
+  protected override void OnInitialized()
+  {
+    if (!AppState.Auth)
+    {
+        NavigationManager.NavigateTo("/");
+    }
+  }
+}
+
 
 @code
 {

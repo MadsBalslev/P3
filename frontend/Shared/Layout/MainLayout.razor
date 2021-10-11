@@ -1,0 +1,64 @@
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject AppState AppState
+
+<div class="page">
+
+  <div class="main">
+    <div class="top-row">
+      @if (AppState.Auth)
+      {
+        <div class="left-nav">
+          <span id="Home" type="submit" @onclick='() => GoTo("/home")'>&#8962;</span>
+          @if (AppState.Role == "user" || AppState.Role == "inst_admin" || AppState.Role == "sys_admin")
+          {
+            <button type="submit" id="pmanager" class="top-row-btn" @onclick='() => GoTo("/PosterManagement")'>Poster
+              Management</button>
+          }
+          @if (AppState.Role == "inst_admin" || AppState.Role == "sys_admin")
+          {
+            <button type="submit" id="umanager" class="top-row-btn" @onclick='() => GoTo("/Users")'>User
+              Management</button>
+          }
+          @if (AppState.Role == "sys_admin")
+          {
+            <button type="submit" id="imanager" class="top-row-btn" @onclick='() => GoTo("/InstitutionManagement")'>Institution
+              Management</button>
+            <button type="submit" id="smanager" class="top-row-btn" @onclick='() => GoTo("/ScreenManagement")'>Screen
+              Management</button>
+          }
+        </div>
+        <div class="right-nav">
+          <button type="submit" id="log" @onclick="LogOut">Logout</button>
+          <div class="dropdown">
+            <span id="Gear">&#9881;</span>
+            <div class="dropdown-content">
+              <p><button type="submit" style="position: relative;" id="DropdownBTN"
+                @onclick='() => GoTo("/EditInformation")'>Change Password</button></p>
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <div class="content">
+      @Body
+    </div>
+  </div>
+</div>
+
+
+@code
+{
+  void GoTo(string route)
+  {
+    NavigationManager.NavigateTo(route);
+  }
+
+  void LogOut()
+  {
+    AppState.LogOut();
+    NavigationManager.NavigateTo(uri: "/");
+  }
+}

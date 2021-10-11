@@ -1,12 +1,13 @@
 @page "/"
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject AppState AppState
 
 <!-- Skal være en form istedet for mange forskellige div's -->
 <div class="container">
     <form action="" @onsubmit="Login">
         <div class="form-group">
-            <input type="email" id="Usernamebox" placeholder="Enter email" name="Uname" required>
+            <input @bind="email" type="email" id="Usernamebox" placeholder="Enter email" name="Uname" required>
         </div>
         <div class="form-group">
             <input type="password" id="Passwordbox" placeholder="Enter Password" name="Pword" required>
@@ -20,8 +21,14 @@
 </div>
 
 @code {
-    void Login()
+    string email;
+
+    void MoveMeToHome()
     {
-        NavigationManager.NavigateTo("/");
+        if(AppState.Login(email))
+        {
+            System.Console.WriteLine(email);
+            NavigationManager.NavigateTo("/Home");
+        }
     }
 }
