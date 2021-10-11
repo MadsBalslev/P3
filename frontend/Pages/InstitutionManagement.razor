@@ -1,5 +1,7 @@
 @page "/InstitutionManagement/"
+@using frontend.Shared.Table
 
+@inject AppState AppState
 
 <div class="UserContainer">
     <div class="UserView">
@@ -7,7 +9,7 @@
             <button @onclick="CreateInstitution">Create institution</button>
         </div>
         <div class="Table">
-            <TableTemplate Items="institutions" Context="institution">
+            <TableTemplate Items="AppState.institutions" Context="institution">
                 <TableHeader>
                     <th>Institution</th>
                     <th>Admin</th>
@@ -29,12 +31,13 @@
         }
         else if (CurrentMode == Mode.Edit)
         {
-            <EditInstitution OnAddInstitutionCallback="@institutions.Add"></EditInstitution>;
+            <EditInstitution ></EditInstitution>;
             CurrentMode = Mode.Initial;
         }
         else if (CurrentMode == Mode.Create)
         {
-            <CreateInstitution OnAddInstitutionCallback="@institutions.Add"></CreateInstitution>
+            <CreateInstitution></CreateInstitution>
+            <!-- <CreateInstitution OnAddInstitutionCallback="@AppState.institutions.Add"></CreateInstitution> -->
             CurrentMode = Mode.Initial;
         }
     </div>
@@ -42,7 +45,6 @@
 
 @code
 {
-    public List<Institution> institutions = new List<Institution>();
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
@@ -52,15 +54,7 @@
         Create
     }
 
-    public void EditValues(Institution Institution)
-    {
-        int index = institutions.FindIndex(item => item.Navn == "test");
-        if (index >= 0) 
-        {
-            Console.WriteLine("bang");
-            institutions[index].Navn = "GAMING?";
-        }
-    }
+
 
     private void CreateInstitution()
     {
@@ -70,6 +64,5 @@
     private void EditInstitution()
     {
         CurrentMode = Mode.Edit;
-        
     }
 }

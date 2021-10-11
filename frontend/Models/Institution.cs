@@ -9,4 +9,5 @@ public class Institution
     public string Navn { get; set; }
     public string Admin { get; set; }
 
+
 }

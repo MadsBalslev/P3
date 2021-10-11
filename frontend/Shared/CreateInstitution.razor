@@ -1,5 +1,7 @@
 @using System.Collections.ObjectModel
 
+@inject AppState AppState
+
 <form>
     <label for="IName">Institutionsnavn:</label>
     <input @bind="BindIName" type="text" id="IName" name="IName" placeholder="Indtast institutionsnavn..." required><br>
@@ -11,12 +13,14 @@
 
 @code {
     private string BindIName { get; set; }
-    private string BindIAdmin {get; set; }
+    private string BindIAdmin { get; set; }
 
     private void OnAddInstitution()
     {
         Institution institution = new Institution(BindIName, BindIAdmin);
-        OnAddInstitutionCallback.InvokeAsync(institution);
+        AppState.AddInstitution(institution);
+
+        //OnAddInstitutionCallback.InvokeAsync(institution);
     }
 
     [Parameter]
