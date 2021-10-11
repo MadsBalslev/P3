@@ -19,6 +19,7 @@
     {
         Institution institution = new Institution(BindIName, BindIAdmin);
         AppState.AddInstitution(institution);
+        // InvokeAsync(StateHasChanged);
 
         //OnAddInstitutionCallback.InvokeAsync(institution);
     }

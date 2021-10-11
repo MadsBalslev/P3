@@ -36,8 +36,6 @@ namespace frontend
         }
     }
 
-
-    private bool _auth = false;
     public bool Auth { get; private set; }
     public string Role {get; private set;}
     private List<string> _imgSources = new List<string>()
