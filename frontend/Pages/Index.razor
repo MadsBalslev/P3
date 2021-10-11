@@ -23,12 +23,8 @@
 @code {
     string email;
 
-    void MoveMeToHome()
+    void Login()
     {
-        if(AppState.Login(email))
-        {
-            System.Console.WriteLine(email);
-            NavigationManager.NavigateTo("/Home");
-        }
+        if(AppState.Login(email)) NavigationManager.NavigateTo("/PosterManagement");
     }
 }
