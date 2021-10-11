@@ -1,5 +1,7 @@
 @page "/users/"
 @using frontend.Shared.Table
+@inject AppState AppState
+@inject NavigationManager NavManager
 
 <div class="UserContainer">
     <div class="UserView">
@@ -45,6 +47,14 @@
 @code
 {
     public List<User> users = new List<User>();
+
+    protected override void OnInitialized()
+    {
+        if (!AppState.Auth)
+        {
+            NavManager.NavigateTo("/");
+        }
+    }
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode

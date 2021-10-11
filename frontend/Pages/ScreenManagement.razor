@@ -1,5 +1,7 @@
 @page "/ScreenManagement"
 @using frontend.Shared.Table
+@inject AppState AppState
+@inject NavigationManager NavManager
 
 <div class="UserContainer">
     <div class="UserView">
@@ -44,6 +46,14 @@
         Initial,
         Edit,
         Create
+    }
+
+    protected override void OnInitialized()
+    {
+        if (!AppState.Auth)
+        {
+            NavManager.NavigateTo("/");
+        }
     }
 
     private void CreateZone()
