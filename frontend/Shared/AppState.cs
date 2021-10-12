@@ -12,7 +12,30 @@ namespace frontend
         "sys_admin"
       };
 
-    private bool _auth = false;
+    public List<Institution> institutions = new List<Institution>();
+
+    public event Action InstitutionUpdate;
+    public void AddInstitution(Institution inst)
+    {
+      institutions.Add(inst);
+      InstitutionUpdate?.Invoke();
+    }
+    public void RemoveInstitution()
+    {
+
+    }
+    public void EditInstitution(Institution institution)
+    {
+  
+        int index = institutions.FindIndex(item => item.Navn == institution.Navn);
+        if (index >= 0) 
+        {
+            Console.WriteLine("bang");
+            institutions[index].Navn = "hej";
+            institutions[index].Admin = "XD";
+        }
+    }
+
     public bool Auth { get; private set; }
     public string Role {get; private set;}
     private List<string> _imgSources = new List<string>()
@@ -51,4 +74,7 @@ namespace frontend
       Auth = false;
     }
   }
+
+
+  
 }

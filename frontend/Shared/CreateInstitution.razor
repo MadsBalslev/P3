@@ -1,0 +1,30 @@
+@using System.Collections.ObjectModel
+
+@inject AppState AppState
+
+<form>
+    <label for="IName">Institutionsnavn:</label>
+    <input @bind="BindIName" type="text" id="IName" name="IName" placeholder="Indtast institutionsnavn..." required><br>
+    <label for="IAdmin">Kontaktperson:</label>
+    <input @bind="BindIAdmin" type="text" id="IAdmin" name="IAdmin" placeholder="Indtast admins navn..." required><br>
+
+    <input @onclick="OnAddInstitution" class="CUSER_submit" type="button" value="Submit">
+</form>
+
+@code {
+    private string BindIName { get; set; }
+    private string BindIAdmin { get; set; }
+
+    private void OnAddInstitution()
+    {
+        Institution institution = new Institution(BindIName, BindIAdmin);
+        AppState.AddInstitution(institution);
+        // InvokeAsync(StateHasChanged);
+
+        //OnAddInstitutionCallback.InvokeAsync(institution);
+    }
+
+    [Parameter]
+    public EventCallback<Institution> OnAddInstitutionCallback { get; set; }
+
+}

@@ -1,0 +1,36 @@
+@using System.Collections.ObjectModel
+@inject AppState AppState
+
+<form>
+    <label for="IName">Editing Institutionsnavn:</label>
+    <input @bind="BindIName" type="text" id="IName" name="IName" required><br>
+    <label for="IAdmin">Editing Kontaktperson:</label>
+    <input @bind="BindIAdmin" type="text" id="IAdmin" name="IAdmin" required><br>
+
+    <input @onclick="OnEditInstitution" class="CUSER_submit" type="button" value="Save Changes">
+    <input @onclick="OnDeleteInstitution" class="CUSER_submit" type="button" value="Delete Institution">
+</form>
+
+@code {
+    private string BindIName { get; set; }
+    private string BindIAdmin { get; set; }
+
+
+    private void OnEditInstitution()
+    {
+        Institution institution = new Institution(BindIName, BindIAdmin);
+        //OnAddInstitutionCallback.InvokeAsync(institution);
+        AppState.EditInstitution(institution);
+        Console.WriteLine("asd");
+    }
+
+    private void OnDeleteInstitution()
+    {
+
+    }
+
+
+    [Parameter]
+    public EventCallback<Institution> OnAddInstitutionCallback { get; set; }
+
+}

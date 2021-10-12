@@ -1,33 +1,68 @@
 @page "/InstitutionManagement"
 @inject NavigationManager NavManager
 @inject AppState AppState
+@using frontend.Shared.Table
 
-<div>
-    <button class="button" type="button">New Institution</button>
+<div class="UserContainer">
+    <div class="UserView">
+        <div class="Btn">
+            <button @onclick="CreateInstitution">Create institution</button>
+        </div>
+        <div class="Table">
+            <TableTemplate Items="AppState.institutions" Context="institution">
+                <TableHeader>
+                    <th>Institution</th>
+                    <th>Admin</th>
+                    <th>Edit</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@institution.Navn</td>
+                    <td>@institution.Admin</td>
+                    <td><a href="/InstitutionManagement/" @onclick="EditInstitution">Edit</a></td>
+                </RowTemplate>
+            </TableTemplate>
+        </div>
+    </div>
 
-    <div class="search">
-        <input type="text" placeholder="Search...">
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1>Test</h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            <EditInstitution ></EditInstitution>;
+            CurrentMode = Mode.Initial;
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreateInstitution></CreateInstitution>;
+          
+            CurrentMode = Mode.Initial;
+        }
     </div>
 </div>
 
-<table class="table">
-    <tr>
-        <th>Institution Name</th>
-        <th></th>
-    </tr>
-    <tr>
-        <td>Biffen</td>
-        <td>Delete</td>
-    </tr>
+@code
+{
 
-</table>
-
-@code {
-    protected override void OnInitialized()
+    Mode CurrentMode { get; set; } = Mode.Initial;
+    enum Mode
     {
-        if (!AppState.Auth)
-        {
-            NavManager.NavigateTo("/");
-        }
+        Initial,
+        Edit,
+        Create
+    }
+
+
+
+    private void CreateInstitution()
+    {
+        CurrentMode = Mode.Create;
+    }
+
+    private void EditInstitution()
+    {
+        CurrentMode = Mode.Edit;
     }
 }
