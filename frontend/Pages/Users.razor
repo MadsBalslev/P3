@@ -9,7 +9,7 @@
             <button @onclick="CreateUser">Create user</button>
         </div>
         <div class="Table">
-            <TableTemplate Items="users" Context="user">
+            <TableTemplate Items="AppState.users" Context="user">
                 <TableHeader>
                     <th>Fornavn</th>
                     <th>Efternavn</th>
@@ -39,14 +39,14 @@
         }
         else if (CurrentMode == Mode.Create)
         {
-            <CreateUser OnAddUserCallback="@users.Add"></CreateUser>
+            <CreateUser></CreateUser>
         }
     </div>
 </div>
 
 @code
 {
-    public List<User> users = new List<User>();
+    // public List<User> users = new List<User>();
 
     protected override void OnInitialized()
     {

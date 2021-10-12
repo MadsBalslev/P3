@@ -36,6 +36,13 @@ namespace frontend
         }
     }
 
+    public List<User> users = new List<User>();
+
+    public void AddUser(User user)
+    {
+      users.Add(user);
+    }
+
     public bool Auth { get; private set; }
     public string Role {get; private set;}
     private List<string> _imgSources = new List<string>()
