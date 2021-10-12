@@ -36,6 +36,25 @@ namespace frontend
         }
     }
 
+    public List<User> users = new List<User>();
+
+    public void AddUser(User user)
+    {
+      users.Add(user);
+    }
+
+    public List<Screen> screens = new List<Screen>();
+    public void AddScreen (Screen screen)
+    {
+      screens.Add(screen);
+    }
+
+    public List<Zone> zones = new List<Zone>();
+    public void AddZone (Zone zone)
+    {
+      zones.Add(zone);
+    }
+
     public bool Auth { get; private set; }
     public string Role {get; private set;}
     private List<string> _imgSources = new List<string>()

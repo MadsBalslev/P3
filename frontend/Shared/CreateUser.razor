@@ -1,5 +1,7 @@
 @using System.Collections.ObjectModel
 
+@inject AppState AppState
+
 <form>
     <label for="fname">Fornavn:</label>
     <input @bind="BindName" type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
@@ -35,7 +37,8 @@
     private void OnAddUser()
     {
         User user = new User(BindName, BindLastname, BindEmail, BindInstitution, BindRole);
-        OnAddUserCallback.InvokeAsync(user);
+        //OnAddUserCallback.InvokeAsync(user);
+        AppState.AddUser(user);
     }
 
     [Parameter]
