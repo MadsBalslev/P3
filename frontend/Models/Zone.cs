@@ -1,8 +1,8 @@
 public class Zone
 {
-    public Zone(string _zone)
+    public Zone(string name)
     {
-        Zones = _zone;
+        Name = name;
     }
-    public string Zones { get; set; }
+    public string Name { get; set; }
 }

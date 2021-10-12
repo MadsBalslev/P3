@@ -1,41 +1,21 @@
 @using System.Collections.ObjectModel
 
+@inject AppState AppState
+
 <form>
     <label for="fZone">Zone:</label>
     <input @bind="BindZone" type="text" id="fZone" name="fZone" placeholder="Indtast zone..." required><br>
-    @* <label for="lname">Efternavn:</label>
-    <input @bind="BindLastname" type="text" id="lname" name="lname" placeholder="Indtast efternavn..." required><br>
-    <label for="email">Email:</label>
-    <input @bind="BindEmail" type="text" id="email" name="email" placeholder="Indtast email..." required><br>
-
-    <label for="institution">Vælg institution:</label>
-    <select @bind="BindInstitution" name="institution" id="institution" required>
-        <option selected value="Nordkraft">Nordkraft</option>
-        <option value="DGI_Huset">DGI Huset</option>
-        <option value="Nicolai_Mor">Nicolai's Mor</option>
-    </select> *@
-
-    @* <label for="role">Vælg rolle:</label>
-    <select @bind="BindRole" name="role" id="role" required>
-        <option value="System_admin">System Admin</option>
-        <option value="Institution_admin">Institutions Admin</option>
-        <option value="Institution_user">Institution Bruger</option>
-    </select> *@
 
     <input @onclick="OnAddZone" class="CZONE_submit" type="button" value="Submit">
 </form>
 
 @code {
     private string BindZone { get; set; }
-    @* private string BindLastname { get; set; }
-    private string BindEmail { get; set; }
-    private string BindInstitution { get; set; }
-    private string BindRole { get; set; } *@
 
     private void OnAddZone()
     {
-        Zone _zone = new Zone(BindZone);
-        OnAddZoneCallback.InvokeAsync(_zone);
+        Zone zone = new Zone(BindZone);
+        AppState.AddZone(zone);
     }
 
     [Parameter]

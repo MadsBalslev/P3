@@ -3,49 +3,80 @@
 @inject AppState AppState
 @inject NavigationManager NavManager
 
-<div class="UserContainer">
-    <div class="UserView">
+<div class ="screenContainer">
+    <div class="group">
+        <div class="Btn">
+            <button @onclick="CreateScreen">Create Screen</button>
+        </div>
+        <div class="Table">
+            <TableTemplate Items="AppState.screens" Context="screen">
+                <TableHeader>
+                    <th>Screen Name</th>
+                    <th>Zone</th>
+                    <th>Edit</th>
+                </TableHeader>
+                <RowTemplate>
+                    <td>@screen.Name</td>
+                    <td>@screen.Zone</td>
+                    <td><a href="/ScreenManagement/" @onclick="EditScreen">Edit</a></td>
+                </RowTemplate>
+            </TableTemplate>   
+        </div> 
+    </div>
+
+
+    <div class="group">
         <div class="Btn">
             <button @onclick="CreateZone">Create Zone</button>
         </div>
         <div class="Table">
-            <TableTemplate Items="_zone" Context="Zone">
+            <TableTemplate Items="AppState.zones" Context="zone">
                 <TableHeader>
                     <th>Zonename</th>
                 </TableHeader>
                 <RowTemplate>
-                    <td>@Zone.Zones</td>
+                    <td>@zone.Name</td>
+                    <td><a href="/ScreenManagement/" @onclick="EditZone">Edit</a></td>
                 </RowTemplate>
             </TableTemplate>
         </div>
     </div>
-
-    <div class="UserManagement">
+    <div class="zoneManagement">
         @if (CurrentMode == Mode.Initial)
         {
             <h1></h1>
         }
-        else if (CurrentMode == Mode.Edit)
+        else if (CurrentMode == Mode.EditScreen)
         {
             <!-- <Editzone-->
         }
-        else if (CurrentMode == Mode.Create)
+        else if (CurrentMode == Mode.CreateZone)
         {
-            <CreateZone OnAddZoneCallback="@_zone.Add"></CreateZone>
+            <CreateZone></CreateZone>
+        }
+        else if (CurrentMode == Mode.EditZone)
+        {
+
+        }
+        else if (CurrentMode == Mode.CreateScreen)
+        {
+            <CreateScreen></CreateScreen>
         }
     </div>
 </div>
 
+
 @code
 {
-    public List<Zone> _zone = new List<Zone>();
 
     Mode CurrentMode { get; set; } = Mode.Initial;
     enum Mode
     {
         Initial,
-        Edit,
-        Create
+        EditScreen,
+        EditZone, 
+        CreateScreen,
+        CreateZone,
     }
 
     protected override void OnInitialized()
@@ -58,6 +89,20 @@
 
     private void CreateZone()
     {
-        CurrentMode = Mode.Create;
+        CurrentMode = Mode.CreateZone;
+    }
+
+    private void CreateScreen()
+    {
+        CurrentMode = Mode.CreateScreen;
+    }
+
+    private void EditScreen()
+    {
+        
+    }
+    private void EditZone()
+    {
+        
     }
 }

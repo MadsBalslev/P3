@@ -1,14 +1,30 @@
-.UserContainer {
-    margin: 0;
+.screenContainer {
     height: calc(100vh - 5rem);
     width: 100%;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
 }
 
-.UserView, .UserManagement {
+/* .UserView, .UserManagement {
     width: 49%;
     border: 2px solid #000000;
+} */
+
+.zoneManagement, .group {
+    border: 2px #000 solid;
+}
+
+.zoneManagement {
+    padding: 5px;
+    flex: 1;
+    margin: 5px;
+}
+
+.group {
+    padding: 5px;
+    flex: 1;
+    margin: 5px;
 }
 
 .Btn {
@@ -27,3 +43,4 @@
     width: fit-content;
     border: 2px black;
 }
+
