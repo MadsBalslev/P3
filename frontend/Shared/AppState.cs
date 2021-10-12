@@ -14,11 +14,11 @@ namespace frontend
 
     public List<Institution> institutions = new List<Institution>();
 
-    public event Action InstitutionUpdate;
+    public event Action OnInstitutionUpdate;
     public void AddInstitution(Institution inst)
     {
       institutions.Add(inst);
-      InstitutionUpdate?.Invoke();
+      OnInstitutionUpdate?.Invoke();
     }
     public void RemoveInstitution()
     {

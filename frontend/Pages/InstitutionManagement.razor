@@ -65,4 +65,14 @@
     {
         CurrentMode = Mode.Edit;
     }
+
+    protected override void OnInitialized()
+    {
+        AppState.OnInstitutionUpdate += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AppState.OnInstitutionUpdate -= StateHasChanged;
+    }
 }
