@@ -28,7 +28,6 @@
     <div class="UserManagement">
         @if (CurrentMode == Mode.Initial)
         {
-            <h1>Test</h1>
         }
         else if (CurrentMode == Mode.Edit)
         {
@@ -37,7 +36,8 @@
         }
         else if (CurrentMode == Mode.Create)
         {
-            <CreatePoster />;
+            <CreatePoster />
+            ;
             CurrentMode = Mode.Initial;
         }
     </div>
@@ -45,15 +45,15 @@
 
 @code
 {
-  protected override void OnInitialized()
-  {
-    AppState.OnPosterAdd += StateHasChanged;
-    if (!AppState.Auth)
+    protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo("/");
+        AppState.OnPosterAdd += StateHasChanged;
+        if (!AppState.Auth)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
-  }
-  
+
     public List<CPoster> PosterList = new List<CPoster>();
 
     Mode CurrentMode { get; set; } = Mode.Initial;
