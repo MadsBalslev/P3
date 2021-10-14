@@ -1,4 +1,5 @@
 @page "/PosterManagement"
+@using frontend.Shared.CreateForms
 @using frontend.Shared.Table
 @inject NavigationManager NavigationManager
 @inject AppState AppState
@@ -9,7 +10,7 @@
             <button @onclick="CreatePoster">Create Poster</button>
         </div>
         <div class="Table">
-            <TableTemplate Items="PosterList" Context="poster">
+            <TableTemplate Items="AppState.Posters" Context="poster">
                 <TableHeader>
                     <th>Poster name</th>
                     <th>Start date</th>
@@ -23,12 +24,30 @@
             </TableTemplate>
         </div>
     </div>
+
+    <div class="UserManagement">
+        @if (CurrentMode == Mode.Initial)
+        {
+            <h1>Test</h1>
+        }
+        else if (CurrentMode == Mode.Edit)
+        {
+            // Edit Poster
+            CurrentMode = Mode.Initial;
+        }
+        else if (CurrentMode == Mode.Create)
+        {
+            <CreatePoster />;
+            CurrentMode = Mode.Initial;
+        }
+    </div>
 </div>
 
 @code
 {
   protected override void OnInitialized()
   {
+    AppState.OnPosterAdd += StateHasChanged;
     if (!AppState.Auth)
     {
         NavigationManager.NavigateTo("/");

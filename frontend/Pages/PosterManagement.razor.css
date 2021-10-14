@@ -9,6 +9,7 @@
 .UserView, .UserManagement {
     width: 49%;
     border: 2px solid #000000;
+    padding: 10px;
 }
 
 .Btn {

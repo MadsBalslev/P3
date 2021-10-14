@@ -1,0 +1,50 @@
+@using System.Collections.ObjectModel
+@inject AppState AppState
+
+<form class="form">
+    <div>
+        <div class="form-group">
+            <label for="pname">Plakatnavn:</label>
+            <input @bind="BindPosterName" class="form-control" type="text" id="pname" name="pname" placeholder="Indtast plakatnavn..." required>
+        </div>
+        <div class="form-group">
+            <label for="sdate">Start Dato:</label>
+            <input @bind="BindStartDate" class="form-control" type="text" id="sdate" name="sdate" placeholder="Indtast startdato..." required>
+        </div>
+        <div class="form-group">
+            <label for="edate">Slut Dato:</label>
+            <input @bind="BindEndDate" class="form-control" type="text" id="edate" name="edate" placeholder="Indtast slutdato..." required>
+        </div>
+        <div class="form-group">
+            <label for="url">Url:</label>
+            <input @bind="BindUrl" class="form-control" type="url" id="url" name="url" placeholder="Indtast url..." required>
+        </div>
+    </div>
+    <div class="btnContainer">
+        <button @onclick="OnAddPoster" class="btn btn-success" type="submit">Add Poster</button>
+        <button @onclick="DiscardChanges" class="btn btn-danger">Discard Changes</button>
+    </div>
+</form>
+
+@code {
+    private string BindPosterName { get; set; }
+    private string BindStartDate { get; set; }
+    private string BindEndDate { get; set; }
+    private string BindUrl {get; set; }
+
+    private void OnAddPoster()
+    {
+        CPoster Poster = new CPoster(BindPosterName, BindStartDate, BindEndDate, BindUrl);
+        AppState.AddPoster(Poster);
+        //OnAddPosterCallback.InvokeAsync(Poster);
+    }
+
+    private void DiscardChanges()
+    {
+        BindPosterName = BindStartDate = BindEndDate = BindUrl = "";
+    }
+
+    [Parameter]
+    public EventCallback<CPoster> OnAddPosterCallback { get; set; }
+
+}
