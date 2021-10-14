@@ -10,11 +10,11 @@
             <button class="btn btn-primary" @onclick="CreateInstitution">Create Institution</button>
         </div>
         <div class="Table">
-            <TableTemplate Items="AppState.institutions" Context="institution">
+            <TableTemplate Items="AppState.Institutions" Context="institution">
                 <TableHeader>
                     <th>Institution</th>
                     <th>Admin</th>
-                    <th>Edit</th>
+                    <th></th>
                 </TableHeader>
                 <RowTemplate>
                     <td>@institution.Navn</td>
