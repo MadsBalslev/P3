@@ -4,11 +4,20 @@
 
 <form>
     <label for="fScreen">Screen Name:</label>
-    <input @bind="BindScreen" type="text" placeholder="Indtast screen..." required><br>
+    <input @bind="BindScreen" type="text" placeholder="Enter screen name..." required><br>
     <label for="fScreenZone">Zone Name:</label>
-    <input @bind="BindScreenZone" type="text" placeholder="Indtast zone..." required><br>
-
-    <input @onclick="OnAddScreen" type="button" value="Submit">
+    <select @bind="BindScreenZone" name="ScreenZoneDD" id="ZoneDropDown" size="1" required>
+        <option value="Option 1">Option 1</option>
+        <option value="">Option 2</option>
+        <option value="">Option 3</option>
+        <option value="">Option 4</option>
+        <option value="">Option 5</option>
+        <option value="">Option 6</option>
+        <option value="">Option 7</option>
+        <option value="">Option 8</option>
+        <option value="">Option 9</option>
+    </select><br>
+    <input @onclick="OnAddScreen" type="button" value="Confirm">
 </form>
 
 @code {
