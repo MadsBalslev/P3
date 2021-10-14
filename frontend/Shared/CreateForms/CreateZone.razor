@@ -3,10 +3,12 @@
 @inject AppState AppState
 
 <form>
-    <label for="fZone">Zone:</label>
-    <input @bind="BindZone" type="text" id="fZone" name="fZone" placeholder="Enter zonename..." required><br>
+    <div class="form-gro">
+        <label for="fZone">Zone</label>
+        <input @bind="BindZone" class="form-control" type="text" id="fZone" name="fZone" placeholder="Enter zonename..." required><br>
+    </div>
 
-    <input @onclick="OnAddZone" class="CZONE_submit" type="button" value="Confirm">
+    <button @onclick="OnAddZone" class="btn btn-success" type="submit">Confirm</button>
 </form>
 
 @code {
@@ -17,8 +19,5 @@
         Zone zone = new Zone(BindZone);
         AppState.AddZone(zone);
     }
-
-    [Parameter]
-    public EventCallback<Zone> OnAddZoneCallback { get; set; }
 
 }

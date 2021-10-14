@@ -37,26 +37,13 @@ namespace frontend
     }
 
     public List<User> users = new List<User>();
-
     public void AddUser(User user)
     {
       users.Add(user);
     }
 
-    public List<Screen> screens = new List<Screen>();
-    public void AddScreen (Screen screen)
-    {
-      screens.Add(screen);
-    }
-
-    public List<Zone> zones = new List<Zone>();
-    public void AddZone (Zone zone)
-    {
-      zones.Add(zone);
-    }
-
-    public bool Auth { get; private set; }
-    public string Role {get; private set;}
+    public bool Auth { get; private set; }// = true;
+    public string Role {get; private set;}// = "sys_admin";
     private List<CPoster> _posters = new List<CPoster>()
       {
       new CPoster("Test", "12/10-2021", "15/10-2021", "https://cdn.discordapp.com/attachments/755020353201373244/895224365711511612/image0.png"),
@@ -92,6 +79,26 @@ namespace frontend
     public void LogOut()
     {
       Auth = false;
+    }
+
+    private List<Zone> _zones = new List<Zone>();
+    public IReadOnlyList<Zone> Zones {get => _zones.AsReadOnly();}
+    public event Action OnZoneAdd;
+
+    public void AddZone(Zone zone)
+    {
+      _zones.Add(zone);
+      OnZoneAdd?.Invoke();
+    }
+
+    private List<Screen> _screens = new List<Screen>();
+    public IReadOnlyList<Screen> Screens {get => _screens.AsReadOnly();}
+    public event Action OnScreenAdd;
+
+    public void AddScreen(Screen screen)
+    {
+      _screens.Add(screen);
+      OnScreenAdd?.Invoke();
     }
   }
 
