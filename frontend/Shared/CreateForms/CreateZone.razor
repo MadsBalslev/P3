@@ -4,9 +4,9 @@
 
 <form>
     <label for="fZone">Zone:</label>
-    <input @bind="BindZone" type="text" id="fZone" name="fZone" placeholder="Enter zonename..." required><br>
-
-    <input @onclick="OnAddZone" class="CZONE_submit" type="button" value="Confirm">
+    <input @bind="BindZone" type="text" id="fZone" name="fZone" placeholder="Indtast zone..." required><br>
+    <button class="btn btn-danger">Discard Changes</button>
+    <button @onclick="OnAddZone" class="btn btn-success"> Add zone </button>
 </form>
 
 @code {
