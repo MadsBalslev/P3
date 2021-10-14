@@ -11,11 +11,12 @@
         <div class="Table">
             <TableTemplate Items="AppState.users" Context="user">
                 <TableHeader>
-                    <th>Fornavn</th>
-                    <th>Efternavn</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Email</th>
                     <th>Institution</th>
-                    <th>Rolle</th>
+                    <th>Role</th>
+                    <th></th>
                 </TableHeader>
                 <RowTemplate>
                     <td>@user.Fornavn</td>
@@ -23,6 +24,7 @@
                     <td>@user.Email</td>
                     <td>@user.Institution</td>
                     <td>@user.Rolle</td>
+                    <td><a href="/users/" @onclick="editUser">Edit</a></td>
                 </RowTemplate>
             </TableTemplate>
         </div>
@@ -46,8 +48,6 @@
 
 @code
 {
-    // public List<User> users = new List<User>();
-
     protected override void OnInitialized()
     {
         if (!AppState.Auth)
@@ -67,5 +67,10 @@
     private void CreateUser()
     {
         CurrentMode = Mode.Create;
+    }
+
+    private void editUser()
+    {
+
     }
 }

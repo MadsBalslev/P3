@@ -11,6 +11,10 @@
     border: 2px solid #000000;
 }
 
+.UserManagement {
+    padding: 25px;
+}
+
 .Btn {
     padding: 5px 0 0 10px;
 }

@@ -3,28 +3,32 @@
 @inject AppState AppState
 
 <form>
-    <label for="fname">Fornavn:</label>
-    <input @bind="BindName" type="text" id="fname" name="fname" placeholder="Indtast fornavn..." required><br>
-    <label for="lname">Efternavn:</label>
-    <input @bind="BindLastname" type="text" id="lname" name="lname" placeholder="Indtast efternavn..." required><br>
+    <label for="fname">First name:</label>
+    <input @bind="BindName" class="form-control" type="text" id="fname" name="fname" placeholder="Insert First Name..." required><br>
+    <label for="lname">Last Name:</label>
+    <input @bind="BindLastname" class="form-control" type="text" id="lname" name="lname" placeholder="Insert last Name..." required><br>
     <label for="email">Email:</label>
-    <input @bind="BindEmail" type="text" id="email" name="email" placeholder="Indtast email..." required><br>
+    <input @bind="BindEmail" class="form-control" type="text" id="email" name="email" placeholder="Insert Email..." required><br>
 
-    <label for="institution">Vælg institution:</label>
-    <select @bind="BindInstitution" name="institution" id="institution" required>
-        <option selected value="Nordkraft">Nordkraft</option>
+    <label for="institution">Choose institution:</label>
+    <select @bind="BindInstitution" class="form-select" name="institution" id="institution" required>
+        <option selected disabled hidden value="">Choose an institution...</option>
+        <option value="Nordkraft">Nordkraft</option>
         <option value="DGI_Huset">DGI Huset</option>
         <option value="Nicolai_Mor">Nicolai's Mor</option>
-    </select>
+    </select><br>
 
-    <label for="role">Vælg rolle:</label>
-    <select @bind="BindRole" name="role" id="role" required>
+    <label for="role">Choose role:</label>
+    <select @bind="BindRole" class="form-select" name="role" id="role" required>
+        <option selected disabled hidden value="">Choose a role...</option>
         <option value="System_admin">System Admin</option>
         <option value="Institution_admin">Institutions Admin</option>
-        <option value="Institution_user">Institution Bruger</option>
+        <option value="Institution_user">Institution User</option>
     </select>
 
-    <input @onclick="OnAddUser" class="CUSER_submit" type="button" value="Submit">
+    <br>
+    <button class="btn btn-danger">Discard Changes</button>
+    <button @onclick="OnAddUser" class="btn btn-success" type="submit">Add User</button>
 </form>
 
 @code {
