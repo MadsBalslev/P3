@@ -12,10 +12,11 @@
 
     <label for="institution">Choose institution:</label>
     <select @bind="BindInstitution" class="form-select" name="institution" id="institution" required>
-        <option selected disabled hidden value="">Choose an institution...</option>
-        <option value="Nordkraft">Nordkraft</option>
-        <option value="DGI_Huset">DGI Huset</option>
-        <option value="Nicolai_Mor">Nicolai's Mor</option>
+        <option disabled selected value>Select Institution...</option>
+        @foreach (Institution institution in AppState.Institutions)
+        {
+            <option value="@institution.Navn">@institution.Navn</option>
+        }
     </select><br>
 
     <label for="role">Choose role:</label>
@@ -27,7 +28,7 @@
     </select>
 
     <br>
-    <button class="btn btn-danger">Discard Changes</button>
+    <button class="btn btn-danger" type="reset">Discard Changes</button>
     <button @onclick="OnAddUser" class="btn btn-success" type="submit">Add User</button>
 </form>
 

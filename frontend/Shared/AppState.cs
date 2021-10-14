@@ -12,28 +12,17 @@ namespace frontend
         "sys_admin"
       };
 
-    public List<Institution> institutions = new List<Institution>();
+    //public List<Institution> institutions = new List<Institution>();
 
     public event Action OnInstitutionUpdate;
     public void AddInstitution(Institution inst)
     {
-      institutions.Add(inst);
+      _institutions.Add(inst);
       OnInstitutionUpdate?.Invoke();
     }
     public void RemoveInstitution()
     {
 
-    }
-    public void EditInstitution(Institution institution)
-    {
-  
-        int index = institutions.FindIndex(item => item.Navn == institution.Navn);
-        if (index >= 0) 
-        {
-            Console.WriteLine("bang");
-            institutions[index].Navn = "hej";
-            institutions[index].Admin = "XD";
-        }
     }
 
     public List<User> users = new List<User>();
@@ -80,6 +69,9 @@ namespace frontend
     {
       Auth = false;
     }
+
+    private List<Institution> _institutions = new List<Institution>();
+    public IReadOnlyList<Institution> Institutions { get => _institutions.AsReadOnly();}
 
     private List<Zone> _zones = new List<Zone>();
     public IReadOnlyList<Zone> Zones {get => _zones.AsReadOnly();}
