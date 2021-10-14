@@ -3,11 +3,11 @@
 @inject AppState AppState
 
 <form>
-    <div class="form-gro">
+    <div class="form-group">
         <label for="fZone">Zone</label>
         <input @bind="BindZone" class="form-control" type="text" id="fZone" name="fZone" placeholder="Enter zonename..." required><br>
     </div>
-
+    <button class="btn btn-danger">Discard Changes</button>
     <button @onclick="OnAddZone" class="btn btn-success" type="submit">Confirm</button>
 </form>
 
