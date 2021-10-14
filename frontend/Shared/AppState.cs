@@ -57,17 +57,17 @@ namespace frontend
 
     public bool Auth { get; private set; }
     public string Role {get; private set;}
-    private List<string> _imgSources = new List<string>()
+    private List<CPoster> _posters = new List<CPoster>()
       {
-      "https://cdn.discordapp.com/attachments/755020353201373244/895224365711511612/image0.png",
+      new CPoster("Test", "12/10-2021", "15/10-2021", "https://cdn.discordapp.com/attachments/755020353201373244/895224365711511612/image0.png"),
       };
-    public IReadOnlyList<string> ImgSources { get => _imgSources.AsReadOnly(); }
+    public IReadOnlyList<CPoster> Posters { get => _posters.AsReadOnly(); }
     public event Action OnListUpdate;
     public event Action OnAuthChange;
 
-    public void AddPoster(string imgSource)
+    public void AddPoster(CPoster poster)
     {
-      _imgSources.Add(imgSource);
+      _posters.Add(poster);
       OnListUpdate?.Invoke();
     }
 

@@ -1,4 +1,5 @@
 @using System.Collections.ObjectModel
+@inject AppState AppState
 
 <form>
     <label for="pname">Plakatnavn:</label>
@@ -7,20 +8,8 @@
     <input @bind="BindStartDate" type="text" id="sdate" name="sdate" placeholder="Indtast startdato..." required><br>
     <label for="edate">Slutdato:</label>
     <input @bind="BindEndDate" type="text" id="edate" name="edate" placeholder="Indtast slutdato..." required><br>
-
-    @* <label for="institution">Vælg institution:</label>
-    <select @bind="BindInstitution" name="institution" id="institution" required>
-        <option selected value="Nordkraft">Nordkraft</option>
-        <option value="DGI_Huset">DGI Huset</option>
-        <option value="Nicolai_Mor">Nicolai's Mor</option>
-    </select>
-
-    <label for="role">Vælg rolle:</label>
-    <select @bind="BindRole" name="role" id="role" required>
-        <option value="System_admin">System Admin</option>
-        <option value="Institution_admin">Institutions Admin</option>
-        <option value="Institution_user">Institution Bruger</option>
-    </select> *@
+    <label for="url">Slutdato:</label>
+    <input @bind="BindUrl" type="url" id="url" name="url" placeholder="Indtast url..." required><br>
 
     <input @onclick="OnAddPoster" class="CPOSTER_submit" type="button" value="Submit">
 </form>
@@ -29,11 +18,13 @@
     private string BindPosterName { get; set; }
     private string BindStartDate { get; set; }
     private string BindEndDate { get; set; }
+    private string BindUrl {get; set; }
 
     private void OnAddPoster()
     {
-        CPoster PosterList = new CPoster(BindPosterName, BindStartDate, BindEndDate);
-        OnAddPosterCallback.InvokeAsync(PosterList);
+        CPoster Poster = new CPoster(BindPosterName, BindStartDate, BindEndDate, BindUrl);
+        AppState.AddPoster(Poster);
+        OnAddPosterCallback.InvokeAsync(Poster);
     }
 
     [Parameter]
