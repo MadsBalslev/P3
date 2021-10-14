@@ -3,12 +3,12 @@
 @inject AppState AppState
 
 <form>
-    <label for="IName">Institutionsnavn:</label>
-    <input @bind="BindIName" type="text" id="IName" name="IName" placeholder="Indtast institutionsnavn..." required><br>
-    <label for="IAdmin">Kontaktperson:</label>
-    <input @bind="BindIAdmin" type="text" id="IAdmin" name="IAdmin" placeholder="Indtast admins navn..." required><br>
+    <label for="IName">Institution name:</label>
+    <input @bind="BindIName" type="text" id="IName" name="IName" placeholder="Enter institution name..." required><br>
+    <label for="IAdmin">Admin name:</label>
+    <input @bind="BindIAdmin" type="text" id="IAdmin" name="IAdmin" placeholder="Enter admin name..." required><br>
 
-    <input @onclick="OnAddInstitution" class="CUSER_submit" type="button" value="Submit">
+    <input @onclick="OnAddInstitution" class="CUSER_submit" type="button" value="Confirm">
 </form>
 
 @code {
