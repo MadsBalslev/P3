@@ -30,4 +30,12 @@
     {
         if(AppState.Login(email)) NavigationManager.NavigateTo("/PosterManagement");
     }
+
+    protected override void OnInitialized()
+    {
+        if (AppState.Auth)
+        {
+            NavigationManager.NavigateTo("/PosterManagement");
+        }
+    }
 }

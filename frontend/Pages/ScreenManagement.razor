@@ -6,11 +6,9 @@
 
 <div class ="screenContainer">
     <div class="group">
-        <div class="Btn">
-            <button @onclick="CreateScreen">Create Screen</button>
-        </div>
+        <button class="btn btn-primary btn-sm" @onclick="CreateScreen">Create Screen</button>
         <div class="Table">
-            <TableTemplate Items="AppState.screens" Context="screen">
+            <TableTemplate Items="AppState.Screens" Context="screen">
                 <TableHeader>
                     <th>Screen Name</th>
                     <th>Zone</th>
@@ -27,14 +25,12 @@
 
 
     <div class="group">
-        <div class="Btn">
-            <button @onclick="CreateZone">Create Zone</button>
-        </div>
+        <button class="btn btn-primary btn-sm" @onclick="CreateZone">Create Zone</button>
         <div class="Table">
-            <TableTemplate Items="AppState.zones" Context="zone">
+            <TableTemplate Items="AppState.Zones" Context="zone">
                 <TableHeader>
-                    <th>Zone Name</th>
-                    <th></th>
+                    <th>Zonename</th>
+                    <th>Edit</th>
                 </TableHeader>
                 <RowTemplate>
                     <td>@zone.Name</td>
@@ -83,10 +79,13 @@
 
     protected override void OnInitialized()
     {
+        AppState.OnPosterAdd += StateHasChanged;
+        AppState.OnScreenAdd += StateHasChanged;
         if (!AppState.Auth)
         {
             NavManager.NavigateTo("/");
         }
+
     }
 
     private void CreateZone()
