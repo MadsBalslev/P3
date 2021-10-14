@@ -7,7 +7,7 @@
 <div class ="screenContainer">
     <div class="group">
         <div class="Btn">
-            <button @onclick="CreateScreen">Create Screen</button>
+            <button class="btn btn-secondary" @onclick="CreateScreen">Create Screen</button>
         </div>
         <div class="Table">
             <TableTemplate Items="AppState.screens" Context="screen">
@@ -28,7 +28,7 @@
 
     <div class="group">
         <div class="Btn">
-            <button @onclick="CreateZone">Create Zone</button>
+            <button class="btn btn-secondary" @onclick="CreateZone">Create Zone</button>
         </div>
         <div class="Table">
             <TableTemplate Items="AppState.zones" Context="zone">
