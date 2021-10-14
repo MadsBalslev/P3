@@ -64,11 +64,12 @@ namespace frontend
     public IReadOnlyList<CPoster> Posters { get => _posters.AsReadOnly(); }
     public event Action OnListUpdate;
     public event Action OnAuthChange;
+    public event Action OnPosterAdd;
 
     public void AddPoster(CPoster poster)
     {
       _posters.Add(poster);
-      OnListUpdate?.Invoke();
+      OnPosterAdd?.Invoke();
     }
 
     public bool Login(string user)

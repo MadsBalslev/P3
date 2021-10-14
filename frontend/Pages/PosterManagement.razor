@@ -47,6 +47,7 @@
 {
   protected override void OnInitialized()
   {
+    AppState.OnPosterAdd += StateHasChanged;
     if (!AppState.Auth)
     {
         NavigationManager.NavigateTo("/");

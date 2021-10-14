@@ -22,7 +22,7 @@
     </div>
     <div class="btnContainer">
         <button @onclick="OnAddPoster" class="btn btn-success" type="submit">Add Poster</button>
-        <button class="btn btn-danger">Discard Changes</button>
+        <button @onclick="DiscardChanges" class="btn btn-danger">Discard Changes</button>
     </div>
 </form>
 
@@ -36,7 +36,12 @@
     {
         CPoster Poster = new CPoster(BindPosterName, BindStartDate, BindEndDate, BindUrl);
         AppState.AddPoster(Poster);
-        OnAddPosterCallback.InvokeAsync(Poster);
+        //OnAddPosterCallback.InvokeAsync(Poster);
+    }
+
+    private void DiscardChanges()
+    {
+        BindPosterName = BindStartDate = BindEndDate = BindUrl = "";
     }
 
     [Parameter]
