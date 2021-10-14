@@ -12,13 +12,13 @@
   System.Timers.Timer ImageTimer;
   int currentPictureNumber = 0;
 
-  IReadOnlyList<String> ImageSourceList;
+  IReadOnlyList<CPoster> Posters;
 
-  string imageSource { get => ImageSourceList[currentPictureNumber]; }
+  string imageSource { get => Posters[currentPictureNumber].Url; }
 
   void nextPic(Object source, System.Timers.ElapsedEventArgs e)
   {
-    if (currentPictureNumber < (ImageSourceList.Count - 1)) currentPictureNumber += 1;
+    if (currentPictureNumber < (Posters.Count - 1)) currentPictureNumber += 1;
     else currentPictureNumber = 0;
     InvokeAsync(StateHasChanged);
   }
@@ -37,6 +37,6 @@
 
   protected override void OnInitialized()
   {
-    ImageSourceList = AppState.ImgSources;
+    Posters = AppState.Posters;
   }
 }
