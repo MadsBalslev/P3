@@ -8,7 +8,8 @@
     <label for="IAdmin">Admin name:</label>
     <input @bind="BindIAdmin" type="text" id="IAdmin" name="IAdmin" placeholder="Enter admin name..." required><br>
 
-    <input @onclick="OnAddInstitution" class="CUSER_submit" type="button" value="Confirm">
+    <button class="btn btn-danger">Discard Changes</button>
+    <input @onclick="OnAddInstitution" class="btn btn-success" type="button" value="Add Institution">
 </form>
 
 @code {
