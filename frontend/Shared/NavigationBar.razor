@@ -1,0 +1,32 @@
+@using System
+@inject NavigationManager navigationManager
+
+<div class="row">
+    <div class="col">
+        <ul class="nav nav-tabs">
+            <CascadingValue Value="_currentRelativeUri">
+                <NavigationBarItem Uri="PosterManagement" Title="Poster management"></NavigationBarItem>
+                <NavigationBarItem Uri="UserManagement" Title="User management"></NavigationBarItem>
+                <NavigationBarItem Uri="InstitutionManagement" Title="Institution management"></NavigationBarItem>
+                <NavigationBarItem Uri="ScreenManagement" Title="Screen management"></NavigationBarItem>
+                <li class="nav-item ml-auto">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Casper Ståhl - Cassiopeia
+                        (System Admin)</a>
+                </li>
+                <NavigationBarItem Uri="YourSettings" Title="Your settings"></NavigationBarItem>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
+                </li>
+            </CascadingValue>
+        </ul>
+    </div>
+</div>
+
+@code
+{
+    private string _currentRelativeUri;
+    protected override void OnInitialized()
+    {
+        _currentRelativeUri = navigationManager.Uri.Split("/")?[3];
+    }
+}
