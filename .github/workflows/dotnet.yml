@@ -12,7 +12,7 @@ jobs:
             - name: Setup .NET
               uses: actions/setup-dotnet@v1
               with:
-                  dotnet-version: 6.0.100-preview.6.21355.2
+                  dotnet-version: 5.0.x
             - name: Restore dependencies
               working-directory: ./frontend
               run: dotnet restore
@@ -22,6 +22,3 @@ jobs:
             - name: Test
               working-directory: ./frontend
               run: dotnet test --no-build --verbosity normal
-            - name: Format
-              working-directory: ./frontend
-              run: dotnet format 
