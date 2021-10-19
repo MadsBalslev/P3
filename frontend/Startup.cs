@@ -33,7 +33,7 @@ namespace frontend
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+app.UseDeveloperExceptionPage();
             }
             else
             {
