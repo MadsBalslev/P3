@@ -26,6 +26,4 @@ jobs:
     - name: Test
       working-directory: ./frontend
       run: dotnet test --no-build --verbosity normal
-    - name: Format
-      working-directory: ./frontend
-      run: dotnet format
+      
