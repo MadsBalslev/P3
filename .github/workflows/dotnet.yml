@@ -18,12 +18,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      working-directory: ./frontend
+      working-directory: ./*
       run: dotnet restore
     - name: Build
-      working-directory: ./frontend
+      working-directory: ./*
       run: dotnet build --no-restore
     - name: Test
-      working-directory: ./frontend
+      working-directory: ./*
       run: dotnet test --no-build --verbosity normal
-      
