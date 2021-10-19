@@ -39,4 +39,4 @@ jobs:
 
             - name: Run dotnet format
               working-directory: ./frontend
-              run: dotnet format --check --verbosity diagnostic
+              run: dotnet format style --check --verbosity diagnostic
