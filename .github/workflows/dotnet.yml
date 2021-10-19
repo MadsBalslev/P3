@@ -25,7 +25,11 @@ jobs:
 
     dotnet-format:
         runs-on: ubuntu-latest
-        steps:
+        steps:      
+        
+            - name: Install dotnet-format tool
+              run: dotnet tool install -g dotnet-format
+            
             - name: Checkout repo
               uses: actions/checkout@v2
 
