@@ -12,17 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - working-directory: ./frontend
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
+      working-directory: ./frontend
       run: dotnet restore
     - name: Build
+      working-directory: ./frontend
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./frontend
       run: dotnet test --no-build --verbosity normal
     - name: Format
+      working-directory: ./frontend
       run: dotnet format
