@@ -14,8 +14,11 @@
         <AppBarButton OnClickCallBack=@UpdateAppBar Title="Institution Management" Link="/InstitutionManagement" />
         <AppBarButton OnClickCallBack=@UpdateAppBar Title="Screen Management" Link="/ScreenManagement" />
         <MudSpacer />
+        <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
+            <MudMenuItem>Your Settings</MudMenuItem>
+            <MudMenuItem>Logout</MudMenuItem>
+        </MudMenu> 
         <MudText>User Name (User Role) - Institution</MudText>
-        <MudIconButton Icon="fas fa-cogs" Color="Color.Warning"></MudIconButton>
     </MudAppBar>
 
     <MudMainContent>
