@@ -1,35 +1,23 @@
 @inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+@using MudBlazor
 
-<div class="page">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Nordkraft PMS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/PosterManagement">Poster management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/UserManagement">User management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/InstitutionManagement">Institution management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Screen management</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+@Body
+<MudMenu Label="Open Menu">
+    <MudMenuItem>Enlist</MudMenuItem>
+    <MudMenuItem>Barracks</MudMenuItem>
+    <MudMenuItem>Armory</MudMenuItem>
+</MudMenu>
 
-    <div class="main">
-        <div class="content px-4 h-100">
-            @Body
-        </div>
-    </div>
-</div>
+<MudMenu Label="Open Dense Menu" Dense="true">
+    <MudMenuItem>Dense Stuff</MudMenuItem>
+    <MudMenuItem>Stuff is Dense</MudMenuItem>
+    <MudMenuItem>Soo Dense</MudMenuItem>
+</MudMenu>
+
+@code
+{
+}
