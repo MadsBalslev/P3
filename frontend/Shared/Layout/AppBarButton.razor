@@ -1,19 +1,13 @@
 @using MudBlazor
+@inherits MudButton
 @inject NavigationManager navigationManager
 
-<MudButton Link=@Link Disabled=_disabled Class=@Class @onclick="@OnClickCallBack">@Title</MudButton>
+<MudButton Link=@Link Disabled=_disabled Class=@Class @onclick="@OnClickCallBack" StartIcon=@StartIcon>
+    @ChildContent
+</MudButton>
 
 @code
 {
-    [Parameter]
-    public string Title { get; set; }
-
-    [Parameter]
-    public string Link { get; set; }
-
-    [Parameter]
-    public string Class { get; set; }
-
     private bool _disabled { get; set; } = false;
 
     [Parameter]
