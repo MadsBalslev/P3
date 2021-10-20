@@ -2,21 +2,20 @@
 @inject NavigationManager navigationManager
 @using MudBlazor
 
-<MudThemeProvider />
+<MudThemeProvider Theme="CustomTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar>
-            <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
-            <AppBarButton OnClickCallBack=@UpdateAppBar Title="Poster Management" Link="/PosterManagement"
-                Class="pl-6" />
-            <AppBarButton OnClickCallBack=@UpdateAppBar Title="User Management" Link="/UserManagement" />
-            <AppBarButton OnClickCallBack=@UpdateAppBar Title="Institution Management" Link="/InstitutionManagement" />
-            <AppBarButton OnClickCallBack=@UpdateAppBar Title="Screen Management" Link="/ScreenManagement" />
-            <MudSpacer />
-            <MudText>User Name (User Role) - Institution</MudText>
-            <MudIconButton Icon="fas fa-cogs" Color="Color.Warning"></MudIconButton>
+        <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
+        <AppBarButton OnClickCallBack=@UpdateAppBar Title="Poster Management" Link="/PosterManagement" Class="pl-6" />
+        <AppBarButton OnClickCallBack=@UpdateAppBar Title="User Management" Link="/UserManagement" />
+        <AppBarButton OnClickCallBack=@UpdateAppBar Title="Institution Management" Link="/InstitutionManagement" />
+        <AppBarButton OnClickCallBack=@UpdateAppBar Title="Screen Management" Link="/ScreenManagement" />
+        <MudSpacer />
+        <MudText>User Name (User Role) - Institution</MudText>
+        <MudIconButton Icon="fas fa-cogs" Color="Color.Warning"></MudIconButton>
     </MudAppBar>
 
     <MudMainContent>
@@ -30,4 +29,31 @@
     {
         StateHasChanged();
     }
+
+    MudTheme CustomTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Black = "#27272f",
+            Background = "#32333d",
+            BackgroundGrey = "#27272f",
+            Surface = "#373740",
+            DrawerBackground = "#27272f",
+            DrawerText = "rgba(255,255,255, 0.50)",
+            DrawerIcon = "rgba(255,255,255, 0.50)",
+            AppbarBackground = "#27272f",
+            AppbarText = "rgba(255,255,255, 0.70)",
+            TextPrimary = "rgba(255,255,255, 0.70)",
+            TextSecondary = "rgba(255,255,255, 0.50)",
+            ActionDefault = "#adadb1",
+            ActionDisabled = "rgba(255,255,255, 0.26)",
+            ActionDisabledBackground = "rgba(255,255,255, 0.12)",
+            Divider = "rgba(255,255,255, 0.12)",
+            DividerLight = "rgba(255,255,255, 0.06)",
+            TableLines = "rgba(255,255,255, 0.12)",
+            LinesDefault = "rgba(255,255,255, 0.12)",
+            LinesInputs = "rgba(255,255,255, 0.3)",
+            TextDisabled = "rgba(255,255,255, 0.2)"
+        }
+    };
 }
