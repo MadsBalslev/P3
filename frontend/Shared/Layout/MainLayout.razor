@@ -7,18 +7,17 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Color="Color.Dark">
-        <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
-        <MudButton class="shades-text text-white pl-6" Href="/">Poster Management</MudButton>
-        <MudButton class="shades-text text-white">User Management</MudButton>
-        <MudButton class="shades-text text-white">Institution Management</MudButton>
-        <MudButton class="shades-text text-white">Screen Management</MudButton>
-        <MudSpacer/>
-        <MudText>User Name (User Role) - Institution</MudText>
-        <MudIconButton Icon="fas fa-cogs" Color="Color.Warning"></MudIconButton>
+    <MudAppBar>
+            <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
+            <AppBarButton OnClickCallBack=@UpdateAppBar Title="Poster Management" Link="/PosterManagement"
+                Class="pl-6" />
+            <AppBarButton OnClickCallBack=@UpdateAppBar Title="User Management" Link="/UserManagement" />
+            <AppBarButton OnClickCallBack=@UpdateAppBar Title="Institution Management" Link="/InstitutionManagement" />
+            <AppBarButton OnClickCallBack=@UpdateAppBar Title="Screen Management" Link="/ScreenManagement" />
+            <MudSpacer />
+            <MudText>User Name (User Role) - Institution</MudText>
+            <MudIconButton Icon="fas fa-cogs" Color="Color.Warning"></MudIconButton>
     </MudAppBar>
-
-
 
     <MudMainContent>
         @Body
@@ -27,4 +26,8 @@
 
 @code
 {
+    private void UpdateAppBar()
+    {
+        StateHasChanged();
+    }
 }
