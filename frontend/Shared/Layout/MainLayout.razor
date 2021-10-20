@@ -5,18 +5,25 @@
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-@Body
-<MudMenu Label="Open Menu">
-    <MudMenuItem>Enlist</MudMenuItem>
-    <MudMenuItem>Barracks</MudMenuItem>
-    <MudMenuItem>Armory</MudMenuItem>
-</MudMenu>
 
-<MudMenu Label="Open Dense Menu" Dense="true">
-    <MudMenuItem>Dense Stuff</MudMenuItem>
-    <MudMenuItem>Stuff is Dense</MudMenuItem>
-    <MudMenuItem>Soo Dense</MudMenuItem>
-</MudMenu>
+<MudLayout>
+    <MudAppBar Color="Color.Dark">
+        <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
+        <MudButton class="shades-text text-white pl-6" Href="/">Poster Management</MudButton>
+        <MudButton class="shades-text text-white">User Management</MudButton>
+        <MudButton class="shades-text text-white">Institution Management</MudButton>
+        <MudButton class="shades-text text-white">Screen Management</MudButton>
+        <MudSpacer/>
+        <MudText>User Name (User Role) - Institution</MudText>
+        <MudIconButton Icon="fas fa-cogs" Color="Color.Warning"></MudIconButton>
+    </MudAppBar>
+
+
+
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
 
 @code
 {
