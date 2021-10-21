@@ -1,7 +1,42 @@
 @page "/PosterManagement"
 @using System
+@using MudBlazor
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="Posters">
+        <MudContainer>
+            <MudTable Items="@Posters">
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Creator</MudTh>
+                    <MudTh>Institution</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.Name</MudTd>
+                    <MudTd>@context.Creator</MudTd>
+                    <MudTd>@context.Institution</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudContainer>
+    </MudTabPanel>
+    <MudTabPanel Text="Poster Schedules">
+    </MudTabPanel>
+</MudTabs>
 
 @code
 {
+    private List<Poster> Posters { get; set; } = new List<Poster>();
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        getPosterFromServer();
+    }
+
+    private void getPosterFromServer()
+    {
+        Posters.Add(new Poster("poster 1", "Casper", "AAU"));
+        Posters.Add(new Poster("poster 2", "Mads", "AAU"));
+        Posters.Add(new Poster("poster 3", "Møller", "AAU"));
+    }
 }
