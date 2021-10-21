@@ -5,10 +5,9 @@ using System.Collections.Generic;
 
 namespace server.Models
 {
-    public partial class Institution
+    public partial class Zone
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string AdminName { get; set; }
     }
 }

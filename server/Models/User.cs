@@ -1,22 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
 namespace server.Models
 {
-    public class User
-    {   
-        public string FirstName {get; set;}
-        public string LastName {get; set;}
-        public string Email {get; set;}
-        public int PhoneNumber {get; set;}
-        public UserRole Role {get; set;}
-        public Institution Institution {get; set;}
-
-        public User(string fName, string lName, string email, int phone, UserRole role, Institution inst)
-        {
-            this.FirstName = fName;
-            this.LastName = lName;
-            this.Email = email;
-            this.PhoneNumber = phone;
-            this.Role = role;
-            this.Institution = inst;
-        }
+    public partial class User
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public int PhoneNumber { get; set; }
+        public string Institution { get; set; }
+        public int Role { get; set; }
     }
 }
