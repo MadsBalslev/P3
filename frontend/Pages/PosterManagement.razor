@@ -1,22 +1,55 @@
 @page "/PosterManagement"
 @using System
 @using MudBlazor
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@inject ISnackbar Snackbar
 
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Posters">
         <MudContainer>
-            <MudTable Items="@Posters">
-                <HeaderContent>
-                    <MudTh>Name</MudTh>
-                    <MudTh>Creator</MudTh>
-                    <MudTh>Institution</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd>@context.Name</MudTd>
-                    <MudTd>@context.Creator</MudTd>
-                    <MudTd>@context.Institution</MudTd>
-                </RowTemplate>
-            </MudTable>
+            <MudGrid Justify="Justify.Center">
+                <MudItem>
+                    <MudTable Items="@Posters">
+                        <HeaderContent>
+                            <MudTh>Name</MudTh>
+                            <MudTh>Creator</MudTh>
+                            <MudTh>Institution</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>@context.Name</MudTd>
+                            <MudTd>@context.Creator</MudTd>
+                            <MudTd>@context.Institution</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudItem>
+                <MudItem>
+                    <MudForm>
+                        <!-- <div style="max-width: 400px;"> -->
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudForm @ref="form" @bind-IsValid="@success">
+                                        <MudTextField T="string" Label="Poster name" Required="true"
+                                            RequiredError="Poster name is required!" />
+                                        
+                                        <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple
+                                            accept=".jpg, .jpeg, .png" />
+
+                                        <MudButton HtmlTag="label" Variant="Variant.Filled"
+                                            StartIcon="@Icons.Filled.CloudUpload" for="fileInput112">
+                                            Upload your image
+                                        </MudButton>
+                                    </MudForm>
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)"
+                                        Class="ml-auto">Upload poster</MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                        <!-- </div> -->
+                    </MudForm>
+                </MudItem>
+            </MudGrid>
         </MudContainer>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
@@ -38,5 +71,19 @@
         Posters.Add(new Poster("poster 1", "Casper", "AAU"));
         Posters.Add(new Poster("poster 2", "Mads", "AAU"));
         Posters.Add(new Poster("poster 3", "Møller", "AAU"));
+    }
+    bool success;
+    MudForm form;
+    private void UploadFiles(InputFileChangeEventArgs e)
+    {
+        var entries = e.GetMultipleFiles();
+        //Do your validations here
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add($"Files with {entries.FirstOrDefault().Size} bytes size are not allowed", Severity.Error);
+        Snackbar.Add($"Files starting with letter {entries.FirstOrDefault().Name.Substring(0, 1)} are not recommended",
+        Severity.Warning);
+        Snackbar.Add($"This file has the extension {entries.FirstOrDefault().Name.Split(".").Last()}", Severity.Info);
+
+        //TODO upload the files to the server
     }
 }
