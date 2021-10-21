@@ -5,12 +5,27 @@
 @using System.ComponentModel.DataAnnotations
 @inject ISnackbar Snackbar
 
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+    .selected>td {
+        color: white !important;
+    }
+
+    .selected>td .mud-input {
+        color: white !important;
+    }
+</style>
+
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Posters">
         <MudContainer>
             <MudGrid Justify="Justify.Center">
                 <MudItem>
-                    <MudTable Items="@Posters">
+                    <MudTable Items="@Posters" Hover="true" RowClassFunc="@SelectedRowClassFunc" @ref="posterMudTable"
+                        @onclick="RowClickEvent">
                         <HeaderContent>
                             <MudTh>Name</MudTh>
                             <MudTh>Creator</MudTh>
@@ -25,13 +40,15 @@
                 </MudItem>
                 <MudItem>
                     <MudForm>
-                        <!-- <div style="max-width: 400px;"> -->
-                            <MudCard>
-                                <MudCardContent>
+                        <MudCard>
+                            <MudCardContent>
+                                @if (currentMode == PosterMode.Create)
+                                {
                                     <MudForm @ref="form" @bind-IsValid="@success">
+
                                         <MudTextField T="string" Label="Poster name" Required="true"
                                             RequiredError="Poster name is required!" />
-                                        
+
                                         <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple
                                             accept=".jpg, .jpeg, .png" />
 
@@ -40,13 +57,17 @@
                                             Upload your image
                                         </MudButton>
                                     </MudForm>
-                                </MudCardContent>
-                                <MudCardActions>
-                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)"
-                                        Class="ml-auto">Upload poster</MudButton>
-                                </MudCardActions>
-                            </MudCard>
-                        <!-- </div> -->
+                                }
+                                else if (currentMode == PosterMode.Edit)
+                                {
+                                    <MudForm @ref="form" @bind-IsValid="@success"></MudForm>
+                                }
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)"
+                                    Class="ml-auto">Upload poster</MudButton>
+                            </MudCardActions>
+                        </MudCard>
                     </MudForm>
                 </MudItem>
             </MudGrid>
@@ -58,6 +79,7 @@
 
 @code
 {
+    private PosterMode currentMode { get; set; } = PosterMode.Create;
     private List<Poster> Posters { get; set; } = new List<Poster>();
 
     protected override void OnParametersSet()
@@ -72,6 +94,37 @@
         Posters.Add(new Poster("poster 2", "Mads", "AAU"));
         Posters.Add(new Poster("poster 3", "Møller", "AAU"));
     }
+
+    private int selectedRowNumber = -1;
+    private MudTable<Poster> posterMudTable;
+
+    private string SelectedRowClassFunc(Poster poster, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            currentMode = PosterMode.Create;
+            return string.Empty;
+        }
+        else if (posterMudTable.SelectedItem != null && posterMudTable.SelectedItem.Equals(poster))
+        {
+            selectedRowNumber = rowNumber;
+            currentMode = PosterMode.Edit;
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+
+    }
+
+    private void RowClickEvent()
+    {
+
+    }
+
+
     bool success;
     MudForm form;
     private void UploadFiles(InputFileChangeEventArgs e)
@@ -85,5 +138,11 @@
         Snackbar.Add($"This file has the extension {entries.FirstOrDefault().Name.Split(".").Last()}", Severity.Info);
 
         //TODO upload the files to the server
+    }
+
+    enum PosterMode
+    {
+        Edit,
+        Create,
     }
 }
