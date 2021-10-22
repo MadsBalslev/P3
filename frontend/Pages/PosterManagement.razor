@@ -5,6 +5,8 @@
 @using System.ComponentModel.DataAnnotations
 @inject ISnackbar Snackbar
 
+@* //TODO the poster and poster schedule managers should be generalized *@
+
 <style>
     .selected {
         background-color: #1E88E5 !important;
@@ -24,8 +26,8 @@
         <MudContainer>
             <MudGrid Justify="Justify.Center">
                 <MudItem>
-                    <MudTable Items="@Posters" Hover="true" RowClassFunc="@SelectedRowClassFunc" @ref="posterMudTable"
-                        @onclick="RowClickEvent">
+                    <MudTable Items="@_posters" Hover="true" RowClassFunc="@SelectedRowClassFunc" @ref="_posterMudTable"
+                        @onclick="UpdateManager">
                         <HeaderContent>
                             <MudTh>Name</MudTh>
                             <MudTh>Creator</MudTh>
@@ -42,29 +44,29 @@
                     <MudForm>
                         <MudCard>
                             <MudCardContent>
-                                @if (currentMode == PosterMode.Create)
+                                @if (_currentMode == PosterMode.Create)
                                 {
-                                    <MudForm @ref="form" @bind-IsValid="@success">
+                                    <MudForm @ref="_form" @bind-IsValid="@_success">
 
                                         <MudTextField T="string" Label="Poster name" Required="true"
-                                            RequiredError="Poster name is required!" />
+                                        RequiredError="Poster name is required!" />
 
                                         <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple
-                                            accept=".jpg, .jpeg, .png" />
+                                        accept=".jpg, .jpeg, .png" />
 
                                         <MudButton HtmlTag="label" Variant="Variant.Filled"
-                                            StartIcon="@Icons.Filled.CloudUpload" for="fileInput112">
+                                        StartIcon="@Icons.Filled.CloudUpload" for="fileInput112">
                                             Upload your image
                                         </MudButton>
                                     </MudForm>
                                 }
-                                else if (currentMode == PosterMode.Edit)
+                                else if (_currentMode == PosterMode.Edit)
                                 {
-                                    <MudForm @ref="form" @bind-IsValid="@success"></MudForm>
+                                    <MudForm @ref="_form" @bind-IsValid="@_success"></MudForm>
                                 }
                             </MudCardContent>
                             <MudCardActions>
-                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)"
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)"
                                     Class="ml-auto">Upload poster</MudButton>
                             </MudCardActions>
                         </MudCard>
@@ -79,8 +81,23 @@
 
 @code
 {
-    private PosterMode currentMode { get; set; } = PosterMode.Create;
-    private List<Poster> Posters { get; set; } = new List<Poster>();
+    private enum PosterMode
+    {
+        Edit,
+        Create,
+    }
+
+    private MudForm _form;
+
+    private bool _success;
+
+    private PosterMode _currentMode { get; set; } = PosterMode.Create;
+
+    private List<Poster> _posters { get; set; } = new List<Poster>();
+
+    private int _selectedRowNumber = -1;
+
+    private MudTable<Poster> _posterMudTable;
 
     protected override void OnParametersSet()
     {
@@ -90,26 +107,23 @@
 
     private void getPosterFromServer()
     {
-        Posters.Add(new Poster("poster 1", "Casper", "AAU"));
-        Posters.Add(new Poster("poster 2", "Mads", "AAU"));
-        Posters.Add(new Poster("poster 3", "Møller", "AAU"));
+        _posters.Add(new Poster("poster 1", "Casper", "AAU"));
+        _posters.Add(new Poster("poster 2", "Mads", "AAU"));
+        _posters.Add(new Poster("poster 3", "Møller", "AAU"));
     }
-
-    private int selectedRowNumber = -1;
-    private MudTable<Poster> posterMudTable;
 
     private string SelectedRowClassFunc(Poster poster, int rowNumber)
     {
-        if (selectedRowNumber == rowNumber)
+        if (_selectedRowNumber == rowNumber)
         {
-            selectedRowNumber = -1;
-            currentMode = PosterMode.Create;
+            _selectedRowNumber = -1;
+            _currentMode = PosterMode.Create;
             return string.Empty;
         }
-        else if (posterMudTable.SelectedItem != null && posterMudTable.SelectedItem.Equals(poster))
+        else if (_posterMudTable.SelectedItem != null && _posterMudTable.SelectedItem.Equals(poster))
         {
-            selectedRowNumber = rowNumber;
-            currentMode = PosterMode.Edit;
+            _selectedRowNumber = rowNumber;
+            _currentMode = PosterMode.Edit;
             return "selected";
         }
         else
@@ -119,30 +133,18 @@
 
     }
 
-    private void RowClickEvent()
-    {
+    private void UpdateManager() { @* StateHasChanged() is implicitly called *@ }
 
-    }
-
-
-    bool success;
-    MudForm form;
     private void UploadFiles(InputFileChangeEventArgs e)
     {
         var entries = e.GetMultipleFiles();
         //Do your validations here
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        @* Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Add($"Files with {entries.FirstOrDefault().Size} bytes size are not allowed", Severity.Error);
         Snackbar.Add($"Files starting with letter {entries.FirstOrDefault().Name.Substring(0, 1)} are not recommended",
         Severity.Warning);
-        Snackbar.Add($"This file has the extension {entries.FirstOrDefault().Name.Split(".").Last()}", Severity.Info);
+        Snackbar.Add($"This file has the extension {entries.FirstOrDefault().Name.Split(".").Last()}", Severity.Info); *@
 
         //TODO upload the files to the server
-    }
-
-    enum PosterMode
-    {
-        Edit,
-        Create,
     }
 }
