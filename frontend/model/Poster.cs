@@ -1,4 +1,4 @@
-class Poster
+class Poster : IManageable
 {
     public string Name { get; set; }
     public string Creator { get; set; }
