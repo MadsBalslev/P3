@@ -1,4 +1,3 @@
-
 namespace frontend.Shared
 {
     public partial class Manager<TManageable> where TManageable : IManageable

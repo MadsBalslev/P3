@@ -1,4 +1,6 @@
-class Poster : IManageable
+using System.Collections;
+
+class Poster
 {
     public string Name { get; set; }
     public string Creator { get; set; }
