@@ -1,0 +1,60 @@
+@* @using MudBlazor
+
+
+@* this only works in 6.0 *@
+@* @typeparam TManageable where TManageable : IManageable *@
+
+@* but for now this will work with a partial class *@
+@typeparam TManageable
+
+<MudContainer>
+    <MudGrid Justify="Justify.Center">
+        <MudItem>
+            <MudTable Items="@_manageables">
+                <HeaderContent>
+                    @foreach (string header in _headers)
+                    {
+                        <MudTh>@header</MudTh>
+                    }
+                </HeaderContent>
+                <RowTemplate>
+                    @foreach (string key in )
+                    {
+                        <MudTd></MudTd>
+                    }
+                </RowTemplate>
+            </MudTable>
+        </MudItem>
+
+        <MudItem>
+
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    // TODO IManageable should be TManageable, but this is easier for construction
+    private List<IManageable> _manageables = new List<IManageable>();
+    private List<string> _headers = new List<string>();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        GetManageables();
+    }
+
+    private void GetManageables()
+    {
+        _manageables.Add(new Poster("Poster 1", "Casper", "AAU"));
+        _manageables.Add(new Poster("Poster 2", "Møller", "AAU"));
+        _manageables.Add(new Poster("Poster 3", "Mads", "AAU"));
+        _headers.Add("test");
+        _headers.Add("test");
+        _headers.Add("test");
+    }
+
+
+
+
+} *@
