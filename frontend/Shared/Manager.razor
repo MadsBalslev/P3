@@ -1,4 +1,4 @@
-@* @using MudBlazor
+@using MudBlazor
 
 
 @* this only works in 6.0 *@
@@ -12,15 +12,16 @@
         <MudItem>
             <MudTable Items="@_manageables">
                 <HeaderContent>
-                    @foreach (string header in _headers)
+                    @foreach (string header in _manageables?[0].TableHeader)
                     {
                         <MudTh>@header</MudTh>
                     }
                 </HeaderContent>
                 <RowTemplate>
-                    @foreach (string key in )
+                    @* // FIXME this is a bad way to do this *@
+                    @foreach (string MudTableDateName in _manageables?[0].MudTableDataNames)
                     {
-                        <MudTd></MudTd>
+                        <MudTh>@context[MudTableDateName]</MudTh>
                     }
                 </RowTemplate>
             </MudTable>
@@ -36,7 +37,6 @@
 {
     // TODO IManageable should be TManageable, but this is easier for construction
     private List<IManageable> _manageables = new List<IManageable>();
-    private List<string> _headers = new List<string>();
 
     protected override void OnParametersSet()
     {
@@ -49,12 +49,9 @@
         _manageables.Add(new Poster("Poster 1", "Casper", "AAU"));
         _manageables.Add(new Poster("Poster 2", "Møller", "AAU"));
         _manageables.Add(new Poster("Poster 3", "Mads", "AAU"));
-        _headers.Add("test");
-        _headers.Add("test");
-        _headers.Add("test");
     }
 
 
 
 
-} *@
+}
