@@ -1,0 +1,66 @@
+@using MudBlazor
+@typeparam T
+@inherits MudTable<T>
+@using System
+
+<MudContainer>
+    <MudGrid Justify="Justify.Center">
+        <MudItem>
+            <MudTable Items="@ItemList">
+                <HeaderContent>
+                    @HeaderContent
+                </HeaderContent>
+                <RowTemplate>
+                    @foreach (string rowTemplateProperty in DisplayRowTemplateProperties)
+                    {
+                        <MudTd>@context?[rowTemplateProperty]</MudTd>
+                    }
+                </RowTemplate>
+            </MudTable>
+        </MudItem>
+
+        <MudItem>
+            <MudForm>
+                @MudForm
+            </MudForm>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    [Parameter]
+    public List<T> ItemList { get; set; } = new List<T>();
+
+    [Parameter]
+    public RenderFragment MudForm { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> DisplayRowTemplateProperties { get; set; }
+
+    @* protected override void OnInitialized()
+    {
+    }
+
+    private async Task<List<T>> GetItems()
+    {
+
+
+    }
+
+    private Task<List<T>> PostItem()
+    {
+
+    }
+
+    private PutItem()
+    {
+
+    }
+
+    private void DeleteItem()
+    {
+
+    } *@
+
+}
