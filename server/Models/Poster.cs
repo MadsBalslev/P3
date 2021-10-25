@@ -12,5 +12,7 @@ namespace server.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string ImageUrl { get; set; }
+        public string CreatedBy { get; set; }
+        public string Institution { get; set; }
     }
 }

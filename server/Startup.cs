@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using server.Models;
 
 namespace server
 {
@@ -27,6 +29,9 @@ namespace server
         {
 
             services.AddControllers();
+
+            services.AddDbContext<databaseContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("MySQL")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "server", Version = "v1" });

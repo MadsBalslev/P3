@@ -27,8 +27,7 @@ namespace server.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySQL("server=localhost;port=3306;database=database;user=root;password=123;");
+                optionsBuilder.UseMySQL("Name=ConnectionStrings:MySQL");
             }
         }
 
@@ -61,6 +60,11 @@ namespace server.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(999)
+                    .HasColumnName("created_by");
+
                 entity.Property(e => e.EndDate)
                     .HasColumnType("date")
                     .HasColumnName("end_date");
@@ -69,6 +73,11 @@ namespace server.Models
                     .IsRequired()
                     .HasMaxLength(999)
                     .HasColumnName("image_url");
+
+                entity.Property(e => e.Institution)
+                    .IsRequired()
+                    .HasMaxLength(999)
+                    .HasColumnName("institution");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
