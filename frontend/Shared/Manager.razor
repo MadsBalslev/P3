@@ -1,57 +1,66 @@
 @using MudBlazor
-
-
-@* this only works in 6.0 *@
-@* @typeparam TManageable where TManageable : IManageable *@
-
-@* but for now this will work with a partial class *@
-@typeparam TManageable
+@typeparam T
+@inherits MudTable<T>
+@using System
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
         <MudItem>
-            <MudTable Items="@_manageables">
+            <MudTable Items="@ItemList">
                 <HeaderContent>
-                    @foreach (string header in _manageables?[0].TableHeader)
-                    {
-                        <MudTh>@header</MudTh>
-                    }
+                    @HeaderContent
                 </HeaderContent>
                 <RowTemplate>
-                    @* // FIXME this is a bad way to do this *@
-                    @foreach (string MudTableDateName in _manageables?[0].MudTableDataNames)
+                    @foreach (string rowTemplateProperty in DisplayRowTemplateProperties)
                     {
-                        <MudTh>@context[MudTableDateName]</MudTh>
+                        <MudTd>@context?[rowTemplateProperty]</MudTd>
                     }
                 </RowTemplate>
             </MudTable>
         </MudItem>
 
         <MudItem>
-
+            <MudForm>
+                @MudForm
+            </MudForm>
         </MudItem>
     </MudGrid>
 </MudContainer>
 
 @code
 {
-    // TODO IManageable should be TManageable, but this is easier for construction
-    private List<IManageable> _manageables = new List<IManageable>();
+    [Parameter]
+    public List<T> ItemList { get; set; } = new List<T>();
 
-    protected override void OnParametersSet()
+    [Parameter]
+    public RenderFragment MudForm { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> DisplayRowTemplateProperties { get; set; }
+
+    @* protected override void OnInitialized()
     {
-        base.OnParametersSet();
-        GetManageables();
     }
 
-    private void GetManageables()
+    private async Task<List<T>> GetItems()
     {
-        _manageables.Add(new Poster("Poster 1", "Casper", "AAU"));
-        _manageables.Add(new Poster("Poster 2", "Møller", "AAU"));
-        _manageables.Add(new Poster("Poster 3", "Mads", "AAU"));
+
+
     }
 
+    private Task<List<T>> PostItem()
+    {
 
+    }
 
+    private PutItem()
+    {
+
+    }
+
+    private void DeleteItem()
+    {
+
+    } *@
 
 }

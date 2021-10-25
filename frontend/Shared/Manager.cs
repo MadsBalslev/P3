@@ -1,7 +1,9 @@
+using MudBlazor;
+
 namespace frontend.Shared
 {
-    public partial class Manager<TManageable> where TManageable : IManageable
+    partial class Manager<T> : MudTable<T> where T : Manageable
     {
-        string _test { get; set; } = "test";
+
     }
 }
