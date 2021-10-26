@@ -3,7 +3,10 @@
 @using System.Collections.Generic
 @layout PosterScreenLayout
 
-<div class="imgContainer">
+<div class="loading" hidden=@hidetext>
+    <h1> Loading picture number: @currentPicture ...</h1>
+</div>
+<div class="imgContainer" hidden=@hidepicture>
     <img class="poster" src="@imageSource">
 </div>
 
@@ -11,8 +14,11 @@
 
 @code
 {
+
     System.Timers.Timer ImageTimer;
     int currentPicture = 0;
+    bool hidepicture = true;
+    bool hidetext = false;
     string imageSource { get => Posters[currentPicture]; }
     List<string> Posters = new List<string>
 {
@@ -67,6 +73,12 @@
             cachenumber++;
             currentPicture++;
             InvokeAsync(StateHasChanged);
+
+            if (cachenumber == Posters.Count - 1)
+            {
+                hidepicture = false;
+                hidetext = true;
+            }
         }
     }
 }
