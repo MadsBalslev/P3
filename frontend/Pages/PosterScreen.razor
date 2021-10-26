@@ -1,17 +1,52 @@
 @page "/posterscreen"
 @using System
+@using System.Collections.Generic
+@layout PosterScreenLayout
 
-<div window.onload="createPoster()"> </div>
-<div src="@imagesource"> </div>
+<div class="imgContainer">
+    <img class="poster" src="@imageSource">
+</div>
 
 
 
 @code
 {
-    void createPoster()
-    {
+    System.Timers.Timer ImageTimer;
+    int currentPicture = 0;
+    string imageSource { get => Posters[currentPicture]; }
+    List<string> Posters = new List<string>
+{
+"https://cdn.discordapp.com/attachments/789112629838086166/902286892949721128/rif-1635192349160.jpg",
+"https://cdn.discordapp.com/attachments/755020353201373244/902461379485790238/tlvvhv1sum641.png",
+};
+
+    @* string createPoster()
+        {
         Poster picture1 = new Poster("Film plakat", "Patrick", "Nordkraft");
         picture1.ImageUrl = "https://cdn.discordapp.com/attachments/755020353201373244/902461379485790238/tlvvhv1sum641.png";
-        string imagesource = picture1.ImageUrl;
+        return picture1.ImageUrl;
+        }
+
+        string showPoster()
+        {
+        return createPoster();
+        } *@
+
+    void nextPic(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        if ((currentPicture < Posters.Count - 1)) { currentPicture += 1; }
+        else currentPicture = 0;
+        InvokeAsync(StateHasChanged);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ImageTimer = new System.Timers.Timer(4000);
+            ImageTimer.Elapsed += nextPic;
+            ImageTimer.AutoReset = true;
+            ImageTimer.Start();
+        }
     }
 }
