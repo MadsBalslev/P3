@@ -1,8 +1,24 @@
 using System;
-using System.Collections.Generic;
 
+[APIAttribute("/Posters")]
 public class Poster
 {
+    private DateTime _startDate = new DateTime(1, 1, 1);
+
+    private DateTime _endDate = new DateTime(1, 1, 1);
+
+    private int _id = 0;
+
+    private string ImageUrl { get; set; } = "nil";
+
+    [AccessLevelAttribute(AccessLevel.InstAdmin)]
+    [HeaderDisplaynameAttribute("ID")]
+    public string Id
+    {
+        get { return _id.ToString(); }
+        set { _id = Int32.Parse(value); }
+    }
+    
     [AccessLevelAttribute(AccessLevel.User)]
     [HeaderDisplaynameAttribute("Name")]
     public string Name { get; set; } = "nil";
@@ -17,34 +33,27 @@ public class Poster
 
     [AccessLevelAttribute(AccessLevel.User)]
     [HeaderDisplaynameAttribute("Start date")]
-    public string StartDate 
-    { 
-        get { return _startDate.ToString(); } 
-        set { _startDate = DateTime.Parse(value);} 
+    public string StartDate
+    {
+        get { return _startDate.ToString(); }
+        set { _startDate = DateTime.Parse(value); }
     }
-
-    private DateTime _startDate = new DateTime(0, 0, 0);
 
     [AccessLevelAttribute(AccessLevel.User)]
     [HeaderDisplaynameAttribute("End date")]
-    public string EndDate 
-    { 
-        get { return _endDate.ToString(); } 
-        set { _endDate = DateTime.Parse(value); } 
+    public string EndDate
+    {
+        get { return _endDate.ToString(); }
+        set { _endDate = DateTime.Parse(value); }
     }
 
-    private DateTime _endDate = new DateTime(0, 0, 0);
-
-    [AccessLevelAttribute(AccessLevel.InstAdmin)]
-    [HeaderDisplaynameAttribute("ID")]
-    public string Id { get; set; } = "nil";
-
-    private string ImageUrl { get; set; } = "nil";
-
-    public Poster(string name, string creator, string institution, string startDate)
+    public Poster(int id, string name, string creator, string institution, DateTime startDate, DateTime endDate)
     {
+        _id = id;
         Name = name;
         Creator = creator;
         Institution = institution;
+        _startDate = startDate;
+        _endDate = endDate;
     }
 }

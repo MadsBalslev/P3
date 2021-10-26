@@ -8,22 +8,43 @@
         <MudItem>
             <MudTable Items="@ItemList">
                 <HeaderContent>
-                    @HeaderContent
+                    @{
+                        foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                        {
+                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
+                            if (attribute is AccessLevelAttribute)
+                            {
+                                AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
+                                if (_userAccessLevel >= accessAttribute.AccessLevel)
+                                {
+                                    attribute = propertyInfo.GetCustomAttribute(typeof(HeaderDisplaynameAttribute), true);
+                                    if (attribute is HeaderDisplaynameAttribute)
+                                    {
+                                        HeaderDisplaynameAttribute headerDisplaynameAttribute = attribute as HeaderDisplaynameAttribute;
+                                        <MudTh>@headerDisplaynameAttribute.HeaderDisplayname</MudTh>
+                                    }
+                                }
+                            }
+
+                        }
+                    }
                 </HeaderContent>
                 <RowTemplate>
-                    @foreach (PropertyInfo propertyInfo in ItemList?[0].GetType().GetProperties(BindingFlags.Public |
-                    BindingFlags.Instance))
-                    {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                        if (attribute is AccessLevelAttribute)
+                    @{
+                        foreach (PropertyInfo propertyInfo in _propertyInfoList)
                         {
-                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
+                            if (attribute is AccessLevelAttribute)
                             {
-                                MethodInfo getter = propertyInfo.GetGetMethod();
-                                <MudTd>@typeof(Poster).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
+                                if (_userAccessLevel >= accessAttribute.AccessLevel)
+                                {
+                                    MethodInfo getter = propertyInfo.GetGetMethod();
+                                    <MudTd>@typeof(Poster).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                }
                             }
                         }
+
                     }
                 </RowTemplate>
             </MudTable>
@@ -38,9 +59,12 @@
 
 @code
 {
+    private IEnumerable<PropertyInfo> _propertyInfoList;
 
-    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.SysAdmin;
+    // TODO this should be a cascading value in MainLayout.razor
+    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.User;
 
+    // TODO replace Poster with T
     [Parameter]
     public List<Poster> ItemList { get; set; } = new List<Poster>();
 
@@ -49,9 +73,11 @@
 
     protected override void OnInitialized()
     {
-        ItemList.Add(new Poster("Poser 1", "Casper", "AAU"));
-        ItemList.Add(new Poster("Poser 2", "Møller", "AKU"));
-        ItemList.Add(new Poster("Poser 3", "Mads", "KRJL"));
+        ItemList.Add(new Poster(0, "Poser 1", "Casper", "AAU", new DateTime(1, 1, 1), new DateTime(1, 1, 1)));
+        ItemList.Add(new Poster(1, "Poser 1", "Casper", "AAU", new DateTime(1, 1, 1), new DateTime(1, 1, 1)));
+        ItemList.Add(new Poster(2, "Poser 1", "Casper", "AAU", new DateTime(1, 1, 1), new DateTime(1, 1, 1)));
+
+        _propertyInfoList = ItemList?[0].GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
     }
     @*
         private async Task<List<T>> GetItems()

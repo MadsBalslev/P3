@@ -1,4 +1,3 @@
-
 using System;
 
 [AttributeUsage(AttributeTargets.Property)]
