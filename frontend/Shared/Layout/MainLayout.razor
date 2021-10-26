@@ -9,15 +9,19 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
-        <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged Link="/PosterManagement" Class="pl-6">Poster Management</AppBarButton>
-        <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged Link="/UserManagement">User Management</AppBarButton>
-        <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged Link="/InstitutionManagement">Institution Management</AppBarButton>
-        <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged Link="/ScreenManagement">Screen Management</AppBarButton>
+        <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged Link="/PosterManagement"
+            Class="pl-6">Poster Management</AppBarButton>
+        <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged Link="/UserManagement">User
+            Management</AppBarButton>
+        <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged
+            Link="/InstitutionManagement">Institution Management</AppBarButton>
+        <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged Link="/ScreenManagement">Screen
+            Management</AppBarButton>
         <MudSpacer />
         <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
             <MudMenuItem>Your Settings</MudMenuItem>
             <MudMenuItem>Logout</MudMenuItem>
-        </MudMenu> 
+        </MudMenu>
         <MudText>User Name (User Role) - Institution</MudText>
     </MudAppBar>
 
@@ -28,6 +32,23 @@
 
 @code
 {
+    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.User;
+
+    private AccessLevel GetUserAccessLevel()
+    {
+        // TODO implement this
+        return AccessLevel.User;
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _userAccessLevel = GetUserAccessLevel();
+    }
+
+
+
     private MudTheme _customTheme = new MudTheme()
     {
         Palette = new Palette()

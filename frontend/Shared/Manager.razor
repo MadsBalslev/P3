@@ -8,11 +8,26 @@
         <MudItem>
             <MudTable Items="@ItemList">
                 <HeaderContent>
-                    @HeaderContent
+                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    {
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
+                        if (attribute is AccessLevelAttribute)
+                        {
+                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
+                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            {
+                                attribute = propertyInfo.GetCustomAttribute(typeof(HeaderDisplaynameAttribute), true);
+                                if (attribute is HeaderDisplaynameAttribute)
+                                {
+                                    HeaderDisplaynameAttribute headerDisplaynameAttribute = attribute as HeaderDisplaynameAttribute;
+                                    <MudTh>@headerDisplaynameAttribute.HeaderDisplayname</MudTh>
+                                }
+                            }
+                        }
+                    }
                 </HeaderContent>
                 <RowTemplate>
-                    @foreach (PropertyInfo propertyInfo in ItemList?[0].GetType().GetProperties(BindingFlags.Public |
-                    BindingFlags.Instance))
+                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
                         Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
                         if (attribute is AccessLevelAttribute)
@@ -21,7 +36,7 @@
                             if (_userAccessLevel >= accessAttribute.AccessLevel)
                             {
                                 MethodInfo getter = propertyInfo.GetGetMethod();
-                                <MudTd>@typeof(Poster).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
                             }
                         }
                     }
@@ -38,21 +53,18 @@
 
 @code
 {
-
-    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.SysAdmin;
+    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
+        BindingFlags.Instance);
 
     [Parameter]
-    public List<Poster> ItemList { get; set; } = new List<Poster>();
+    public List<T> ItemList { get; set; } = new List<T>();
 
     [Parameter]
     public RenderFragment MudForm { get; set; }
 
-    protected override void OnInitialized()
-    {
-        ItemList.Add(new Poster("Poser 1", "Casper", "AAU"));
-        ItemList.Add(new Poster("Poser 2", "Møller", "AKU"));
-        ItemList.Add(new Poster("Poser 3", "Mads", "KRJL"));
-    }
+    [CascadingParameter]
+    protected AccessLevel _userAccessLevel { get; set; }
+
     @*
         private async Task<List<T>> GetItems()
         {
