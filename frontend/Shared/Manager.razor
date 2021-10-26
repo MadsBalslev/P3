@@ -1,7 +1,7 @@
 @using MudBlazor
 @typeparam T
 @inherits MudTable<T>
-@using System
+@using System.Reflection
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
@@ -11,14 +11,23 @@
                     @HeaderContent
                 </HeaderContent>
                 <RowTemplate>
-                    @foreach (string rowTemplateProperty in DisplayRowTemplateProperties)
+                    @foreach (PropertyInfo propertyInfo in ItemList?[0].GetType().GetProperties(BindingFlags.Public |
+                    BindingFlags.Instance))
                     {
-                        <MudTd>@context?[rowTemplateProperty]</MudTd>
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
+                        if (attribute is AccessLevelAttribute)
+                        {
+                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
+                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            {
+                                MethodInfo getter = propertyInfo.GetGetMethod();
+                                <MudTd>@typeof(Poster).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                            }
+                        }
                     }
                 </RowTemplate>
             </MudTable>
         </MudItem>
-
         <MudItem>
             <MudForm>
                 @MudForm
@@ -29,38 +38,41 @@
 
 @code
 {
+
+    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.SysAdmin;
+
     [Parameter]
-    public List<T> ItemList { get; set; } = new List<T>();
+    public List<Poster> ItemList { get; set; } = new List<Poster>();
 
     [Parameter]
     public RenderFragment MudForm { get; set; }
 
-    [Parameter]
-    public IEnumerable<string> DisplayRowTemplateProperties { get; set; }
-
-    @* protected override void OnInitialized()
+    protected override void OnInitialized()
     {
+        ItemList.Add(new Poster("Poser 1", "Casper", "AAU"));
+        ItemList.Add(new Poster("Poser 2", "Møller", "AKU"));
+        ItemList.Add(new Poster("Poser 3", "Mads", "KRJL"));
     }
+    @*
+        private async Task<List<T>> GetItems()
+        {
 
-    private async Task<List<T>> GetItems()
-    {
 
+        }
 
-    }
+        private Task<List<T>> PostItem()
+        {
 
-    private Task<List<T>> PostItem()
-    {
+        }
 
-    }
+        private PutItem()
+        {
 
-    private PutItem()
-    {
+        }
 
-    }
+        private void DeleteItem()
+        {
 
-    private void DeleteItem()
-    {
-
-    } *@
+        } *@
 
 }
