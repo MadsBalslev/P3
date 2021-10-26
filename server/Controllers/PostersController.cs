@@ -46,7 +46,9 @@ namespace server.Controllers
             _context.Posters.Add(poster);
             _context.SaveChanges();
 
-            return _context.Posters.Where(p => p.Name == poster.Name && p.Institution == poster.Institution).FirstOrDefault();
+            return _context.Posters
+            .Where(p => p.Name == poster.Name && p.CreatedByNavigation.InstitutionNavigation.Name == poster.CreatedByNavigation.InstitutionNavigation.Name)
+            .FirstOrDefault();
         }
 
         [HttpDelete("{id:int}")]

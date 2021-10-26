@@ -37,80 +37,93 @@ namespace server.Models
             {
                 entity.ToTable("institutions");
 
+                entity.HasIndex(e => e.AdminName, "admin_name");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
                 entity.Property(e => e.AdminName)
-                    .IsRequired()
-                    .HasMaxLength(999)
+                    .HasColumnType("int(11)")
                     .HasColumnName("admin_name");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(256)
                     .HasColumnName("name");
+
+                entity.HasOne(d => d.AdminNameNavigation)
+                    .WithMany(p => p.Institutions)
+                    .HasForeignKey(d => d.AdminName)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("admin_name");
             });
 
             modelBuilder.Entity<Poster>(entity =>
             {
                 entity.ToTable("posters");
 
+                entity.HasIndex(e => e.CreatedBy, "created_by");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
                 entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(999)
+                    .HasColumnType("int(11)")
                     .HasColumnName("created_by");
 
-                entity.Property(e => e.EndDate)
-                    .HasColumnType("date")
-                    .HasColumnName("end_date");
+                entity.Property(e => e.EndDate).HasColumnName("end_date");
 
                 entity.Property(e => e.ImageUrl)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(256)
                     .HasColumnName("image_url");
-
-                entity.Property(e => e.Institution)
-                    .IsRequired()
-                    .HasMaxLength(999)
-                    .HasColumnName("institution");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(256)
                     .HasColumnName("name");
 
-                entity.Property(e => e.StartDate)
-                    .HasColumnType("date")
-                    .HasColumnName("start_date");
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.Posters)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("created_by");
             });
 
             modelBuilder.Entity<Screen>(entity =>
             {
                 entity.ToTable("screens");
 
+                entity.HasIndex(e => e.Zone, "zone");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(255)
                     .HasColumnName("name");
 
                 entity.Property(e => e.Zone)
-                    .IsRequired()
-                    .HasMaxLength(999)
+                    .HasColumnType("int(11)")
                     .HasColumnName("zone");
+
+                entity.HasOne(d => d.ZoneNavigation)
+                    .WithMany(p => p.Screens)
+                    .HasForeignKey(d => d.Zone)
+                    .HasConstraintName("zone");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("users");
+
+                entity.HasIndex(e => e.Institution, "institution");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
@@ -118,31 +131,36 @@ namespace server.Models
 
                 entity.Property(e => e.Email)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(256)
                     .HasColumnName("email");
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(256)
                     .HasColumnName("first_name");
 
                 entity.Property(e => e.Institution)
-                    .IsRequired()
-                    .HasMaxLength(999)
+                    .HasColumnType("int(11)")
                     .HasColumnName("institution");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(256)
                     .HasColumnName("last_name");
 
                 entity.Property(e => e.PhoneNumber)
-                    .HasColumnType("int(255)")
+                    .HasColumnType("int(11)")
                     .HasColumnName("phone_number");
 
                 entity.Property(e => e.Role)
-                    .HasColumnType("int(5)")
+                    .HasColumnType("int(11)")
                     .HasColumnName("role");
+
+                entity.HasOne(d => d.InstitutionNavigation)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.Institution)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("institution");
             });
 
             modelBuilder.Entity<Zone>(entity =>
@@ -155,7 +173,7 @@ namespace server.Models
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(999)
+                    .HasMaxLength(255)
                     .HasColumnName("name");
             });
 

@@ -9,6 +9,8 @@ namespace server.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Zone { get; set; }
+        public int? Zone { get; set; }
+
+        public virtual Zone ZoneNavigation { get; set; }
     }
 }

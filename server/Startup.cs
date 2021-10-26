@@ -30,8 +30,14 @@ namespace server
 
             services.AddControllers();
 
+            // https://stackoverflow.com/questions/59199593/net-core-3-0-possible-object-cycle-was-detected-which-is-not-supported
+            services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             services.AddDbContext<databaseContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("MySQL")));
+                    options.UseLazyLoadingProxies().UseMySQL(Configuration.GetConnectionString("MySQL")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "server", Version = "v1" });
