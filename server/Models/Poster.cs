@@ -12,7 +12,7 @@ namespace server.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string ImageUrl { get; set; }
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
 
         public virtual User CreatedByNavigation { get; set; }
     }

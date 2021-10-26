@@ -25,13 +25,13 @@ CREATE TABLE IF NOT EXISTS `database`.`users` (
   `last_name` VARCHAR(256) NOT NULL,
   `email` VARCHAR(256) NOT NULL,
   `phone_number` INT NOT NULL,
-  `institution` INT NOT NULL,
+  `institution` INT,
   `role` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `institution`
     FOREIGN KEY (`institution`)
     REFERENCES `database`.`institutions` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
@@ -46,12 +46,12 @@ DROP TABLE IF EXISTS `database`.`institutions` ;
 CREATE TABLE IF NOT EXISTS `database`.`institutions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
-  `admin_name` INT NOT NULL,
+  `admin` INT,
   PRIMARY KEY (`id`),
-  CONSTRAINT `admin_name`
-    FOREIGN KEY (`admin_name`)
+  CONSTRAINT `admin`
+    FOREIGN KEY (`admin`)
     REFERENCES `database`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
@@ -69,12 +69,12 @@ CREATE TABLE IF NOT EXISTS `database`.`posters` (
   `start_date` DATETIME NOT NULL,
   `end_date` DATETIME NOT NULL,
   `image_url` VARCHAR(256) NOT NULL,
-  `created_by` INT NOT NULL,
+  `created_by` INT,
   PRIMARY KEY (`id`),
   CONSTRAINT `created_by`
     FOREIGN KEY (`created_by`)
     REFERENCES `database`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
@@ -104,12 +104,12 @@ DROP TABLE IF EXISTS `database`.`screens` ;
 CREATE TABLE IF NOT EXISTS `database`.`screens` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `zone` INT NULL,
+  `zone` INT,
   PRIMARY KEY (`id`),
   CONSTRAINT `zone`
     FOREIGN KEY (`zone`)
     REFERENCES `database`.`zones` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT

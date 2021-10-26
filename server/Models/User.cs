@@ -18,7 +18,7 @@ namespace server.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public int PhoneNumber { get; set; }
-        public int Institution { get; set; }
+        public int? Institution { get; set; }
         public int Role { get; set; }
 
         public virtual Institution InstitutionNavigation { get; set; }

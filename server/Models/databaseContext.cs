@@ -37,26 +37,26 @@ namespace server.Models
             {
                 entity.ToTable("institutions");
 
-                entity.HasIndex(e => e.AdminName, "admin_name");
+                entity.HasIndex(e => e.Admin, "admin");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.AdminName)
+                entity.Property(e => e.Admin)
                     .HasColumnType("int(11)")
-                    .HasColumnName("admin_name");
+                    .HasColumnName("admin");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("name");
 
-                entity.HasOne(d => d.AdminNameNavigation)
+                entity.HasOne(d => d.AdminNavigation)
                     .WithMany(p => p.Institutions)
-                    .HasForeignKey(d => d.AdminName)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("admin_name");
+                    .HasForeignKey(d => d.Admin)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("admin");
             });
 
             modelBuilder.Entity<Poster>(entity =>
@@ -90,7 +90,7 @@ namespace server.Models
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.Posters)
                     .HasForeignKey(d => d.CreatedBy)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("created_by");
             });
 
@@ -116,6 +116,7 @@ namespace server.Models
                 entity.HasOne(d => d.ZoneNavigation)
                     .WithMany(p => p.Screens)
                     .HasForeignKey(d => d.Zone)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("zone");
             });
 
@@ -159,7 +160,7 @@ namespace server.Models
                 entity.HasOne(d => d.InstitutionNavigation)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.Institution)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("institution");
             });
 
