@@ -12,11 +12,10 @@
 
     [Parameter]
     public EventCallback OnClickCallBack { get; set; }
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        string currentPage = "/" + navigationManager.Uri.Split('/')[3]; // FIXME: this is janky
+        string currentPage = "/" + navigationManager.ToBaseRelativePath(navigationManager.Uri);
         if (currentPage == Link)
         {
             _disabled = true;
