@@ -1,7 +1,7 @@
 using System;
 
 [APIAttribute("/Posters")]
-public class Poster
+public class T
 {
     private DateTime _startDate = new DateTime(1, 1, 1);
 
@@ -47,7 +47,7 @@ public class Poster
         set { _endDate = DateTime.Parse(value); }
     }
 
-    public Poster(int id, string name, string creator, string institution, DateTime startDate, DateTime endDate)
+    public T(int id, string name, string creator, string institution, DateTime startDate, DateTime endDate)
     {
         _id = id;
         Name = name;

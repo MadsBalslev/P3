@@ -8,43 +8,37 @@
         <MudItem>
             <MudTable Items="@ItemList">
                 <HeaderContent>
-                    @{
-                        foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    {
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
+                        if (attribute is AccessLevelAttribute)
                         {
-                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                            if (attribute is AccessLevelAttribute)
+                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
+                            if (_userAccessLevel >= accessAttribute.AccessLevel)
                             {
-                                AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                                if (_userAccessLevel >= accessAttribute.AccessLevel)
+                                attribute = propertyInfo.GetCustomAttribute(typeof(HeaderDisplaynameAttribute), true);
+                                if (attribute is HeaderDisplaynameAttribute)
                                 {
-                                    attribute = propertyInfo.GetCustomAttribute(typeof(HeaderDisplaynameAttribute), true);
-                                    if (attribute is HeaderDisplaynameAttribute)
-                                    {
-                                        HeaderDisplaynameAttribute headerDisplaynameAttribute = attribute as HeaderDisplaynameAttribute;
-                                        <MudTh>@headerDisplaynameAttribute.HeaderDisplayname</MudTh>
-                                    }
+                                    HeaderDisplaynameAttribute headerDisplaynameAttribute = attribute as HeaderDisplaynameAttribute;
+                                    <MudTh>@headerDisplaynameAttribute.HeaderDisplayname</MudTh>
                                 }
                             }
-
                         }
                     }
                 </HeaderContent>
                 <RowTemplate>
-                    @{
-                        foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    {
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
+                        if (attribute is AccessLevelAttribute)
                         {
-                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                            if (attribute is AccessLevelAttribute)
+                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
+                            if (_userAccessLevel >= accessAttribute.AccessLevel)
                             {
-                                AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                                if (_userAccessLevel >= accessAttribute.AccessLevel)
-                                {
-                                    MethodInfo getter = propertyInfo.GetGetMethod();
-                                    <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
-                                }
+                                MethodInfo getter = propertyInfo.GetGetMethod();
+                                <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
                             }
                         }
-
                     }
                 </RowTemplate>
             </MudTable>
@@ -59,9 +53,9 @@
 
 @code
 {
-    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = new List<PropertyInfo>();
+    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
+        BindingFlags.Instance);
 
-    // TODO replace Poster with T
     [Parameter]
     public List<T> ItemList { get; set; } = new List<T>();
 
@@ -71,13 +65,6 @@
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
 
-    protected override void OnInitialized()
-    {
-        if (ItemList.Count > 0)
-        {
-            _propertyInfoList = ItemList?[0].GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        }
-    }
     @*
         private async Task<List<T>> GetItems()
         {
