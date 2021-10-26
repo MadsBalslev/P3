@@ -56,4 +56,9 @@ public class Poster
         _startDate = startDate;
         _endDate = endDate;
     }
+
+    public void ChangeUrl(string url)
+    {
+        ImageUrl = url;
+    }
 }
