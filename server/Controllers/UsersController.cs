@@ -58,7 +58,5 @@ namespace server.Controllers
 
             return user;
         }
-
-        
     }
 }
