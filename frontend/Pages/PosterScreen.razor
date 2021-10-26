@@ -1,0 +1,17 @@
+@page "/posterscreen"
+@using System
+
+<div window.onload="createPoster()"> </div>
+<div src="@imagesource"> </div>
+
+
+
+@code
+{
+    void createPoster()
+    {
+        Poster picture1 = new Poster("Film plakat", "Patrick", "Nordkraft");
+        picture1.ImageUrl = "https://cdn.discordapp.com/attachments/755020353201373244/902461379485790238/tlvvhv1sum641.png";
+        string imagesource = picture1.ImageUrl;
+    }
+}

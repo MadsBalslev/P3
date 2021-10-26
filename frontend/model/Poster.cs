@@ -21,12 +21,17 @@ public class Poster
     [AccessLevelAttribute(AccessLevel.InstAdmin)]
     public string Id { get; set; } = "nil";
 
-    private string ImageUrl { get; set; } = "nil";
+    public string ImageUrl { get; set; } = "nil";
 
     public Poster(string name, string creator, string institution)
     {
         Name = name;
         Creator = creator;
         Institution = institution;
+    }
+
+    public void ChangeUrl(string url)
+    {
+        ImageUrl = url;
     }
 }
