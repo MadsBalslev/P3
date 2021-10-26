@@ -8,7 +8,9 @@ CREATE TABLE `posters` (
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `image_url` varchar(999) NOT NULL,
-  PRIMARY KEY(`id`)
+  'created_by' int NOT NULL,
+  PRIMARY KEY(`id`),
+  FOREIGN KEY('created_by') REFERENCES users('id')
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET utf8;
 
 -- ----------------------------
@@ -21,9 +23,10 @@ CREATE TABLE `users` (
   `last_name` varchar(999) NOT NULL,
   `email` varchar(999) NOT NULL,
   `phone_number` int(255) NOT NULL,
-  `institution` varchar(999) NOT NULL,
+  `institution` int NOT NULL,
   `role` int(5) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY ('institution') REFERENCES institutions('id')
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -33,8 +36,9 @@ DROP TABLE IF EXISTS `institutions`;
 CREATE TABLE `institutions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(999) NOT NULL,
-  `admin_name` varchar(999) NOT NULL,
-  PRIMARY KEY (`id`)
+  `admin_name` int NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY ('admin_name') REFERENCES users('id')
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -54,6 +58,7 @@ DROP TABLE IF EXISTS `screens`;
 CREATE TABLE `screens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(999) NOT NULL, 
-  `zone` varchar(999) NOT NULL,
-  PRIMARY KEY (`id`)
+  `zone` int NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY ('zone') REFERENCES zones('id')
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
