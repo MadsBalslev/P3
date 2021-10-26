@@ -7,6 +7,12 @@
     <MudGrid Justify="Justify.Center">
         <MudItem>
             <MudTable Items="@ItemList">
+                <ToolBarContent>
+                    @* //TODO Add dynamic button name *@
+                    <MudButton Variant="Variant.Outlined">Create</MudButton>
+                    <MudSpacer />
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
                 <HeaderContent>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
@@ -25,6 +31,7 @@
                             }
                         }
                     }
+
                 </HeaderContent>
                 <RowTemplate>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
@@ -53,6 +60,7 @@
 
 @code
 {
+    private string searchString { get; set; }
     private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
         BindingFlags.Instance);
 
