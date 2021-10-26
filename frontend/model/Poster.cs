@@ -18,7 +18,7 @@ public class Poster
         get { return _id.ToString(); }
         set { _id = Int32.Parse(value); }
     }
-    
+
     [AccessLevelAttribute(AccessLevel.User)]
     [HeaderDisplaynameAttribute("Name")]
     public string Name { get; set; } = "nil";
