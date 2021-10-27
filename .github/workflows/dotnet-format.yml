@@ -20,7 +20,6 @@ jobs:
                 repo-token: ${{ secrets.GITHUB_TOKEN }}
                 action: "fix"
                 only-changed-files: true
-                folder: "./frontend"
 
             - name: Commit files
               if: steps.format.outputs.has-changes == 'true'
@@ -48,7 +47,6 @@ jobs:
                 repo-token: ${{ secrets.GITHUB_TOKEN }}
                 action: "fix"
                 only-changed-files: true
-                folder: "./server"
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
