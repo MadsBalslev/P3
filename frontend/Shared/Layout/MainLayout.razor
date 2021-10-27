@@ -2,7 +2,7 @@
 @inject NavigationManager navigationManager
 @using MudBlazor
 
-<MudThemeProvider Theme="_customTheme" />
+<MudThemeProvider Theme="_darkTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -17,6 +17,8 @@
             Link="/InstitutionManagement">Institution Management</AppBarButton>
         <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged Link="/ScreenManagement">Screen
             Management</AppBarButton>
+        <MudSpacer />
+        <MudSwitch @bind-Checked="lightTheme"></MudSwitch>
         <MudSpacer />
         <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
             <MudMenuItem>Your Settings</MudMenuItem>
@@ -47,9 +49,10 @@
         _userAccessLevel = GetUserAccessLevel();
     }
 
+    private bool lightTheme = true;
 
 
-    private MudTheme _customTheme = new MudTheme()
+    private MudTheme _darkTheme = new MudTheme()
     {
         Palette = new Palette()
         {
@@ -75,4 +78,6 @@
             TextDisabled = "rgba(255,255,255, 0.2)"
         }
     };
+
+    private MudTheme _lightTheme = new MudTheme();
 }
