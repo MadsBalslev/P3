@@ -4,11 +4,8 @@ on:
         branches: [main, development]
 
 jobs:
-    dotnet-format-frontend:
+    dotnet-format:
         runs-on: windows-latest
-        defaults:
-            run:
-                working-directory: ./frontend
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
@@ -16,45 +13,17 @@ jobs:
             - name: Install dotnet-format tool
               run: dotnet tool install -g dotnet-format --version 5.1.250801
 
-            - name: Format
-              run: dotnet-format
+            - name: Format frontend
+              run: dotnet-format ./frontend 
+              
+            - name: Format server
+              run: dotnet-format ./server 
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
               id: verify-changed-files
               with:
                 files: frontend
-
-            - name: Commit files
-              if: steps.verify-changed-files.outputs.files_changed == 'true'
-              uses: EndBug/add-and-commit@v7.4.0
-              with:
-                  author_name: Github Actions
-                  author_email: actions@github.com
-                  message: Automated dotnet-format update
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    dotnet-format-server:
-        runs-on: windows-latest
-        defaults:
-            run:
-                working-directory: ./server
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v2
-
-            - name: Install dotnet-format tool
-              run: dotnet tool install -g dotnet-format --version 5.1.250801
-
-            - name: Format
-              run: dotnet-format
-
-            - name: Verify Changed files
-              uses: tj-actions/verify-changed-files@v8.2
-              id: verify-changed-files
-              with:
-                files: server
 
             - name: Commit files
               if: steps.verify-changed-files.outputs.files_changed == 'true'
