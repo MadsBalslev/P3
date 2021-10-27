@@ -6,12 +6,13 @@ on:
 jobs:
     dotnet-format-frontend:
         runs-on: windows-latest
-        env:
-          working-directory: ./frontend
+        defaults:
+            run:
+                working-directory: ./server
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
-        
+
             - name: Install dotnet-format tool
               run: dotnet tool install -g dotnet-format --version 5.1.250801
 
@@ -33,8 +34,9 @@ jobs:
 
     dotnet-format-server:
         runs-on: windows-latest
-        env:
-            working-directory: ./server
+        defaults:
+            run:
+                working-directory: ./server
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
@@ -44,7 +46,7 @@ jobs:
 
             - name: Format
               run: dotnet-format
-            
+
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
 
