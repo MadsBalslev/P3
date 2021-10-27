@@ -34,5 +34,3 @@ jobs:
                   author_name: Github Actions
                   author_email: actions@github.com
                   message: Automated dotnet-format update
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
