@@ -6,9 +6,6 @@ on:
 jobs:
     dotnet-format-frontend:
         runs-on: windows-latest
-        defaults:
-            run:
-                working-directory: ./frontend
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
@@ -23,6 +20,7 @@ jobs:
                 repo-token: ${{ secrets.GITHUB_TOKEN }}
                 action: "fix"
                 only-changed-files: true
+                working-directory: ./frontend
 
             - name: Commit files
               if: steps.format.outputs.has-changes == 'true'
@@ -36,13 +34,10 @@ jobs:
 
     dotnet-format-server:
         runs-on: windows-latest
-        defaults:
-            run:
-                working-directory: ./server
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
-              
+
             - name: Install dotnet-format tool
               run: dotnet tool install -g dotnet-format --version 5.1.250801
 
@@ -53,6 +48,7 @@ jobs:
                 repo-token: ${{ secrets.GITHUB_TOKEN }}
                 action: "fix"
                 only-changed-files: true
+                working-directory: ./server
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
