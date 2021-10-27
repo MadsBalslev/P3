@@ -8,7 +8,7 @@ jobs:
         runs-on: windows-latest
         defaults:
             run:
-                working-directory: ./server
+                working-directory: ./frontend
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
@@ -21,6 +21,7 @@ jobs:
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
+              id: verify-changed-files
 
             - name: Commit files
               if: steps.verify-changed-files.outputs.files_changed == 'true'
@@ -49,6 +50,7 @@ jobs:
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
+              id: verify-changed-files
 
             - name: Commit files
               if: steps.verify-changed-files.outputs.files_changed == 'true'
