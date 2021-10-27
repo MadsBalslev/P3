@@ -13,7 +13,7 @@ namespace server.Controllers
     [Route("[controller]")]
     public class ScreenZonesController : ControllerBase
     {
-       private readonly databaseContext _context;
+        private readonly databaseContext _context;
 
         public ScreenZonesController(databaseContext context)
         {
@@ -59,6 +59,6 @@ namespace server.Controllers
             _context.SaveChanges();
 
             return zone;
-        } 
+        }
     }
 }
