@@ -23,7 +23,9 @@ jobs:
               uses: tj-actions/verify-changed-files@v8.2
               id: verify-changed-files
               with:
-                  files: frontend server
+                  files: |
+                    frontend 
+                    server
 
             - name: Commit files
               if: steps.verify-changed-files.outputs.files_changed == 'true'
