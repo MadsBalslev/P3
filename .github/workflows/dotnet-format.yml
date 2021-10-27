@@ -15,15 +15,18 @@ jobs:
 
             - name: Install dotnet-format tool
               run: dotnet tool install -g dotnet-format --version 5.1.250801
-
+           
             - name: Run dotnet format
-              run: dotnet format
-
-            - name: Verify Changed files
-              uses: tj-actions/verify-changed-files@v8.2
+              id: format
+              uses: xt0rted/dotnet-format@v1.0.2
+              with:
+                repo-token: ${{ secrets.GITHUB_TOKEN }}
+                action: "fix"
+                only-changed-files: true
+                folder: "./frontend"
 
             - name: Commit files
-              if: files_changed == 'true'
+              if: steps.format.outputs.has-changes == 'true'
               uses: EndBug/add-and-commit@v4.1.0
               with:
                   author_name: Github Actions
@@ -42,17 +45,20 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v2
 
-            - name: Install dotnet-format tool
-              run: dotnet tool install -g dotnet-format --version 5.1.250801
-
             - name: Run dotnet format
-              run: dotnet format
+              id: format
+              uses: xt0rted/dotnet-format@v1.0.2
+              with:
+                repo-token: ${{ secrets.GITHUB_TOKEN }}
+                action: "fix"
+                only-changed-files: true
+                folder: "./server"
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
 
             - name: Commit files
-              if: files_changed == 'true'
+              if: steps.format.outputs.has-changes == 'true'
               uses: EndBug/add-and-commit@v4.1.0
               with:
                   author_name: Github Actions
