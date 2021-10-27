@@ -1,0 +1,63 @@
+name: Format check on pull request
+on:
+    pull_request:
+        branches: [main, development]
+
+jobs:
+    dotnet-format-frontend:
+        runs-on: windows-latest
+        defaults:
+            run:
+                working-directory: ./frontend
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+
+            - name: Install dotnet-format tool
+              run: dotnet tool install -g dotnet-format --version 5.1.250801
+
+            - name: Run dotnet format
+              run: dotnet format
+
+            - name: Verify Changed files
+              uses: tj-actions/verify-changed-files@v8.2
+
+            - name: Commit files
+              if: files_changed == 'true'
+              uses: EndBug/add-and-commit@v4.1.0
+              with:
+                  author_name: Github Actions
+                  author_email: actions@github.com
+                  message: Automated dotnet-format update
+                  ref: ${{ github.head_ref }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    dotnet-format-server:
+        runs-on: windows-latest
+        defaults:
+            run:
+                working-directory: ./server
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+
+            - name: Install dotnet-format tool
+              run: dotnet tool install -g dotnet-format --version 5.1.250801
+
+            - name: Run dotnet format
+              run: dotnet format
+
+            - name: Verify Changed files
+              uses: tj-actions/verify-changed-files@v8.2
+
+            - name: Commit files
+              if: files_changed == 'true'
+              uses: EndBug/add-and-commit@v4.1.0
+              with:
+                  author_name: Github Actions
+                  author_email: actions@github.com
+                  message: Automated dotnet-format update
+                  ref: ${{ github.head_ref }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
