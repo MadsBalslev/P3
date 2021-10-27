@@ -2,16 +2,33 @@
 @typeparam T
 @inherits MudTable<T>
 @using System.Reflection
+@inject ISnackbar Snackbar
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
-        <MudItem>
-            <MudTable Items="@ItemList">
+        <MudItem xs="12">
+            <MudTable Items="@ItemList" 
+                      Hover="@true" 
+                      CanCancelEdit="@true" 
+                      Filter="new Func<T, bool>(FilterFunc)"
+                      @bind-SelectedItem="_selectedItem" 
+                      SortLabel="Sort By" 
+                      CommitEditTooltip="Accept Changes"
+                      OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" 
+                      RowEditPreview="BackupItem"
+                      RowEditCancel="ResetItemToOriginalValues" 
+                      RowEditCommit="ItemHasBeenCommitted">
                 <ToolBarContent>
                     @* //TODO Add dynamic button name *@
                     <MudButton Variant="Variant.Outlined">Create</MudButton>
                     <MudSpacer />
-                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    <MudTextField @bind-Value="_searchString" 
+                                  Placeholder="Search" 
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" 
+                                  IconSize="Size.Medium" 
+                                  Class="mt-0">
+                    </MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
@@ -31,7 +48,6 @@
                             }
                         }
                     }
-
                 </HeaderContent>
                 <RowTemplate>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
@@ -43,27 +59,35 @@
                             if (_userAccessLevel >= accessAttribute.AccessLevel)
                             {
                                 MethodInfo getter = propertyInfo.GetGetMethod();
+                                // TODO Datalabel should be implemented for MudTd below
                                 <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
                             }
                         }
                     }
                 </RowTemplate>
+                @*// TODO implement <RowEditingTemplate, see comment below for example *@
+                @* <RowEditingTemplate>
+                    <MudTd DataLabel="Nr">@context.Number</MudTd>
+                    <MudTd DataLabel="Sign">
+                    <MudTextField @bind-Value="@context.Sign" Required />
+                    </MudTd>
+                    <MudTd DataLabel="Name">
+                    <MudTextField @bind-Value="@context.Name" Required />
+                    </MudTd>
+                    <MudTd DataLabel="Position">
+                    <MudNumericField @bind-Value="@context.Position" Required Min="1" />
+                    </MudTd>
+                    <MudTd DataLabel="Molar mass">
+                    <MudTextField @bind-Value="@context.Molar" Required />
+                    </MudTd>
+                    </RowEditingTemplate> *@
             </MudTable>
-        </MudItem>
-        <MudItem>
-            <MudForm>
-                @MudForm
-            </MudForm>
         </MudItem>
     </MudGrid>
 </MudContainer>
 
 @code
 {
-    private string searchString { get; set; }
-    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
-        BindingFlags.Instance);
-
     [Parameter]
     public List<T> ItemList { get; set; } = new List<T>();
 
@@ -73,26 +97,73 @@
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
 
+    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
+    BindingFlags.Instance);
+
+    private T _selectedItem { get; set; }
+
+    private string _searchString = "";
+
+    // TODO implement, see comment below for example.
+    private bool FilterFunc(T item)
+    {
+        return true;
+        @* if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+            if (element.Sign.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (element.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if ($"{element.Number} {element.Position} {element.Molar}".Contains(_searchString))
+            return true;
+            return false; *@
+    }
+
+    // TODO implement, see comment below for example.
+    private void BackupItem(object item)
+    {
+        @* elementBeforeEdit = new()
+            {
+            Sign = ((Element)element).Sign,
+            Name = ((Element)element).Name,
+            Molar = ((Element)element).Molar,
+            Position = ((Element)element).Position
+            };
+            AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}"); *@
+    }
+
+    // TODO implement, see comment below for example.
+    private void ItemHasBeenCommitted(object item)
+    {
+        @* AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed"); *@
+    }
+
+    // TODO implement, see comment below for example.
+    private void ResetItemToOriginalValues(object item)
+    {
+        @* ((Element)element).Sign = elementBeforeEdit.Sign;
+            ((Element)element).Name = elementBeforeEdit.Name;
+            ((Element)element).Molar = elementBeforeEdit.Molar;
+            ((Element)element).Position = elementBeforeEdit.Position;
+            AddEditionEvent($"RowEditCancel event: Editing of Element {((Element)element).Name} cancelled"); *@
+    }
+
+    // TODO implement these functions
     @*
         private async Task<List<T>> GetItems()
         {
-
-
         }
 
         private Task<List<T>> PostItem()
         {
-
         }
 
         private PutItem()
         {
-
         }
 
         private void DeleteItem()
         {
-
         } *@
 
 }
