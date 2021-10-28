@@ -1,7 +1,7 @@
 name: "Workflow"
 on:
     pull_request:
-        branches: [main, development]
+        branches: [development]
 jobs:
     build:
         runs-on: "ubuntu-latest"
@@ -10,3 +10,5 @@ jobs:
             - name: "TODO to Issue"
               uses: "alstr/todo-to-issue-action@v4.3"
               id: "todo"
+              with:
+                PROJECTS_SECRET: ${{ secrets.PROJECTS_SECRET }}
