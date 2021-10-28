@@ -64,22 +64,6 @@
                         }
                     }
                 </RowTemplate>
-                @*// TODO implement <RowEditingTemplate, see comment below for example *@
-                @* <RowEditingTemplate>
-                    <MudTd DataLabel="Nr">@context.Number</MudTd>
-                    <MudTd DataLabel="Sign">
-                    <MudTextField @bind-Value="@context.Sign" Required />
-                    </MudTd>
-                    <MudTd DataLabel="Name">
-                    <MudTextField @bind-Value="@context.Name" Required />
-                    </MudTd>
-                    <MudTd DataLabel="Position">
-                    <MudNumericField @bind-Value="@context.Position" Required Min="1" />
-                    </MudTd>
-                    <MudTd DataLabel="Molar mass">
-                    <MudTextField @bind-Value="@context.Molar" Required />
-                    </MudTd>
-                    </RowEditingTemplate> *@
             </MudTable>
         </MudItem>
     </MudGrid>
@@ -103,7 +87,8 @@
 
     private string _searchString = "";
 
-    // TODO implement, see comment below for example.
+    // TODO Implement ```FilterFunc()```
+    //  labels: Domain: Development, Priority: High, Type: Enhancement
     private bool FilterFunc(T item)
     {
         throw new NotImplementedException();
@@ -118,7 +103,6 @@
             return false; *@
     }
 
-    // TODO implement, see comment below for example.
     private void BackupItem(object item)
     {
         throw new NotImplementedException();
@@ -132,14 +116,12 @@
             AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}"); *@
     }
 
-    // TODO implement, see comment below for example.
     private void ItemHasBeenCommitted(object item)
     {
         throw new NotImplementedException();
         @* AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed"); *@
     }
 
-    // TODO implement, see comment below for example.
     private void ResetItemToOriginalValues(object item)
     {
         throw new NotImplementedException();
@@ -149,7 +131,6 @@
             ((Element)element).Position = elementBeforeEdit.Position;
             AddEditionEvent($"RowEditCancel event: Editing of Element {((Element)element).Name} cancelled"); *@
     }
-
 
     // TODO implement
     private async Task<List<T>> GetItems()
