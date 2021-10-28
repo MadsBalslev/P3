@@ -2,7 +2,7 @@
 @inject NavigationManager navigationManager
 @using MudBlazor
 
-<MudThemeProvider Theme="_darkTheme" />
+<MudThemeProvider Theme="_currentTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -18,8 +18,7 @@
         <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged Link="/ScreenManagement">Screen
             Management</AppBarButton>
         <MudSpacer />
-        <MudSwitch @bind-Checked="lightTheme"></MudSwitch>
-        <MudSpacer />
+        <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme" Label="@(lightTheme ? "Light" : "Dark")" />
         <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
             <MudMenuItem>Your Settings</MudMenuItem>
             <MudMenuItem>Logout</MudMenuItem>
@@ -42,21 +41,42 @@
         return AccessLevel.User;
     }
 
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _userAccessLevel = GetUserAccessLevel();
+        _currentTheme = defaultTheme;
     }
 
-    private bool lightTheme = true;
+    private bool lightTheme { get; set; } = true;
 
+    private void DarkMode()
+    {
+        if (_currentTheme == defaultTheme)
+        {
+            _currentTheme = DarkTheme;
+        }
+        else
+        {
+            _currentTheme = defaultTheme;
+        }
+    }
 
-    private MudTheme _darkTheme = new MudTheme()
+    private MudTheme _currentTheme = new MudTheme();
+    private MudTheme defaultTheme = new MudTheme()
     {
         Palette = new Palette()
         {
-            Black = "#27272f",
+            Black = "#272c34"
+        }
+    };
+
+
+    private MudTheme DarkTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Black = "#272c34",
             Background = "#32333d",
             BackgroundGrey = "#27272f",
             Surface = "#373740",
@@ -78,6 +98,4 @@
             TextDisabled = "rgba(255,255,255, 0.2)"
         }
     };
-
-    private MudTheme _lightTheme = new MudTheme();
 }
