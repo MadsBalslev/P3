@@ -11,7 +11,9 @@
                     @* //TODO Add dynamic button name *@
                     <MudButton Variant="Variant.Outlined">Create</MudButton>
                     <MudSpacer />
-                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start"
+                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                    </MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
@@ -62,7 +64,7 @@
 {
     private string searchString { get; set; }
     private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
-        BindingFlags.Instance);
+    BindingFlags.Instance);
 
     [Parameter]
     public List<T> ItemList { get; set; } = new List<T>();
