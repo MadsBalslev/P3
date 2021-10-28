@@ -16,8 +16,7 @@
                       CommitEditTooltip="Accept Changes"
                       OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" 
                       RowEditPreview="BackupItem"
-                      RowEditCancel="ResetItemToOriginalValues" 
-                      RowEditCommit="ItemHasBeenCommitted">
+                      RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
                 <ToolBarContent>
                     @* //TODO Add dynamic button name *@
                     <MudButton Variant="Variant.Outlined">Create</MudButton>
@@ -107,7 +106,7 @@
     // TODO implement, see comment below for example.
     private bool FilterFunc(T item)
     {
-        return true;
+        throw new NotImplementedException();
         @* if (string.IsNullOrWhiteSpace(_searchString))
             return true;
             if (element.Sign.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
@@ -122,6 +121,7 @@
     // TODO implement, see comment below for example.
     private void BackupItem(object item)
     {
+        throw new NotImplementedException();
         @* elementBeforeEdit = new()
             {
             Sign = ((Element)element).Sign,
@@ -135,12 +135,14 @@
     // TODO implement, see comment below for example.
     private void ItemHasBeenCommitted(object item)
     {
+        throw new NotImplementedException();
         @* AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed"); *@
     }
 
     // TODO implement, see comment below for example.
     private void ResetItemToOriginalValues(object item)
     {
+        throw new NotImplementedException();
         @* ((Element)element).Sign = elementBeforeEdit.Sign;
             ((Element)element).Name = elementBeforeEdit.Name;
             ((Element)element).Molar = elementBeforeEdit.Molar;
@@ -148,22 +150,28 @@
             AddEditionEvent($"RowEditCancel event: Editing of Element {((Element)element).Name} cancelled"); *@
     }
 
-    // TODO implement these functions
-    @*
-        private async Task<List<T>> GetItems()
-        {
-        }
 
-        private Task<List<T>> PostItem()
-        {
-        }
+    // TODO implement
+    private async Task<List<T>> GetItems()
+    {
+        throw new NotImplementedException();
+    }
 
-        private PutItem()
-        {
-        }
+    // TODO implement
+    private async Task<List<T>> PostItem()
+    {
+        throw new NotImplementedException();
+    }
 
-        private void DeleteItem()
-        {
-        } *@
+    // TODO implement
+    private async Task<List<T>> PutItem()
+    {
+        throw new NotImplementedException();
+    }
 
+    // TODO implement this function
+    private async Task<List<T>> DeleteItem()
+    {
+        throw new NotImplementedException();
+    }
 }
