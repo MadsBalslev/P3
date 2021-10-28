@@ -87,6 +87,51 @@
 
     private string _searchString = "";
 
+    // TODO Implement ```FilterFunc()```
+    //  labels: Domain: Development, Priority: High, Type: Enhancement
+    private bool FilterFunc(T item)
+    {
+        throw new NotImplementedException();
+        @* if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+            if (element.Sign.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (element.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if ($"{element.Number} {element.Position} {element.Molar}".Contains(_searchString))
+            return true;
+            return false; *@
+    }
+
+    private void BackupItem(object item)
+    {
+        throw new NotImplementedException();
+        @* elementBeforeEdit = new()
+            {
+            Sign = ((Element)element).Sign,
+            Name = ((Element)element).Name,
+            Molar = ((Element)element).Molar,
+            Position = ((Element)element).Position
+            };
+            AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}"); *@
+    }
+
+    private void ItemHasBeenCommitted(object item)
+    {
+        throw new NotImplementedException();
+        @* AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed"); *@
+    }
+
+    private void ResetItemToOriginalValues(object item)
+    {
+        throw new NotImplementedException();
+        @* ((Element)element).Sign = elementBeforeEdit.Sign;
+            ((Element)element).Name = elementBeforeEdit.Name;
+            ((Element)element).Molar = elementBeforeEdit.Molar;
+            ((Element)element).Position = elementBeforeEdit.Position;
+            AddEditionEvent($"RowEditCancel event: Editing of Element {((Element)element).Name} cancelled"); *@
+    }
+
     // TODO implement
     private async Task<List<T>> GetItems()
     {
