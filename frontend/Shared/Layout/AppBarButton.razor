@@ -2,6 +2,9 @@
 @inherits MudButton
 @inject NavigationManager navigationManager
 
+<!-- TODO: Text looks bad on light theme
+     labels: enhancement, bug
+-->
 <MudButton Link=@Link Disabled=_disabled Class=@Class @onclick="@OnClickCallBack" StartIcon=@StartIcon>
     @ChildContent
 </MudButton>

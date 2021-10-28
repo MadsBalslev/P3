@@ -29,7 +29,7 @@
                                   Class="mt-0">
                     </MudTextField>
                 </ToolBarContent>
-                <HeaderContent>
+               <HeaderContent>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
                         Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
