@@ -1,18 +1,14 @@
-name: "TODO to Issue"
-# TODO test
-on:
-    push:
-        branches: [development]
-jobs:
-    build:
-        runs-on: "ubuntu-latest"
-        defaults:
-          run:
-            working-directory: ./server
-        steps:
-            - uses: "actions/checkout@master"
-            - name: "TODO to Issue"
-              uses: "CasperStaahl/todo-to-issue-action@v4.3"
-              id: "todo"
-              with:
-                PROJECTS_SECRET: ${{ secrets.PROJECTS_SECRET }}
+# name: "TODO to Issue"
+# on:
+#     push:
+#         branches: [development]
+# jobs:
+#     build:
+#         runs-on: "ubuntu-latest"
+#         steps:
+#             - uses: "actions/checkout@master"
+#             - name: "TODO to Issue"
+#               uses: "CasperStaahl/todo-to-issue-action@v4.3"
+#               id: "todo"
+#               with:
+#                 PROJECTS_SECRET: ${{ secrets.PROJECTS_SECRET }}
