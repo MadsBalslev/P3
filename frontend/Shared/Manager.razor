@@ -52,7 +52,7 @@
 
 @code
 {
-    readonly private IEnumerable<PropertyInfo> _propertyInfoList =
+    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
         typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
     [Parameter]
