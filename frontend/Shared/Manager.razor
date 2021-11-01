@@ -2,73 +2,62 @@
 @typeparam T
 @inherits MudTable<T>
 @using System.Reflection
-@inject ISnackbar Snackbar
 
-@{
-    // TODO fix this
-    void Test(RenderFragment renderFragment)
-    {
-        @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-        {
-            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-            if (attribute is ManagerMetadataAttribute)
-            {
-                ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                if (_userAccessLevel >= managerMetadata.AccessLevel)
-                {
-                    @renderFragment;
-                }
-            }
-        }
-    }
+<CascadingValue Value="_propertyInfoList">
+    <MudContainer>
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12">
+                <MudTable Items="@ItemList" 
+                          Hover="@true" 
+                          CanCancelEdit="@true" 
+                          Filter="new Func<T, bool>(FilterFunc)"
+                          @bind-SelectedItem="_selectedItem" 
+                          SortLabel="Sort By">
+                    <ToolBarContent>
+                        <!-- TODO Add dynamic button name -->
+                        <MudButton Variant="Variant.Outlined">Create</MudButton>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="_searchString" 
+                                      Placeholder="Search" 
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" 
+                                      IconSize="Size.Medium" 
+                                      Class="mt-0" />
+                    </ToolBarContent>
 
-}
-
-<MudContainer>
-    <MudGrid Justify="Justify.Center">
-        <MudItem xs="12">
-            <MudTable Items="@ItemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
-                @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
-                <ToolBarContent>
-                    <!-- TODO Add dynamic button name -->
-                    <MudButton Variant="Variant.Outlined">Create</MudButton>
-                    <MudSpacer />
-                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
-                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
-                    </MudTextField>
-                </ToolBarContent>
-                <HeaderContent>
-                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                    {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
+                    <HeaderContent>
+                        @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                         {
-                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                            if (attribute is ManagerMetadataAttribute)
                             {
-                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
+                                ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                                if (_userAccessLevel >= managerMetadata.AccessLevel)
+                                {
+                                    <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
+                                }
                             }
                         }
-                    }
-                </HeaderContent>
-                <RowTemplate>
-                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                    {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
+                    </HeaderContent>
+                    <RowTemplate>
+                        @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                         {
-                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                            if (attribute is ManagerMetadataAttribute)
                             {
-                                <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                                if (_userAccessLevel >= managerMetadata.AccessLevel)
+                                {
+                                    <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                }
                             }
                         }
-                    }
-                </RowTemplate>
-            </MudTable>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+                    </RowTemplate>
+                </MudTable>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</CascadingValue>
 
 @code
 {
@@ -87,12 +76,6 @@
     private T _selectedItem { get; set; }
 
     private string _searchString = "";
-
-    private Func<ManagerMetadataAttribute, RenderFragment> _headerContentTemplate = (ManagerMetadataAttribute
-    managerMetadata) =>
-    @<MudTh>@managerMetadata.HeaderDisplayname</MudTh>
-    ;
-
 
     // TODO Implement
     private bool FilterFunc(T item)
