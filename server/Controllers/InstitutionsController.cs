@@ -24,17 +24,17 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Institution> Get()
+        public IEnumerable<Object> Get()
         {
-            return _institutionService.GetAllInstitutions();
+            return _institutionService.GetAllInstitutionsJSON();
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Institution> GetInstitutionDetails(int id)
+        public ActionResult<Object> GetInstitutionDetails(int id)
         {
             try
             {
-                 Institution institution = _institutionService.GetInstitution(id);
+                 Object institution = _institutionService.GetInstitutionJSON(id);
                  return institution;
             }
             catch (System.Exception)

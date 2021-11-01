@@ -45,8 +45,15 @@ namespace server.Controllers
         [HttpPost]
         public ActionResult<Object> Post([FromBody] User user)
         {
-            User u = _userService.CreateUser(user);
-            return _userService.GetUserJSON(u.Id);
+            try
+            {
+                User u = _userService.CreateUser(user);
+                return _userService.GetUserJSON(u.Id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }            
         }
 
         [HttpDelete("{id:int}")]

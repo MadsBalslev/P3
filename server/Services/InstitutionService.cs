@@ -18,6 +18,25 @@ namespace server.Services
             return _context.Institutions.ToList();
         }
 
+        public IEnumerable<Object> GetAllInstitutionsJSON()
+        {
+            IEnumerable<Institution> institutions = GetAllInstitutions();
+            List<Object> response = new List<object>();
+            foreach (Institution i in institutions)
+            {
+                Object r = new
+                {
+                    institutionId = i.Id,
+                    name = i.Name,
+                    admin = $"{i.AdminNavigation.FirstName} {i.AdminNavigation.LastName}",
+
+                };
+                response.Add(r);
+            }
+
+            return response;
+        }
+
         public Institution GetInstitution(int id)
         {
             Institution institution = _context.Institutions.Find(id);
@@ -28,6 +47,31 @@ namespace server.Services
             }
 
             return institution;
+        }
+
+        public Object GetInstitutionJSON(int id)
+        {
+            Institution i = GetInstitution(id);
+            List<Object> iUsers = new List<Object>();
+            foreach (User u in i.Users)
+            {
+                Object ru = new
+                {
+                    userId = u.Id,
+                    firstName = u.FirstName,
+                    lastName = u.LastName,
+                    email = u.Email,
+                };
+                iUsers.Add(ru);
+            }
+            Object response = new
+            {
+                institutionId = i.Id,
+                name = i.Name,
+                admin = $"{i.AdminNavigation.FirstName} {i.AdminNavigation.LastName}",
+                users = iUsers,
+            };
+            return response;
         }
 
         public Institution CreateInstitution(Institution institution)
