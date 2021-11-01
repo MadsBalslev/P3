@@ -46,13 +46,30 @@ namespace server.Controllers
         [HttpPost]
         public ActionResult<Institution> Post([FromBody] Institution institution)
         {
-            return _institutionService.CreateInstitution(institution);
+            try
+            {
+                Institution i = _institutionService.CreateInstitution(institution);
+                return _institutionService.GetInstitution(i.Id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Institution> Delete(int id)
+        public ActionResult<Object> Delete(int id)
         {
-            return _institutionService.DeleteInstitution(id);
+            try
+            {
+                Object i = _institutionService.GetInstitutionJSON(id);
+                _institutionService.DeleteInstitution(id);
+                return i;
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }

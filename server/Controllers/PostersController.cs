@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
+using server.Services;
 
 namespace server.Controllers
 {
@@ -13,52 +14,60 @@ namespace server.Controllers
     [Route("[controller]")]
     public class PostersController : ControllerBase
     {
-        private readonly databaseContext _context;
+        //private readonly databaseContext _context;
+        private PosterService _posterService;
 
         public PostersController(databaseContext context)
         {
-            _context = context;
+            _posterService = new PosterService(context);
         }
 
         [HttpGet]
-        public IEnumerable<Poster> Get()
+        public IEnumerable<Object> Get()
         {
-            //await Task.Delay(3000);
-            return _context.Posters.ToList();
+            return _posterService.GetAllPosterJSON();
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Poster> GetPosterDetails(int id)
+        public ActionResult<Object> GetPosterDetails(int id)
         {
-            Poster poster = _context.Posters.Where(p => p.Id == id).FirstOrDefault();
-
-            if (poster == null)
+            try
+            {
+                return _posterService.GetPosterJSON(id);
+            }
+            catch (System.Exception)
             {
                 return NotFound();
             }
-
-            return poster;
         }
 
         [HttpPost]
-        public ActionResult<Poster> Post([FromBody] Poster poster)
+        public ActionResult<Object> Post([FromBody] Poster poster)
         {
-            _context.Posters.Add(poster);
-            _context.SaveChanges();
-
-            return _context.Posters
-            .Where(p => p.Name == poster.Name && p.CreatedByNavigation.InstitutionNavigation.Name == poster.CreatedByNavigation.InstitutionNavigation.Name)
-            .FirstOrDefault();
+            try
+            {
+                Poster p = _posterService.CreatePoster(poster);
+                return _posterService.GetPosterJSON(p.Id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Poster> Delete(int id)
+        public ActionResult<Object> Delete(int id)
         {
-            Poster poster = _context.Posters.Find(id);
-            _context.Posters.Remove(poster);
-            _context.SaveChanges();
-
-            return poster;
+            try
+            {
+                Object p = _posterService.GetPosterJSON(id);
+                _posterService.DeletePoster(id);
+                return p;
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }

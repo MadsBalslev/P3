@@ -1,0 +1,92 @@
+using System.Collections.Generic;
+using System;
+using System.Linq;
+using server.Models;
+namespace server.Services
+{
+    public class PosterService
+    {
+        public PosterService(databaseContext context)
+        {
+            _context = context;
+        }
+
+        private databaseContext _context;
+
+        public IEnumerable<Poster> GetAllPosters()
+        {
+            return _context.Posters.ToList();
+        }
+
+        public Poster GetPoster(int id)
+        {
+            Poster poster = _context.Posters.Find(id);
+
+            if (poster == null)
+            {
+                throw new NullReferenceException("Poster was not found");
+            }
+
+            return poster;
+        }
+
+        public Object GetPosterJSON(int id)
+        {
+            Poster p = GetPoster(id);
+
+            Object response = new
+            {
+                posterId = p.Id,
+                name = p.Name,
+                startDate = p.StartDate,
+                endDate = p.EndDate,
+                url = p.ImageUrl,
+                institution = p.CreatedByNavigation.InstitutionNavigation.Name,
+                createdBy = $"{p.CreatedByNavigation.FirstName} {p.CreatedByNavigation.LastName}",
+            };
+
+            return response;
+        }
+
+        public Poster CreatePoster(Poster poster)
+        {
+            _context.Posters.Add(poster);
+            _context.SaveChanges();
+
+            return _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefault();
+        }
+
+        public Poster DeletePoster(int id)
+        {
+            Poster poster = _context.Posters.Find(id);
+            _context.Posters.Remove(poster);
+            _context.SaveChanges();
+
+            return poster;
+        }
+
+        public IEnumerable<Object> GetAllPosterJSON()
+        {
+            IEnumerable<Poster> posters = GetAllPosters();
+            List<Object> response = new List<object>();
+
+            foreach (Poster p in posters)
+            {
+                Object rp = new
+                {
+                    posterId = p.Id,
+                    name = p.Name,
+                    startDate = p.StartDate,
+                    endDate = p.EndDate,
+                    url = p.ImageUrl,
+                    institution = p.CreatedByNavigation.InstitutionNavigation.Name,
+                    createdBy = $"{p.CreatedByNavigation.FirstName} {p.CreatedByNavigation.LastName}",
+                };
+
+                response.Add(rp);
+            }
+
+            return response;
+        }
+    }
+}
