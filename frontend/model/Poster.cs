@@ -11,36 +11,30 @@ public class Poster
 
     private string ImageUrl { get; set; } = "nil";
 
-    [AccessLevelAttribute(AccessLevel.InstAdmin)]
-    [HeaderDisplaynameAttribute("ID")]
+    [ManagerMetadata(AccessLevel.SysAdmin, "ID")]
     public string Id
     {
         get { return _id.ToString(); }
         set { _id = Int32.Parse(value); }
     }
 
-    [AccessLevelAttribute(AccessLevel.User)]
-    [HeaderDisplaynameAttribute("Name")]
+    [ManagerMetadata(AccessLevel.User, "Name")]
     public string Name { get; set; } = "nil";
 
-    [AccessLevelAttribute(AccessLevel.InstAdmin)]
-    [HeaderDisplaynameAttribute("Creator")]
+    [ManagerMetadata(AccessLevel.InstAdmin, "Creator")]
     public string Creator { get; set; } = "nil";
 
-    [AccessLevelAttribute(AccessLevel.InstAdmin)]
-    [HeaderDisplaynameAttribute("Institution")]
+    [ManagerMetadata(AccessLevel.SysAdmin, "Institution")]
     public string Institution { get; set; } = "nil";
 
-    [AccessLevelAttribute(AccessLevel.User)]
-    [HeaderDisplaynameAttribute("Start date")]
+    [ManagerMetadata(AccessLevel.User, "Start date")]
     public string StartDate
     {
         get { return _startDate.ToString(); }
         set { _startDate = DateTime.Parse(value); }
     }
 
-    [AccessLevelAttribute(AccessLevel.User)]
-    [HeaderDisplaynameAttribute("End date")]
+    [ManagerMetadata(AccessLevel.User, "End date")]
     public string EndDate
     {
         get { return _endDate.ToString(); }
