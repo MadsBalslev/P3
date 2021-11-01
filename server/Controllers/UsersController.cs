@@ -53,7 +53,7 @@ namespace server.Controllers
             catch (System.Exception)
             {
                 return NotFound();
-            }            
+            }
         }
 
         [HttpDelete("{id:int}")]

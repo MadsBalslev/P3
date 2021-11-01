@@ -34,8 +34,8 @@ namespace server.Controllers
         {
             try
             {
-                 Object institution = _institutionService.GetInstitutionJSON(id);
-                 return institution;
+                Object institution = _institutionService.GetInstitutionJSON(id);
+                return institution;
             }
             catch (System.Exception)
             {
