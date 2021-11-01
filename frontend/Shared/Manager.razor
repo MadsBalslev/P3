@@ -1,5 +1,6 @@
 @using MudBlazor
 @using System.Reflection
+@using System.Runtime
 @typeparam T
 
 <MudContainer>
@@ -67,19 +68,63 @@
 
     private T _selectedItem;
 
-    // TODO Implement
     private bool FilterFunc(T item)
     {
-        throw new NotImplementedException();
-        @* if (string.IsNullOrWhiteSpace(_searchString))
+        if (string.IsNullOrWhiteSpace(_searchString))
+        {
             return true;
-            if (element.Sign.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        }
+        else if (SearchStringMatch(item))
+        {
             return true;
-            if (element.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-            if ($"{element.Number} {element.Position} {element.Molar}".Contains(_searchString))
-            return true;
-            return false; *@
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool SearchStringMatch(T item)
+    {
+        foreach (PropertyInfo propertyInfo in _propertyInfoList)
+        {
+            if (PropertyIsAvaliableAndSearchStringMatch(item, propertyInfo))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
+    {
+        // beware of infamous do-while-false pattern.
+        do
+        {
+            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+            if (managerMetadata == null)
+            {
+                break;
+            }
+
+            if (_userAccessLevel < managerMetadata.AccessLevel)
+            {
+                break;
+            }
+
+            string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+            if (propertyValue == null)
+            {
+                break;
+            }
+
+            if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        } while (false);
+        return false;
     }
 
     // TODO implement
