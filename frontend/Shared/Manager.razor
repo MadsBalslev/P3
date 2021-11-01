@@ -4,46 +4,49 @@
 @using System.Reflection
 @inject ISnackbar Snackbar
 
+@{
+    // TODO fix this
+    void Test(RenderFragment renderFragment)
+    {
+        @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+        {
+            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+            if (attribute is ManagerMetadataAttribute)
+            {
+                ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                if (_userAccessLevel >= managerMetadata.AccessLevel)
+                {
+                    @renderFragment;
+                }
+            }
+        }
+    }
+
+}
+
 <MudContainer>
     <MudGrid Justify="Justify.Center">
         <MudItem xs="12">
-            <MudTable Items="@ItemList" 
-                      Hover="@true" 
-                      CanCancelEdit="@true" 
-                      Filter="new Func<T, bool>(FilterFunc)"
-                      @bind-SelectedItem="_selectedItem" 
-                      SortLabel="Sort By" 
-                      CommitEditTooltip="Accept Changes"
-                      OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" 
-                      RowEditPreview="BackupItem"
-                      RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
+            <MudTable Items="@ItemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton Variant="Variant.Outlined">Create</MudButton>
                     <MudSpacer />
-                    <MudTextField @bind-Value="_searchString" 
-                                  Placeholder="Search" 
-                                  Adornment="Adornment.Start"
-                                  AdornmentIcon="@Icons.Material.Filled.Search" 
-                                  IconSize="Size.Medium" 
-                                  Class="mt-0">
+                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
+                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
                     </MudTextField>
                 </ToolBarContent>
-               <HeaderContent>
+                <HeaderContent>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                        if (attribute is AccessLevelAttribute)
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        if (attribute is ManagerMetadataAttribute)
                         {
-                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            if (_userAccessLevel >= managerMetadata.AccessLevel)
                             {
-                                attribute = propertyInfo.GetCustomAttribute(typeof(HeaderDisplaynameAttribute), true);
-                                if (attribute is HeaderDisplaynameAttribute)
-                                {
-                                    HeaderDisplaynameAttribute headerDisplaynameAttribute = attribute as HeaderDisplaynameAttribute;
-                                    <MudTh>@headerDisplaynameAttribute.HeaderDisplayname</MudTh>
-                                }
+                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
                             }
                         }
                     }
@@ -51,14 +54,12 @@
                 <RowTemplate>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                        if (attribute is AccessLevelAttribute)
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        if (attribute is ManagerMetadataAttribute)
                         {
-                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            if (_userAccessLevel >= managerMetadata.AccessLevel)
                             {
-                                MethodInfo getter = propertyInfo.GetGetMethod();
-                                // TODO Datalabel should be implemented for MudTd below
                                 <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
                             }
                         }
@@ -87,8 +88,13 @@
 
     private string _searchString = "";
 
-    // TODO Implement ```FilterFunc()```
-    //  labels: Domain: Development, Priority: High, Type: Enhancement
+    private Func<ManagerMetadataAttribute, RenderFragment> _headerContentTemplate = (ManagerMetadataAttribute
+    managerMetadata) =>
+    @<MudTh>@managerMetadata.HeaderDisplayname</MudTh>
+    ;
+
+
+    // TODO Implement
     private bool FilterFunc(T item)
     {
         throw new NotImplementedException();
@@ -101,35 +107,6 @@
             if ($"{element.Number} {element.Position} {element.Molar}".Contains(_searchString))
             return true;
             return false; *@
-    }
-
-    private void BackupItem(object item)
-    {
-        throw new NotImplementedException();
-        @* elementBeforeEdit = new()
-            {
-            Sign = ((Element)element).Sign,
-            Name = ((Element)element).Name,
-            Molar = ((Element)element).Molar,
-            Position = ((Element)element).Position
-            };
-            AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}"); *@
-    }
-
-    private void ItemHasBeenCommitted(object item)
-    {
-        throw new NotImplementedException();
-        @* AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed"); *@
-    }
-
-    private void ResetItemToOriginalValues(object item)
-    {
-        throw new NotImplementedException();
-        @* ((Element)element).Sign = elementBeforeEdit.Sign;
-            ((Element)element).Name = elementBeforeEdit.Name;
-            ((Element)element).Molar = elementBeforeEdit.Molar;
-            ((Element)element).Position = elementBeforeEdit.Position;
-            AddEditionEvent($"RowEditCancel event: Editing of Element {((Element)element).Name} cancelled"); *@
     }
 
     // TODO implement
