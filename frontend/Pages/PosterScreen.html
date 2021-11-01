@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {box-sizing: border-box;}
+body {font-family: Verdana, sans-serif;}
+.mySlides {display: none;}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1080px;
+  position: relative;
+  margin: auto;
+}
+
+.active {
+  background-color: #717171;
+}
+
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .text {font-size: 11px}
+}
+</style>
+</head>
+<body>
+
+<div class="slideshow-container">
+
+<div class="mySlides">
+  <img src="https://cdn.discordapp.com/attachments/884376312079327262/903620476809650196/IMG_1565.jpg" style="width:100%">
+</div>
+
+<div class="mySlides">
+  <img src="https://cdn.discordapp.com/attachments/884376312079327262/903620772562612274/image0.png" style="width:100%">
+</div>
+
+<div class="mySlides">
+  <img src="https://cdn.discordapp.com/attachments/884376312079327262/903342511601356820/image0.jpg" style="width:100%">
+</div>
+
+</div>
+
+<script>
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none"; 
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}   
+  slides[slideIndex-1].style.display = "block"; 
+  setTimeout(showSlides, 4000); // Change image every 2 seconds
+}
+</script>
+
+</body>
+</html>
