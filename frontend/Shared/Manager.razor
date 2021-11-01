@@ -17,6 +17,8 @@
                 </ToolBarContent>
 
                 <HeaderContent>
+                    @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
+                        method, where you can vary the renderfragment in the inntermost if statement *@
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
                         Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
