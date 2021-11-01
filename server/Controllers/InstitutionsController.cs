@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
+using server.Services;
 
 namespace server.Controllers
 {
@@ -13,52 +14,45 @@ namespace server.Controllers
     [Route("[controller]")]
     public class InstitutionsController : ControllerBase
     {
-        private readonly databaseContext _context;
+        // private readonly databaseContext _context;
+
+        private InstitutionService _institutionService;
 
         public InstitutionsController(databaseContext context)
         {
-            _context = context;
+            _institutionService = new InstitutionService(context);
         }
 
         [HttpGet]
         public IEnumerable<Institution> Get()
         {
-            //await Task.Delay(3000);
-            return _context.Institutions.ToList();
+            return _institutionService.GetAllInstitutions();
         }
 
         [HttpGet("{id:int}")]
         public ActionResult<Institution> GetInstitutionDetails(int id)
         {
-            Institution institution = _context.Institutions.Where(i => i.Id == id).FirstOrDefault();
-
-            if (institution == null)
+            try
+            {
+                 Institution institution = _institutionService.GetInstitution(id);
+                 return institution;
+            }
+            catch (System.Exception)
             {
                 return NotFound();
             }
-
-            return institution;
         }
 
         [HttpPost]
         public ActionResult<Institution> Post([FromBody] Institution institution)
         {
-            _context.Institutions.Add(institution);
-            _context.SaveChanges();
-
-            return _context.Institutions
-            .Where(i => i.Name == institution.Name)
-            .FirstOrDefault();
+            return _institutionService.CreateInstitution(institution);
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult<Institution> Delete(int id)
         {
-            Institution institution = _context.Institutions.Find(id);
-            _context.Institutions.Remove(institution);
-            _context.SaveChanges();
-
-            return institution;
+            return _institutionService.DeleteInstitution(id);
         }
     }
 }

@@ -23,42 +23,45 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<Object> Get()
         {
-            return _userService.GetAllUsers();
-            // return _context.Users.ToList();
+            return _userService.GetAllUserJSON();
         }
 
-        // [HttpGet("{id:int}")]
-        // public ActionResult<User> GetUserDetails(int id)
-        // {
-        //     User user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+        [HttpGet("{id:int}")]
+        public ActionResult<Object> GetUserDetails(int id)
+        {
+            try
+            {
+                Object user = _userService.GetUserJSON(id);
+                return user;
+            }
+            catch (System.NullReferenceException)
+            {
+                return NotFound();
+            }
+        }
 
-        //     if (user == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpPost]
+        public ActionResult<Object> Post([FromBody] User user)
+        {
+            User u = _userService.CreateUser(user);
+            return _userService.GetUserJSON(u.Id);
+        }
 
-        //     return user;
-        // }
-
-        // [HttpPost]
-        // public ActionResult<User> Post([FromBody] User user)
-        // {
-        //     _context.Users.Add(user);
-        //     _context.SaveChanges();
-
-        //     return _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
-        // }
-
-        // [HttpDelete("{id:int}")]
-        // public ActionResult<User> Delete(int id)
-        // {
-        //     User user = _context.Users.Find(id);
-        //     _context.Users.Remove(user);
-        //     _context.SaveChanges();
-
-        //     return user;
-        // }
+        [HttpDelete("{id:int}")]
+        public ActionResult<Object> Delete(int id)
+        {
+            try
+            {
+                Object u = _userService.GetUserJSON(id);
+                _userService.DeleteUser(id);
+                return u;
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
     }
 }
