@@ -5,7 +5,7 @@
 <MudContainer>
     <MudGrid Justify="Justify.Center">
         <MudItem xs="12">
-            <MudTable Items="@ItemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
@@ -52,8 +52,8 @@
 
 @code
 {
-    [Parameter]
-    public List<T> ItemList { get; set; } = new List<T>();
+    readonly private IEnumerable<PropertyInfo> _propertyInfoList =
+        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
     [Parameter]
     public RenderFragment MudForm { get; set; }
@@ -61,10 +61,9 @@
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
 
-    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
-    BindingFlags.Instance);
+    private List<T> _itemList = new List<T>();
 
-    private T _selectedItem { get; set; }
+    private T _selectedItem;
 
     private string _searchString = "";
 
