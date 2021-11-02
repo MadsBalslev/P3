@@ -2,6 +2,7 @@
 @using System.Reflection
 @using System.Runtime
 @typeparam T
+@inject IHttpClientFactory ClientFactory
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
@@ -53,6 +54,9 @@
 
 @code
 {
+    private readonly APIAttribute _apiAttribute =
+        Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
+
     private readonly IEnumerable<PropertyInfo> _propertyInfoList =
         typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -98,32 +102,28 @@
 
     private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
     {
-        // beware of infamous do-while-false pattern.
-        do
+        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+        ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+        if (managerMetadata == null)
         {
-            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-            if (managerMetadata == null)
-            {
-                break;
-            }
+            return false;
+        }
 
-            if (_userAccessLevel < managerMetadata.AccessLevel)
-            {
-                break;
-            }
+        if (_userAccessLevel < managerMetadata.AccessLevel)
+        {
+            return false;
+        }
 
-            string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
-            if (propertyValue == null)
-            {
-                break;
-            }
+        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+        if (propertyValue == null)
+        {
+            return false;
+        }
 
-            if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        } while (false);
+        if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
         return false;
     }
 
@@ -131,7 +131,10 @@
     private async Task<List<T>> GetItems()
     {
         throw new NotImplementedException();
-    }
+        @* HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, ) *@
+
+
+}
 
     // TODO implement
     private async Task<List<T>> PostItem()
