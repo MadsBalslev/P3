@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using server.Models;
+
 namespace server.Services
 {
     public class InstitutionService
@@ -24,14 +25,7 @@ namespace server.Services
             List<Object> response = new List<object>();
             foreach (Institution i in institutions)
             {
-                Object r = new
-                {
-                    institutionId = i.Id,
-                    name = i.Name,
-                    admin = $"{i.AdminNavigation.FirstName} {i.AdminNavigation.LastName}",
-
-                };
-                response.Add(r);
+                response.Add(i.ToJSON());
             }
 
             return response;
@@ -55,23 +49,13 @@ namespace server.Services
             List<Object> iUsers = new List<Object>();
             foreach (User u in i.Users)
             {
-                Object ru = new
-                {
-                    userId = u.Id,
-                    firstName = u.FirstName,
-                    lastName = u.LastName,
-                    email = u.Email,
-                };
-                iUsers.Add(ru);
+                iUsers.Add(u.ToJSON());
             }
-            Object response = new
-            {
-                institutionId = i.Id,
-                name = i.Name,
-                admin = $"{i.AdminNavigation.FirstName} {i.AdminNavigation.LastName}",
+    
+            return new {
+                institutionDetails = i.ToJSON(),
                 users = iUsers,
             };
-            return response;
         }
 
         public Institution CreateInstitution(Institution institution)

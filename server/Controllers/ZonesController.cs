@@ -12,25 +12,25 @@ namespace server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ScreensController : ControllerBase
+    public class ZonesController : ControllerBase
     {
-        ScreenService _screenService;
+        private ZoneService _zoneService;
 
-        public ScreensController(databaseContext context)
+        public ZonesController(databaseContext context)
         {
-            _screenService = new ScreenService(context);
+            _zoneService = new ZoneService(context);
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get() => _screenService.GetAllScreensJSON();
+        public IEnumerable<Object> Get() => _zoneService.GetAllZonesJSON();
 
         [HttpGet("{id:int}")]
-        public ActionResult<Object> GetScreenDetails(int id)
+        public ActionResult<Object> GetZoneDetails(int id)
         {
             try
             {
-                Object screen = _screenService.GetScreenJSON(id);
-                return screen;
+                Object zone = _zoneService.GetZoneJSON(id);
+                return zone;
             }
             catch (System.NullReferenceException)
             {
@@ -39,12 +39,12 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Object> Post([FromBody] Screen screen)
+        public ActionResult<Object> Post([FromBody] Zone zone)
         {
             try
             {
-                Screen s = _screenService.CreateScreen(screen);
-                return _screenService.GetScreenJSON(s.Id);
+                Zone z = _zoneService.CreateZone(zone);
+                return _zoneService.GetZoneJSON(z.Id);
             }
             catch (System.Exception)
             {
@@ -57,9 +57,9 @@ namespace server.Controllers
         {
             try
             {
-                Object s = _screenService.GetScreenJSON(id);
-                _screenService.DeleteScreen(id);
-                return s;
+                Object z = _zoneService.GetZoneJSON(id);
+                _zoneService.DeleteZone(id);
+                return z;
             }
             catch (System.Exception)
             {

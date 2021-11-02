@@ -34,18 +34,7 @@ namespace server.Services
         {
             Poster p = GetPoster(id);
 
-            Object response = new
-            {
-                posterId = p.Id,
-                name = p.Name,
-                startDate = p.StartDate,
-                endDate = p.EndDate,
-                url = p.ImageUrl,
-                institution = p.CreatedByNavigation.InstitutionNavigation.Name,
-                createdBy = $"{p.CreatedByNavigation.FirstName} {p.CreatedByNavigation.LastName}",
-            };
-
-            return response;
+            return p.ToJSON();
         }
 
         public Poster CreatePoster(Poster poster)
@@ -72,18 +61,7 @@ namespace server.Services
 
             foreach (Poster p in posters)
             {
-                Object rp = new
-                {
-                    posterId = p.Id,
-                    name = p.Name,
-                    startDate = p.StartDate,
-                    endDate = p.EndDate,
-                    url = p.ImageUrl,
-                    institution = p.CreatedByNavigation.InstitutionNavigation.Name,
-                    createdBy = $"{p.CreatedByNavigation.FirstName} {p.CreatedByNavigation.LastName}",
-                };
-
-                response.Add(rp);
+                response.Add(p.ToJSON());
             }
 
             return response;
