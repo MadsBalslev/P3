@@ -1,49 +1,33 @@
 @using MudBlazor
-@typeparam T
-@inherits MudTable<T>
 @using System.Reflection
-@inject ISnackbar Snackbar
+@using System.Runtime
+@typeparam T
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
         <MudItem xs="12">
-            <MudTable Items="@ItemList" 
-                      Hover="@true" 
-                      CanCancelEdit="@true" 
-                      Filter="new Func<T, bool>(FilterFunc)"
-                      @bind-SelectedItem="_selectedItem" 
-                      SortLabel="Sort By" 
-                      CommitEditTooltip="Accept Changes"
-                      OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" 
-                      RowEditPreview="BackupItem"
-                      RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
+            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton Variant="Variant.Outlined">Create</MudButton>
                     <MudSpacer />
-                    <MudTextField @bind-Value="_searchString" 
-                                  Placeholder="Search" 
-                                  Adornment="Adornment.Start"
-                                  AdornmentIcon="@Icons.Material.Filled.Search" 
-                                  IconSize="Size.Medium" 
-                                  Class="mt-0">
-                    </MudTextField>
+                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
+                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
-               <HeaderContent>
+
+                <HeaderContent>
+                    @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
+                        method, where you can vary the renderfragment in the inntermost if statement *@
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                        if (attribute is AccessLevelAttribute)
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        if (attribute is ManagerMetadataAttribute)
                         {
-                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            if (_userAccessLevel >= managerMetadata.AccessLevel)
                             {
-                                attribute = propertyInfo.GetCustomAttribute(typeof(HeaderDisplaynameAttribute), true);
-                                if (attribute is HeaderDisplaynameAttribute)
-                                {
-                                    HeaderDisplaynameAttribute headerDisplaynameAttribute = attribute as HeaderDisplaynameAttribute;
-                                    <MudTh>@headerDisplaynameAttribute.HeaderDisplayname</MudTh>
-                                }
+                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
                             }
                         }
                     }
@@ -51,14 +35,12 @@
                 <RowTemplate>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(AccessLevelAttribute), true);
-                        if (attribute is AccessLevelAttribute)
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        if (attribute is ManagerMetadataAttribute)
                         {
-                            AccessLevelAttribute accessAttribute = attribute as AccessLevelAttribute;
-                            if (_userAccessLevel >= accessAttribute.AccessLevel)
+                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            if (_userAccessLevel >= managerMetadata.AccessLevel)
                             {
-                                MethodInfo getter = propertyInfo.GetGetMethod();
-                                // TODO Datalabel should be implemented for MudTd below
                                 <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
                             }
                         }
@@ -71,8 +53,8 @@
 
 @code
 {
-    [Parameter]
-    public List<T> ItemList { get; set; } = new List<T>();
+    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
+        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
     [Parameter]
     public RenderFragment MudForm { get; set; }
@@ -80,56 +62,69 @@
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
 
-    private IEnumerable<PropertyInfo> _propertyInfoList { get; set; } = typeof(T).GetProperties(BindingFlags.Public |
-    BindingFlags.Instance);
-
-    private T _selectedItem { get; set; }
+    private List<T> _itemList = new List<T>();
 
     private string _searchString = "";
 
-    // TODO Implement ```FilterFunc()```
-    //  labels: Domain: Development, Priority: High, Type: Enhancement
+    private T _selectedItem;
+
     private bool FilterFunc(T item)
     {
-        throw new NotImplementedException();
-        @* if (string.IsNullOrWhiteSpace(_searchString))
+        if (string.IsNullOrWhiteSpace(_searchString))
+        {
             return true;
-            if (element.Sign.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        }
+        else if (SearchStringMatch(item))
+        {
             return true;
-            if (element.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-            if ($"{element.Number} {element.Position} {element.Molar}".Contains(_searchString))
-            return true;
-            return false; *@
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    private void BackupItem(object item)
+    private bool SearchStringMatch(T item)
     {
-        throw new NotImplementedException();
-        @* elementBeforeEdit = new()
+        foreach (PropertyInfo propertyInfo in _propertyInfoList)
+        {
+            if (PropertyIsAvaliableAndSearchStringMatch(item, propertyInfo))
             {
-            Sign = ((Element)element).Sign,
-            Name = ((Element)element).Name,
-            Molar = ((Element)element).Molar,
-            Position = ((Element)element).Position
-            };
-            AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}"); *@
+                return true;
+            }
+        }
+        return false;
     }
 
-    private void ItemHasBeenCommitted(object item)
+    private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
     {
-        throw new NotImplementedException();
-        @* AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed"); *@
-    }
+        // beware of infamous do-while-false pattern.
+        do
+        {
+            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+            if (managerMetadata == null)
+            {
+                break;
+            }
 
-    private void ResetItemToOriginalValues(object item)
-    {
-        throw new NotImplementedException();
-        @* ((Element)element).Sign = elementBeforeEdit.Sign;
-            ((Element)element).Name = elementBeforeEdit.Name;
-            ((Element)element).Molar = elementBeforeEdit.Molar;
-            ((Element)element).Position = elementBeforeEdit.Position;
-            AddEditionEvent($"RowEditCancel event: Editing of Element {((Element)element).Name} cancelled"); *@
+            if (_userAccessLevel < managerMetadata.AccessLevel)
+            {
+                break;
+            }
+
+            string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+            if (propertyValue == null)
+            {
+                break;
+            }
+
+            if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        } while (false);
+        return false;
     }
 
     // TODO implement

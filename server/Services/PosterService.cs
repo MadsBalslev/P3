@@ -33,7 +33,6 @@ namespace server.Services
         public Object GetPosterJSON(int id)
         {
             Poster p = GetPoster(id);
-
             return p.ToJSON();
         }
 

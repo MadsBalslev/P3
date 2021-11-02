@@ -8,7 +8,7 @@ namespace server.Models
             {
                 id = this.Id,
                 name = this.Name,
-                zone = new 
+                zone = new
                 {
                     id = this.Zone,
                     name = this.ZoneNavigation.Name

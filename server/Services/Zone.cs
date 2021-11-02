@@ -4,7 +4,8 @@ namespace server.Models
     {
         public object ToJSON()
         {
-            return new {
+            return new
+            {
                 id = this.Id,
                 name = this.Name
             };

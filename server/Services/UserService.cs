@@ -43,7 +43,7 @@ namespace server.Services
             {
                 userDetail = u.ToJSON(),
                 posters = uPosters,
-            }; ;
+            };
         }
 
         public User CreateUser(User user)

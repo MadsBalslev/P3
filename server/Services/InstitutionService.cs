@@ -51,8 +51,9 @@ namespace server.Services
             {
                 iUsers.Add(u.ToJSON());
             }
-    
-            return new {
+
+            return new
+            {
                 institutionDetails = i.ToJSON(),
                 users = iUsers,
             };
