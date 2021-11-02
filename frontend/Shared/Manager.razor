@@ -2,6 +2,7 @@
 @using System.Reflection
 @using System.Runtime
 @typeparam T
+@inject IHttpClientFactory ClientFactory
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
@@ -53,6 +54,9 @@
 
 @code
 {
+    private readonly APIAttribute _apiAttribute =
+        Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
+
     private readonly IEnumerable<PropertyInfo> _propertyInfoList =
         typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -126,8 +130,11 @@
     // TODO implement
     private async Task<List<T>> GetItems()
     {
-        throw new NotImplementedException();
-    }
+        @* throw new NotImplementedException(); *@
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, )
+
+
+}
 
     // TODO implement
     private async Task<List<T>> PostItem()
