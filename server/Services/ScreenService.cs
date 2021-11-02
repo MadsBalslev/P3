@@ -38,7 +38,7 @@ namespace server.Services
             }
 
             return s;
-        } 
+        }
 
         public Object GetScreenJSON(int id) => GetScreen(id).ToJSON();
 
@@ -60,6 +60,6 @@ namespace server.Services
 
             return screen;
         }
-            
+
     }
 }
