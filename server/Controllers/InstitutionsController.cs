@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
+using server.Services;
 
 namespace server.Controllers
 {
@@ -13,52 +14,62 @@ namespace server.Controllers
     [Route("[controller]")]
     public class InstitutionsController : ControllerBase
     {
-        private readonly databaseContext _context;
+        // private readonly databaseContext _context;
+
+        private InstitutionService _institutionService;
 
         public InstitutionsController(databaseContext context)
         {
-            _context = context;
+            _institutionService = new InstitutionService(context);
         }
 
         [HttpGet]
-        public IEnumerable<Institution> Get()
+        public IEnumerable<Object> Get()
         {
-            //await Task.Delay(3000);
-            return _context.Institutions.ToList();
+            return _institutionService.GetAllInstitutionsJSON();
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Institution> GetInstitutionDetails(int id)
+        public ActionResult<Object> GetInstitutionDetails(int id)
         {
-            Institution institution = _context.Institutions.Where(i => i.Id == id).FirstOrDefault();
-
-            if (institution == null)
+            try
+            {
+                Object institution = _institutionService.GetInstitutionJSON(id);
+                return institution;
+            }
+            catch (System.Exception)
             {
                 return NotFound();
             }
-
-            return institution;
         }
 
         [HttpPost]
         public ActionResult<Institution> Post([FromBody] Institution institution)
         {
-            _context.Institutions.Add(institution);
-            _context.SaveChanges();
-
-            return _context.Institutions
-            .Where(i => i.Name == institution.Name)
-            .FirstOrDefault();
+            try
+            {
+                Institution i = _institutionService.CreateInstitution(institution);
+                return _institutionService.GetInstitution(i.Id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Institution> Delete(int id)
+        public ActionResult<Object> Delete(int id)
         {
-            Institution institution = _context.Institutions.Find(id);
-            _context.Institutions.Remove(institution);
-            _context.SaveChanges();
-
-            return institution;
+            try
+            {
+                Object i = _institutionService.GetInstitutionJSON(id);
+                _institutionService.DeleteInstitution(id);
+                return i;
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }

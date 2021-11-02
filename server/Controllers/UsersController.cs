@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
+using server.Services;
 
 namespace server.Controllers
 {
@@ -13,50 +14,61 @@ namespace server.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly databaseContext _context;
+        // private readonly databaseContext _context;
+        private UserService _userService;
 
         public UsersController(databaseContext context)
         {
-            _context = context;
+            _userService = new UserService(context);
         }
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<Object> Get()
         {
-            //await Task.Delay(3000);
-            return _context.Users.ToList();
+            return _userService.GetAllUserJSON();
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<User> GetUserDetails(int id)
+        public ActionResult<Object> GetUserDetails(int id)
         {
-            User user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
-
-            if (user == null)
+            try
+            {
+                Object user = _userService.GetUserJSON(id);
+                return user;
+            }
+            catch (System.NullReferenceException)
             {
                 return NotFound();
             }
-
-            return user;
         }
 
         [HttpPost]
-        public ActionResult<User> Post([FromBody] User user)
+        public ActionResult<Object> Post([FromBody] User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            return _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+            try
+            {
+                User u = _userService.CreateUser(user);
+                return _userService.GetUserJSON(u.Id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<User> Delete(int id)
+        public ActionResult<Object> Delete(int id)
         {
-            User user = _context.Users.Find(id);
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-
-            return user;
+            try
+            {
+                Object u = _userService.GetUserJSON(id);
+                _userService.DeleteUser(id);
+                return u;
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }
