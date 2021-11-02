@@ -4,6 +4,11 @@ function startGenerating()
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img")
     Image.src ="https://cdn.discordapp.com/attachments/884376312079327262/903342511601356820/image0.jpg"
+    screenDiv.classList = "container";
+    Image.classList = "image";
+    Image.style.height = "100vh";
+    Image.style.width = "100%";
+
     screenDiv.appendChild(Image);
     document.body.appendChild(screenDiv);
     var i = 0;
@@ -11,10 +16,9 @@ function startGenerating()
   
 
     function showSlides() {
-      
-      var slides =[ "https://cdn.discordapp.com/attachments/884376312079327262/903620476809650196/IMG_1565.jpg",
-      "https://assets3.thrillist.com/v1/image/3005227/792x815/scale;jpeg_quality=60.jpg",
-      "https://assets3.thrillist.com/v1/image/3005222/792x918/scale;jpeg_quality=60.jpg",
+      var slides =[ "https://via.placeholder.com/960x1280.png",
+      "https://via.placeholder.com/1080x1920.png",
+      "https://via.placeholder.com/1080x2048.png",
       ]
       Image.src=slides[slideIndex];
       slideIndex++;
