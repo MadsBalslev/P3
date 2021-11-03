@@ -1,5 +1,14 @@
-function startGenerating()
+
+    //  async function getData(URL) 
+    //  {
+    //     const response = await fetch(URL);
+    //     const data = await response.json();
+    //     return data;
+    //  }  
+
+async function startGenerating()
 {
+    // var Posters = await getData("http://localhost:3000/Posters");
     var slideIndex=0;
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img")
@@ -15,29 +24,15 @@ function startGenerating()
   
 
     function showSlides() {
-      var slides =[ "https://via.placeholder.com/960x1280.png",
-      "https://via.placeholder.com/1080x1920.png",
-      "https://via.placeholder.com/1080x2048.png",
-      ]
+      var slides =[];
+      Posters.forEach(element => {
+          slides.push(element.image);
+      });
+      
+  
       Image.src=slides[slideIndex];
       slideIndex++;
       if (slideIndex == slides.length) {slideIndex = 0}   
       setTimeout(showSlides, 4000); // Change image every 2 seconds
-
-    //  if(i==0)
-    //  {
-    //      Image.src="https://assets3.thrillist.com/v1/image/3005227/792x815/scale;jpeg_quality=60.jpg";
-    //      i++;
-    //  }
-    //  else if (i==1)
-    //  {
-    //      Image.src=  "https://assets3.thrillist.com/v1/image/3005222/792x918/scale;jpeg_quality=60.jpg";
-    //      i = 0;
-    
-    //  for (each item in jsonobject)
-    //  do {get json[i]
-    //  i = jsonobject.length {sig selv}}
-
-        // setTimeout(showSlides,4000);
     }
 }
