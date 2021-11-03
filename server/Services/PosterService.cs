@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using server.Models;
 namespace server.Services
@@ -53,6 +53,7 @@ namespace server.Services
             return poster;
         }
 
+
         public IEnumerable<Object> GetAllPosterJSON()
         {
             IEnumerable<Poster> posters = GetAllPosters();
@@ -65,5 +66,22 @@ namespace server.Services
 
             return response;
         }
+
+        // PUT request
+        public Poster UpdatePoster(int id, Poster poster)
+        {
+            Poster p = GetPoster(id);
+            p.Name = poster.Name;
+            p.StartDate = poster.StartDate;
+            p.EndDate = poster.EndDate;
+            p.ImageUrl = poster.ImageUrl;
+
+
+            _context.SaveChanges();
+
+            return p;
+        }
+
+        public Object UpdatePosterJSON(int id, Poster p) => UpdatePoster(id, p).ToJSON();
     }
 }
