@@ -69,5 +69,8 @@ namespace server.Controllers
                 return NotFound();
             }
         }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<Object> Put([FromBody] Poster p, int id) => _posterService.UpdatePosterJSON(id, p);
     }
 }
