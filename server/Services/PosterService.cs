@@ -53,6 +53,7 @@ namespace server.Services
             return poster;
         }
 
+
         public IEnumerable<Object> GetAllPosterJSON()
         {
             IEnumerable<Poster> posters = GetAllPosters();

@@ -24,3 +24,6 @@ INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('2', 'Screen2', 
 INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('3', 'Screen3', '2');
 INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('4', 'Screen4', '3');
 
+UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
+UPDATE `users` SET `institution` = 2 WHERE `id` = 2;
+UPDATE `users` SET `institution` = 3 WHERE `id` = 3;
