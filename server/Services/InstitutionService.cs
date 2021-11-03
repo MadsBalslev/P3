@@ -82,7 +82,7 @@ namespace server.Services
             Institution inst = GetInstitution(id);
             inst.Name = institution.Name;
             inst.Admin = institution.Admin;
-            
+
 
             _context.SaveChanges();
 
