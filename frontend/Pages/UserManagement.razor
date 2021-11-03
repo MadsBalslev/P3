@@ -1,7 +1,57 @@
 @page "/UserManagement"
-@using System
+@using MudBlazor
+@inject ISnackbar Snackbar
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+    .selected>td {
+        color: white !important;
+    }
+
+    .selected>td .mud-input {
+        color: white !important;
+    }
+</style>
+
+<MudTabs>
+        <Manager T="@Poster">
+            <MudGrid Justify="Justify.FlexEnd">
+                <MudForm>
+                    <MudCard>
+                        <MudCardContent>
+                            <MudTextField @bind-Value="firstName" Label="First name" class="mb-3" />
+                            <MudTextField @bind-Value="lastName" Label="Last name" class="mb-3" />
+                            <MudTextField @bind-Value="Email" Label="Email" class="mb-3" />
+                            <MudNumericField @bind-Value="phoneNumber" Label="Phone number" Min="0" Max="99999999" HideSpinButtons="true" text=" " class="mb-3" />
+                            <MudSelect Dense="true" T="string" xs="12" Label="Institution" class="mb-3" Variant="Variant.Text" EndIcon="@Icons.Filled.KeyboardArrowDown" AnchorOrigin="Origin.BottomCenter" IconColor="Color.Primary">
+                                <MudSelectItem Value="@("Biffen")" />
+                            </MudSelect>
+                            <MudSpacer />
+                            <MudSelect Dense="true" T="string" xs="12" Label="Role" class="mb-3" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Text" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Primary">
+                                <MudSelectItem Value="@("System admin")" />
+                                <MudSelectItem Value="@("Institution admin")" />
+                                <MudSelectItem Value="@("Institution user")" />
+                            </MudSelect>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add user
+                            </MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel
+                            </MudButton>
+
+                        </MudCardContent>
+                    </MudCard>
+                </MudForm>
+            </MudGrid>
+        </Manager>
+</MudTabs>
 
 @code
 {
+private string firstName;
+private string lastName;
+private string Email;
+private int phoneNumber;
 
 }
