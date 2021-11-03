@@ -13,7 +13,7 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public IEnumerable<Poster> GetAllPosters() 
+        public IEnumerable<Poster> GetAllPosters()
         {
             return _context.Posters.ToList();
         }
