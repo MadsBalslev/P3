@@ -1,8 +1,6 @@
 @using MudBlazor
 @using System.Reflection
 @using System.Runtime
-@using System.IO
-@using System.Text.Json
 @typeparam T
 @inject IHttpClientFactory ClientFactory
 
@@ -63,6 +61,8 @@
 @code
 {
     private int _tableSize = 12;
+    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
+        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
     
     [Parameter]
     public bool Collapsed { get; set; } = true;
@@ -72,12 +72,6 @@
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
-
-    private readonly APIAttribute _apiAttribute =
-    Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
-
-    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
-    typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
     private List<T> _itemList = new List<T>();
 
@@ -92,11 +86,6 @@
     private string PosterStartDate;
 
     private string PosterEndDate; *@
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        await GetItems();
-    }
 
     private bool FilterFunc(T item)
     {
@@ -171,23 +160,13 @@
     }
 
     // TODO implement
-    private async Task GetItems()
+    private async Task<List<T>> GetItems()
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
-
-        HttpClient client = ClientFactory.CreateClient();
-
-        HttpResponseMessage response = await client.SendAsync(request);
-
-        if (response.IsSuccessStatusCode)
-        {
-            using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream); 
-        }
+        throw new NotImplementedException();
     }
 
     // TODO implement
-    private async Task PostItem()
+    private async Task<List<T>> PostItem()
     {
         @* var addPoster = new Poster{ Name = posterName, Creator = PosterCreator, StartDate = PosterStartDate, EndDate = PosterEndDate};
         await Http.PostAsJsonAsync("", addPoster); *@
@@ -196,13 +175,13 @@
     }
 
     // TODO implement
-    private async Task PutItem()
+    private async Task<List<T>> PutItem()
     {
         throw new NotImplementedException();
     }
 
     // TODO implement this function
-    private async Task DeleteItem()
+    private async Task<List<T>> DeleteItem()
     {
         throw new NotImplementedException();
     }

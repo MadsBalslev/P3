@@ -71,8 +71,5 @@ namespace server.Controllers
                 return NotFound();
             }
         }
-
-        [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Institution inst, int id) => _institutionService.UpdateInstitutionJSON(id, inst);
     }
 }

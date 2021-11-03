@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using server.Models;
 
@@ -60,20 +60,6 @@ namespace server.Services
 
             return screen;
         }
-
-        // PUT request
-        public Screen UpdateScreen(int id, Screen screen)
-        {
-            Screen s = GetScreen(id);
-            s.Name = screen.Name;
-            s.Zone = screen.Zone;
-
-            _context.SaveChanges();
-
-            return s;
-        }
-
-        public Object UpdateScreenJSON(int id, Screen screen) => UpdateScreen(id, screen).ToJSON();
 
     }
 }

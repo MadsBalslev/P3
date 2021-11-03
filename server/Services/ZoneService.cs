@@ -73,18 +73,5 @@ namespace server.Services
 
             return zone;
         }
-
-        // PUT request
-        public Zone UpdateZone(int id, Zone zone)
-        {
-            Zone z = GetZone(id);
-            z.Name = zone.Name;
-
-            _context.SaveChanges();
-
-            return z;
-        }
-
-        public Object UpdateZoneJSON(int id, Zone z) => UpdateZone(id, z).ToJSON();
     }
 }

@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using server.Models;
 
@@ -75,20 +75,5 @@ namespace server.Services
 
             return institution;
         }
-
-        // PUT request
-        public Institution UpdateInstitution(int id, Institution institution)
-        {
-            Institution inst = GetInstitution(id);
-            inst.Name = institution.Name;
-            inst.Admin = institution.Admin;
-
-
-            _context.SaveChanges();
-
-            return inst;
-        }
-
-        public Object UpdateInstitutionJSON(int id, Institution i) => UpdateInstitution(id, i).ToJSON();
     }
 }

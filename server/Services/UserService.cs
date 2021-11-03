@@ -75,22 +75,5 @@ namespace server.Services
 
             return response;
         }
-
-        // PUT request
-        public User UpdateUser(int id, User user)
-        {
-            User u = GetUser(id);
-            u.FirstName = user.FirstName;
-            u.LastName = user.LastName;
-            u.Email = user.Email;
-            u.PhoneNumber = user.PhoneNumber;
-            u.Role = user.Role;
-
-            _context.SaveChanges();
-
-            return u;
-        }
-
-        public Object UpdateUserJSON(int id, User user) => UpdateUser(id, user).ToJSON();
     }
 }

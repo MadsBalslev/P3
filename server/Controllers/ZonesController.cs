@@ -66,8 +66,5 @@ namespace server.Controllers
                 return NotFound();
             }
         }
-
-        [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Zone z, int id) => _zoneService.UpdateZoneJSON(id, z);
     }
 }

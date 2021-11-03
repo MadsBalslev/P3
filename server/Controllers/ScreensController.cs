@@ -66,8 +66,5 @@ namespace server.Controllers
                 return NotFound();
             }
         }
-
-        [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Screen s, int id) => _screenService.UpdateScreenJSON(id, s);
     }
 }
