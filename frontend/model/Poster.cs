@@ -1,58 +1,31 @@
 using System;
+using System.Collections.Generic;
 
 [APIAttribute("/Posters")]
 public class Poster
 {
-    private DateTime _startDate = new DateTime(1, 1, 1);
-
-    private DateTime _endDate = new DateTime(1, 1, 1);
-
-    private int _id = 0;
-
-    private string ImageUrl { get; set; } = "nil";
-
     [ManagerMetadata(AccessLevel.SysAdmin, "ID")]
-    public string Id
-    {
-        get { return _id.ToString(); }
-        set { _id = Int32.Parse(value); }
-    }
+    public int posterId { get; set; } = -1;
 
     [ManagerMetadata(AccessLevel.User, "Name")]
-    public string Name { get; set; } = "nil";
-
-    [ManagerMetadata(AccessLevel.InstAdmin, "Creator")]
-    public string Creator { get; set; } = "nil";
-
-    [ManagerMetadata(AccessLevel.SysAdmin, "Institution")]
-    public string Institution { get; set; } = "nil";
+    public string name { get; set; } = "nil";
 
     [ManagerMetadata(AccessLevel.User, "Start date")]
-    public string StartDate
-    {
-        get { return _startDate.ToString(); }
-        set { _startDate = DateTime.Parse(value); }
-    }
+    public DateTimeOffset startDate { get; set; } = new DateTimeOffset();
 
     [ManagerMetadata(AccessLevel.User, "End date")]
-    public string EndDate
-    {
-        get { return _endDate.ToString(); }
-        set { _endDate = DateTime.Parse(value); }
-    }
+    public DateTimeOffset endDate { get; set; } = new DateTimeOffset();
 
-    public Poster(int id, string name, string creator, string institution, DateTime startDate, DateTime endDate)
-    {
-        _id = id;
-        Name = name;
-        Creator = creator;
-        Institution = institution;
-        _startDate = startDate;
-        _endDate = endDate;
-    }
+    [ManagerMetadata(AccessLevel.InstAdmin, "Created by")]
+    public string Creator { get => createdBy.name; }
 
-    public void ChangeUrl(string url)
-    {
-        ImageUrl = url;
-    }
+    [ManagerMetadata(AccessLevel.SysAdmin, "Institution")]
+    public string  Institution { get => institution.name; }
+
+    [ManagerMetadata(AccessLevel.User, "Image url")]
+    public string image { get; set; } = "https://via.placeholder.com/1080x1920";
+
+    public User createdBy { get; set; } = new User();
+
+    public Institution institution { get; set; } = new Institution();
 }
