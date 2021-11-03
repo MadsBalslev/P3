@@ -1,7 +1,10 @@
 @using MudBlazor
 @using System.Reflection
 @using System.Runtime
+@using System.IO
+@using System.Text.Json
 @typeparam T
+@inject IHttpClientFactory ClientFactory
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
@@ -53,20 +56,29 @@
 
 @code
 {
-    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
-        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
     [Parameter]
     public RenderFragment MudForm { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
 
+    private readonly APIAttribute _apiAttribute =
+    Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
+
+    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
+    typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
     private List<T> _itemList = new List<T>();
 
     private string _searchString = "";
 
     private T _selectedItem;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await GetItems();
+    }
 
     private bool FilterFunc(T item)
     {
@@ -98,55 +110,61 @@
 
     private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
     {
-        // beware of infamous do-while-false pattern.
-        do
+        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+        ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+        if (managerMetadata == null)
         {
-            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-            if (managerMetadata == null)
-            {
-                break;
-            }
+            return false;
+        }
 
-            if (_userAccessLevel < managerMetadata.AccessLevel)
-            {
-                break;
-            }
+        if (_userAccessLevel < managerMetadata.AccessLevel)
+        {
+            return false;
+        }
 
-            string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
-            if (propertyValue == null)
-            {
-                break;
-            }
+        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+        if (propertyValue == null)
+        {
+            return false;
+        }
 
-            if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        } while (false);
+        if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
         return false;
     }
 
     // TODO implement
-    private async Task<List<T>> GetItems()
+    private async Task GetItems()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
+
+        HttpClient client = ClientFactory.CreateClient();
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            using Stream responseStream = await response.Content.ReadAsStreamAsync();
+            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream); 
+        }
+    }
+
+    // TODO implement
+    private async Task PostItem()
     {
         throw new NotImplementedException();
     }
 
     // TODO implement
-    private async Task<List<T>> PostItem()
-    {
-        throw new NotImplementedException();
-    }
-
-    // TODO implement
-    private async Task<List<T>> PutItem()
+    private async Task PutItem()
     {
         throw new NotImplementedException();
     }
 
     // TODO implement this function
-    private async Task<List<T>> DeleteItem()
+    private async Task DeleteItem()
     {
         throw new NotImplementedException();
     }

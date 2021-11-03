@@ -3,10 +3,11 @@ using System;
 [AttributeUsage(AttributeTargets.Class)]
 public class APIAttribute : Attribute
 {
-    public string APIPath = "/";
+    private static readonly string _basePath = "http://localhost:5000";
+    public string APIPath = _basePath;
 
     public APIAttribute(string apiPath)
     {
-        APIPath = apiPath;
+        APIPath = _basePath + apiPath;
     }
 }
