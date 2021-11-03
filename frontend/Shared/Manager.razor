@@ -54,17 +54,17 @@
 
 @code
 {
-    private readonly APIAttribute _apiAttribute =
-        Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
-
-    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
-        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
     [Parameter]
     public RenderFragment MudForm { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
+
+    private readonly APIAttribute _apiAttribute =
+        Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
+
+    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
+        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
     private List<T> _itemList = new List<T>();
 
