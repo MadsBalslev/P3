@@ -70,5 +70,8 @@ namespace server.Controllers
                 return NotFound();
             }
         }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<Object> Put([FromBody] User user, int id) => _userService.UpdateUserJSON(id, user);
     }
 }

@@ -36,25 +36,14 @@ namespace server.Services
             List<Object> uPosters = new List<Object>();
             foreach (Poster p in u.Posters)
             {
-                Object rp = new
-                {
-                    posterId = p.Id,
-                    name = p.Name,
-                    image = p.ImageUrl,
-                };
-                uPosters.Add(rp);
+                uPosters.Add(p.ToJSON());
             }
-            Object response = new
+
+            return new
             {
-                userId = u.Id,
-                fistName = u.FirstName,
-                lastName = u.LastName,
-                email = u.Email,
-                institution = u.InstitutionNavigation.Name,
+                userDetail = u.ToJSON(),
                 posters = uPosters,
             };
-
-            return response;
         }
 
         public User CreateUser(User user)
@@ -81,20 +70,27 @@ namespace server.Services
 
             foreach (User u in users)
             {
-                List<Object> uPosters = new List<Object>();
-                Object ru = new
-                {
-                    userId = u.Id,
-                    fistName = u.FirstName,
-                    lastName = u.LastName,
-                    email = u.Email,
-                    institution = u.InstitutionNavigation.Name,
-                };
-
-                response.Add(ru);
+                response.Add(u.ToJSON());
             }
 
             return response;
         }
+
+        // PUT request
+        public User UpdateUser(int id, User user)
+        {
+            User u = GetUser(id);
+            u.FirstName = user.FirstName;
+            u.LastName = user.LastName;
+            u.Email = user.Email;
+            u.PhoneNumber = user.PhoneNumber;
+            u.Role = user.Role;
+
+            _context.SaveChanges();
+
+            return u;
+        }
+
+        public Object UpdateUserJSON(int id, User user) => UpdateUser(id, user).ToJSON();
     }
 }
