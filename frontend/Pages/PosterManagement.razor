@@ -2,7 +2,6 @@
 @using MudBlazor
 @inject ISnackbar Snackbar
 
-
 <style>
     .selected {
         background-color: #1E88E5 !important;
@@ -19,7 +18,26 @@
 
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Posters">
-        <Manager T="@Poster" />
+        <Manager T="@Poster">
+            <MudGrid Justify="Justify.FlexEnd">
+            <MudForm>
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField @bind-Value="posterName" Label="Postername" Placeholder="New Postername" />
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudDatePicker ShowWeekNumbers="true" Label="Start date" @bind-Date="PosterStartDate" HelperText="For custom cultures" DateFormat="dd/MM/yyyy" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudDatePicker ShowWeekNumbers="true" Label="End date" @bind-Date="EndDate" HelperText="For custom cultures" DateFormat="dd/MM/yyyy" />
+                        </MudItem>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Add Poster</MudButton>
+                        <MudSpacer />
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudForm>
+            </MudGrid>
+        </Manager>
         @* <MudContainer>
             <MudGrid Justify="Justify.Center">
             <MudItem>
@@ -78,6 +96,10 @@
 
 @code
 {
+
+    private string posterName;
+    private DateTime PosterStartDate;
+    private DateTime EndDate;
     string[] _displayRowTemplateProperties = new string[] { "Name", "Creator", "Institution" };
     @* private enum PosterMode
         {

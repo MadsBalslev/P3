@@ -6,7 +6,7 @@
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
-        <MudItem xs="12">
+        <MudItem xs="8">
             <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
@@ -49,19 +49,19 @@
                 </RowTemplate>
             </MudTable>
         </MudItem>
+        <MudItem>
+            @ChildContent
+        </MudItem>
     </MudGrid>
 </MudContainer>
 
 @code
 {
-    private readonly APIAttribute _apiAttribute =
-        Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
-
     private readonly IEnumerable<PropertyInfo> _propertyInfoList =
         typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
     [Parameter]
-    public RenderFragment MudForm { get; set; }
+    public RenderFragment ChildContent { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
@@ -71,6 +71,14 @@
     private string _searchString = "";
 
     private T _selectedItem;
+
+    @* private string posterName;
+
+    private string PosterCreator;
+
+    private string PosterStartDate;
+
+    private string PosterEndDate; *@
 
     private bool FilterFunc(T item)
     {
@@ -102,28 +110,32 @@
 
     private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
     {
-        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-        ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-        if (managerMetadata == null)
+        // beware of infamous do-while-false pattern.
+        do
         {
-            return false;
-        }
+            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+            if (managerMetadata == null)
+            {
+                break;
+            }
 
-        if (_userAccessLevel < managerMetadata.AccessLevel)
-        {
-            return false;
-        }
+            if (_userAccessLevel < managerMetadata.AccessLevel)
+            {
+                break;
+            }
 
-        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
-        if (propertyValue == null)
-        {
-            return false;
-        }
+            string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+            if (propertyValue == null)
+            {
+                break;
+            }
 
-        if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-        {
-            return true;
-        }
+            if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        } while (false);
         return false;
     }
 
@@ -131,14 +143,14 @@
     private async Task<List<T>> GetItems()
     {
         throw new NotImplementedException();
-        @* HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, ) *@
-
-
-}
+    }
 
     // TODO implement
     private async Task<List<T>> PostItem()
     {
+        @* var addPoster = new Poster{ Name = posterName, Creator = PosterCreator, StartDate = PosterStartDate, EndDate = PosterEndDate};
+        await Http.PostAsJsonAsync("", addPoster); *@
+
         throw new NotImplementedException();
     }
 
