@@ -20,7 +20,7 @@ public class Poster
     public string Creator { get => createdBy.name; }
 
     [ManagerMetadata(AccessLevel.SysAdmin, "Institution")]
-    public string  Institution { get => institution.name; }
+    public string Institution { get => institution.name; }
 
     [ManagerMetadata(AccessLevel.User, "Image url")]
     public string image { get; set; } = "https://via.placeholder.com/1080x1920";
