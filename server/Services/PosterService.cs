@@ -13,11 +13,26 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public IEnumerable<Poster> GetAllPosters()
+        public IEnumerable<Poster> GetAllPosters() 
         {
+            System.Console.WriteLine("Fetching posters");
             return _context.Posters.ToList();
         }
+        public IEnumerable<Object> GetAllPosterJSON()
+        {
+            IEnumerable<Poster> posters = GetAllPosters();
+            List<Object> response = new List<Object>();
 
+            System.Console.WriteLine("Formatting as JSON");
+
+            foreach (Poster p in posters)
+            {
+                System.Console.WriteLine(p.ToJSON());
+                response.Add(p.ToJSON());
+            }
+
+            return response;
+        }
         public Poster GetPoster(int id)
         {
             Poster poster = _context.Posters.Find(id);
@@ -53,18 +68,6 @@ namespace server.Services
             return poster;
         }
 
-        public IEnumerable<Object> GetAllPosterJSON()
-        {
-            IEnumerable<Poster> posters = GetAllPosters();
-            List<Object> response = new List<object>();
-
-            foreach (Poster p in posters)
-            {
-                response.Add(p.ToJSON());
-            }
-
-            return response;
-        }
 
         // PUT request
         public Poster UpdatePoster(int id, Poster poster)
