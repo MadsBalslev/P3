@@ -11,7 +11,6 @@ function startGenerating()
 
     screenDiv.appendChild(Image);
     document.body.appendChild(screenDiv);
-    var i = 0;
     setTimeout(showSlides,4000);
   
 
