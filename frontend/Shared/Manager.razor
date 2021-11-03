@@ -68,7 +68,7 @@
     public bool Collapsed { get; set; } = true;
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment MudForm { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
@@ -78,14 +78,6 @@
     private string _searchString = "";
 
     private T _selectedItem;
-
-    @* private string posterName;
-
-    private string PosterCreator;
-
-    private string PosterStartDate;
-
-    private string PosterEndDate; *@
 
     private bool FilterFunc(T item)
     {
@@ -117,32 +109,28 @@
 
     private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
     {
-        // beware of infamous do-while-false pattern.
-        do
+        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+        ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+        if (managerMetadata == null)
         {
-            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-            if (managerMetadata == null)
-            {
-                break;
-            }
+            return false;
+        }
 
-            if (_userAccessLevel < managerMetadata.AccessLevel)
-            {
-                break;
-            }
+        if (_userAccessLevel < managerMetadata.AccessLevel)
+        {
+            return false;
+        }
 
-            string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
-            if (propertyValue == null)
-            {
-                break;
-            }
+        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+        if (propertyValue == null)
+        {
+            return false;
+        }
 
-            if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        } while (false);
+        if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
         return false;
     }
 
@@ -163,14 +151,14 @@
     private async Task<List<T>> GetItems()
     {
         throw new NotImplementedException();
-    }
+        @* HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, ) *@
+
+
+}
 
     // TODO implement
     private async Task<List<T>> PostItem()
     {
-        @* var addPoster = new Poster{ Name = posterName, Creator = PosterCreator, StartDate = PosterStartDate, EndDate = PosterEndDate};
-        await Http.PostAsJsonAsync("", addPoster); *@
-
         throw new NotImplementedException();
     }
 
