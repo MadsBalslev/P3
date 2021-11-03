@@ -15,7 +15,6 @@ namespace server.Services
 
         public IEnumerable<Poster> GetAllPosters() 
         {
-            System.Console.WriteLine("Fetching posters");
             return _context.Posters.ToList();
         }
         public IEnumerable<Object> GetAllPosterJSON()
@@ -23,11 +22,8 @@ namespace server.Services
             IEnumerable<Poster> posters = GetAllPosters();
             List<Object> response = new List<Object>();
 
-            System.Console.WriteLine("Formatting as JSON");
-
             foreach (Poster p in posters)
             {
-                System.Console.WriteLine(p.ToJSON());
                 response.Add(p.ToJSON());
             }
 
