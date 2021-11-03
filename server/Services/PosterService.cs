@@ -17,18 +17,7 @@ namespace server.Services
         {
             return _context.Posters.ToList();
         }
-        public IEnumerable<Object> GetAllPosterJSON()
-        {
-            IEnumerable<Poster> posters = GetAllPosters();
-            List<Object> response = new List<Object>();
 
-            foreach (Poster p in posters)
-            {
-                response.Add(p.ToJSON());
-            }
-
-            return response;
-        }
         public Poster GetPoster(int id)
         {
             Poster poster = _context.Posters.Find(id);
@@ -64,6 +53,19 @@ namespace server.Services
             return poster;
         }
 
+
+        public IEnumerable<Object> GetAllPosterJSON()
+        {
+            IEnumerable<Poster> posters = GetAllPosters();
+            List<Object> response = new List<object>();
+
+            foreach (Poster p in posters)
+            {
+                response.Add(p.ToJSON());
+            }
+
+            return response;
+        }
 
         // PUT request
         public Poster UpdatePoster(int id, Poster poster)
