@@ -68,7 +68,7 @@
     public bool Collapsed { get; set; } = true;
 
     [Parameter]
-    public RenderFragment MudForm { get; set; }
+    public RenderFragment ChildContent { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
