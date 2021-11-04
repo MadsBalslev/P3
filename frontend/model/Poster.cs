@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [APIAttribute("/Posters")]
 public class Poster
 {
-    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
+    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.SysAdmin, FormRepresentation.TextField)]
     public int posterId { get; set; } = -1;
 
     [ManagerMetadata("Name", AccessLevel.User, AccessLevel.User, FormRepresentation.TextField)]
