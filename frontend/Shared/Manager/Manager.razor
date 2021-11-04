@@ -1,7 +1,5 @@
-@using CreateForms
 @using MudBlazor
 @using System.Reflection
-@using System.Runtime
 @using System.IO
 @using System.Text.Json
 @typeparam T
@@ -29,7 +27,7 @@
                         if (attribute is ManagerMetadataAttribute)
                         {
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            if (_userAccessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
                             }
@@ -43,7 +41,7 @@
                         if (attribute is ManagerMetadataAttribute)
                         {
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            if (_userAccessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
                             }
@@ -67,7 +65,7 @@
     public bool Collapsed { get; set; } = true;
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment<CreateForm<T>> ChildContent { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
@@ -129,7 +127,7 @@
             return false;
         }
 
-        if (_userAccessLevel < managerMetadata.AccessLevel)
+        if (_userAccessLevel < managerMetadata.ViewableBy)
         {
             return false;
         }
@@ -175,10 +173,9 @@
         }
     }
 
-    // TODO implement
-    private async Task PostItem()
+    public async Task PostItem()
     {
-        throw new NotImplementedException();
+
     }
 
     // TODO implement

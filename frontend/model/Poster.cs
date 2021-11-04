@@ -4,25 +4,25 @@ using System.Collections.Generic;
 [APIAttribute("/Posters")]
 public class Poster
 {
-    [ManagerMetadata(AccessLevel.SysAdmin, "ID")]
+    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
     public int posterId { get; set; } = -1;
 
-    [ManagerMetadata(AccessLevel.User, "Name")]
+    [ManagerMetadata("Name", AccessLevel.User, AccessLevel.User, FormRepresentation.TextField)]
     public string name { get; set; } = "nil";
 
-    [ManagerMetadata(AccessLevel.User, "Start date")]
+    [ManagerMetadata("Start date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
     public DateTimeOffset startDate { get; set; } = new DateTimeOffset();
 
-    [ManagerMetadata(AccessLevel.User, "End date")]
+    [ManagerMetadata("End date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
     public DateTimeOffset endDate { get; set; } = new DateTimeOffset();
 
-    [ManagerMetadata(AccessLevel.InstAdmin, "Created by")]
+    [ManagerMetadata("Creator", AccessLevel.InstAdmin, AccessLevel.None, FormRepresentation.None)]
     public string Creator { get => createdBy.name; }
 
-    [ManagerMetadata(AccessLevel.SysAdmin, "Institution")]
+    [ManagerMetadata("Institution", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
     public string Institution { get => institution.name; }
 
-    [ManagerMetadata(AccessLevel.User, "Image url")]
+    [ManagerMetadata("Image url", AccessLevel.User, AccessLevel.User, FormRepresentation.PictureUpload)]
     public string image { get; set; } = "https://via.placeholder.com/1080x1920";
 
     public User createdBy { get; set; } = new User();
