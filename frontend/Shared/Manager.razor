@@ -8,12 +8,12 @@
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
-        <MudItem xs="12">
+        <MudItem xs="_tableSize">
             <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
-                    <MudButton Variant="Variant.Outlined">Create</MudButton>
+                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@toggle>Create</MudButton>
                     <MudSpacer />
                     <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
                         AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
@@ -51,13 +51,24 @@
                 </RowTemplate>
             </MudTable>
         </MudItem>
+        <MudItem for="Create">
+            @if (!Collapsed)
+            {
+                @ChildContent 
+            }
+        </MudItem>
     </MudGrid>
 </MudContainer>
 
 @code
 {
+    private int _tableSize = 12;
+    
     [Parameter]
-    public RenderFragment MudForm { get; set; }
+    public bool Collapsed { get; set; } = true;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
@@ -133,6 +144,19 @@
             return true;
         }
         return false;
+    }
+
+    void toggle()
+    {
+        Collapsed = !Collapsed;
+        if (Collapsed)
+        {
+            _tableSize = 12;
+        }
+        else
+        {
+            _tableSize = 8;
+        }
     }
 
     // TODO implement

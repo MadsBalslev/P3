@@ -2,7 +2,6 @@
 @using MudBlazor
 @inject ISnackbar Snackbar
 
-
 <style>
     .selected {
         background-color: #1E88E5 !important;
@@ -19,58 +18,30 @@
 
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Posters">
-        <Manager T="@Poster" />
-        @* <MudContainer>
-            <MudGrid Justify="Justify.Center">
-            <MudItem>
-            <MudTable Items="@_posters" Hover="true" RowClassFunc="@SelectedRowClassFunc" @ref="_posterMudTable"
-            @onclick="UpdateManager">
-            <HeaderContent>
-            <MudTh>Name</MudTh>
-            <MudTh>Creator</MudTh>
-            <MudTh>Institution</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-            <MudTd>@context.Name</MudTd>
-            <MudTd>@context.Creator</MudTd>
-            <MudTd>@context.Institution</MudTd>
-            </RowTemplate>
-            </MudTable>
-            </MudItem>
-            <MudItem>
-            <MudForm>
-            <MudCard>
-            <MudCardContent>
-            @if (_currentMode == PosterMode.Create)
-            {
-            <MudForm @ref="_form" @bind-IsValid="@_success">
-
-            <MudTextField T="string" Label="Poster name" Required="true"
-            RequiredError="Poster name is required!" />
-
-            <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple
-            accept=".jpg, .jpeg, .png" />
-
-            <MudButton HtmlTag="label" Variant="Variant.Filled"
-            StartIcon="@Icons.Filled.CloudUpload" for="fileInput112">
-            Upload your image
-            </MudButton>
-            </MudForm>
-            }
-            else if (_currentMode == PosterMode.Edit)
-            {
-            <MudForm @ref="_form" @bind-IsValid="@_success"></MudForm>
-            }
-            </MudCardContent>
-            <MudCardActions>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)"
-            Class="ml-auto">Upload poster</MudButton>
-            </MudCardActions>
-            </MudCard>
-            </MudForm>
-            </MudItem>
+        <Manager T="@Poster">
+            <MudGrid Justify="Justify.FlexEnd">
+                <MudForm>
+                    <MudCard>
+                        <MudCardContent>
+                            <MudTextField @bind-Value="posterName" Label="Postername" Placeholder="Postername..." class="mb-3" />
+                            <MudItem xs="12" class="mb-3">
+                                <MudDatePicker ShowWeekNumbers="true" Label="Start date" @bind-Date="PosterStartDate"
+                                    DateFormat="dd/MM/yyyy" />
+                            </MudItem>
+                            <MudItem xs="12"class="mb-3">
+                                <MudDatePicker ShowWeekNumbers="true" Label="End date" @bind-Date="EndDate"
+                                    DateFormat="dd/MM/yyyy" />
+                            </MudItem>
+                            <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" />
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput"
+                                FullWidth="true" class="mb-3">Upload poster</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add Poster</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudForm>
             </MudGrid>
-            </MudContainer> *@
+        </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
     </MudTabPanel>
@@ -78,70 +49,8 @@
 
 @code
 {
+    private string posterName;
+    private DateTime? PosterStartDate;
+    private DateTime? EndDate;
     string[] _displayRowTemplateProperties = new string[] { "Name", "Creator", "Institution" };
-    @* private enum PosterMode
-        {
-        Edit,
-        Create,
-        }
-
-        private MudForm _form;
-
-        private bool _success;
-
-        private PosterMode _currentMode { get; set; } = PosterMode.Create;
-
-        private List<Poster> _posters { get; set; } = new List<Poster>();
-
-        private int _selectedRowNumber = -1;
-
-        private MudTable<Poster> _posterMudTable;
-
-        protected override void OnParametersSet()
-        {
-        base.OnParametersSet();
-        getPosterFromServer();
-        }
-
-        private void getPosterFromServer()
-        {
-        _posters.Add(new Poster("poster 1", "Casper", "AAU"));
-        _posters.Add(new Poster("poster 2", "Mads", "AAU"));
-        _posters.Add(new Poster("poster 3", "Møller", "AAU"));
-        }
-
-        private string SelectedRowClassFunc(Poster poster, int rowNumber)
-        {
-        if (_selectedRowNumber == rowNumber)
-        {
-        _selectedRowNumber = -1;
-        _currentMode = PosterMode.Create;
-        return string.Empty;
-        }
-        else if (_posterMudTable.SelectedItem != null && _posterMudTable.SelectedItem.Equals(poster))
-        {
-        _selectedRowNumber = rowNumber;
-        _currentMode = PosterMode.Edit;
-        return "selected";
-        }
-        else
-        {
-        return string.Empty;
-        }
-
-        }
-
-        private void UpdateManager() { StateHasChanged() is implicitly called }
-
-        private void UploadFiles(InputFileChangeEventArgs e)
-        {
-        var entries = e.GetMultipleFiles();
-        //Do your validations here
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-        Snackbar.Add($"Files with {entries.FirstOrDefault().Size} bytes size are not allowed", Severity.Error);
-        Snackbar.Add($"Files starting with letter {entries.FirstOrDefault().Name.Substring(0, 1)} are not recommended",
-        Severity.Warning);
-        Snackbar.Add($"This file has the extension {entries.FirstOrDefault().Name.Split(".").Last()}", Severity.Info);
-        //TODO upload the files to the server
-        } *@
 }
