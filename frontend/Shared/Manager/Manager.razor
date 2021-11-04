@@ -50,12 +50,52 @@
                 </RowTemplate>
             </MudTable>
         </MudItem>
-        <MudItem for="Create">
-            @if (!Collapsed)
-            {
-                @ChildContent
-            }
+
+        <MudItem>
+            <MudForm>
+                <MudCard>
+                    <MudCardContent>
+                        @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                        {
+                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                            if (attribute is ManagerMetadataAttribute)
+                            {
+                                ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                                if (_userAccessLevel >= managerMetadata.EditableBy)
+                                {
+                                    switch (managerMetadata.EditFormRepresentation)
+                                    {
+                                        case FormRepresentation.TextField:
+                                            <MudTextField Label="@managerMetadata.HeaderDisplayname" T="string" Class="mb-3" />
+                                            break;
+
+                                        case FormRepresentation.DatePicker:
+                                            <MudDatePicker Label="@managerMetadata.HeaderDisplayname" Class="mb-3" />
+                                            break;
+
+                                        case FormRepresentation.Selector:
+                                            <p>Selector</p>
+                                            break;
+
+                                        case FormRepresentation.PictureUpload:
+                                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
+                                            Class="mb-3">Upload poster</MudButton>
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudForm>
         </MudItem>
+
+        @* @if (!Collapsed)
+            {
+            } *@
+
     </MudGrid>
 </MudContainer>
 
@@ -63,9 +103,6 @@
 {
     [Parameter]
     public bool Collapsed { get; set; } = true;
-
-    [Parameter]
-    public RenderFragment<CreateForm<T>> ChildContent { get; set; }
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
@@ -169,7 +206,7 @@
         if (response.IsSuccessStatusCode)
         {
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream); 
+            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
         }
     }
 
