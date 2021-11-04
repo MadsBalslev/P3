@@ -63,7 +63,7 @@
                                 ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
                                 if (_userAccessLevel >= managerMetadata.EditableBy)
                                 {
-                                    object propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(_selectedItem, null);
+                                    string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(_selectedItem, null).ToString();
                                     Action<ChangeEventArgs> onchangeHandler = (e) => typeof(T).GetProperty(propertyInfo.Name).SetValue(_selectedItem, e.Value);
                                     switch (managerMetadata.EditFormRepresentation)
                                     {
