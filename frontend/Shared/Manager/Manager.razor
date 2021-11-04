@@ -63,14 +63,16 @@
                                 ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
                                 if (_userAccessLevel >= managerMetadata.EditableBy)
                                 {
+                                    object propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(_selectedItem, null);
+                                    Action<ChangeEventArgs> onchangeHandler = (e) => typeof(T).GetProperty(propertyInfo.Name).SetValue(_selectedItem, e.Value);
                                     switch (managerMetadata.EditFormRepresentation)
                                     {
                                         case FormRepresentation.TextField:
                                             <MudTextField type="text"
                                                     Label="@managerMetadata.HeaderDisplayname" 
                                                     Class="mb-3" 
-                                                    Value="@typeof(T).GetProperty(propertyInfo.Name).GetValue(_selectedItem, null)"
-                                                    @onchange="(e) => typeof(T).GetProperty(propertyInfo.Name).SetValue(_selectedItem, e.Value)" />
+                                                    Value="@propertyValue"
+                                                    @onchange="onchangeHandler" />
                                             break;
 
                                         case FormRepresentation.DatePicker:
