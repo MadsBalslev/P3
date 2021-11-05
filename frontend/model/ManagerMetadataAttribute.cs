@@ -13,7 +13,7 @@ public class ManagerMetadataAttribute : Attribute
             if (value <= EditableBy)
                 _viewableBy = value;
             else
-                throw new ArgumentException();
+                throw new ArgumentException("Property ManagerMetaDataAttribute can't have ViewableBy > EditableBy");
         }
     }
 
@@ -25,7 +25,7 @@ public class ManagerMetadataAttribute : Attribute
             if (value >= ViewableBy)
                 _editableBy = value;
             else
-                throw new ArgumentException();
+                throw new ArgumentException("Property ManagerMetaDataAttribute can't have ViewableBy > EditableBy");
         }
     }
 
@@ -36,7 +36,7 @@ public class ManagerMetadataAttribute : Attribute
         {
             if (EditableBy == AccessLevel.None && value != FormRepresentation.None)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Property ManagerMetaDataAttribute can't have EditFormRepresentation of other than FormRepresentation.None when property have EditableBy of AccessLevel.None.");
             }
             _editFormRepresentation = value;
         }
