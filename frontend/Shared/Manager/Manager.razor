@@ -2,6 +2,7 @@
 @using System.Reflection
 @using System.IO
 @using System.Text.Json
+@using System.Text
 @typeparam T
 @inject IHttpClientFactory ClientFactory
 
@@ -43,7 +44,7 @@
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
                             if (_userAccessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                <MudTd>@propertyInfo.GetValue(context, null)</MudTd>
                             }
                         }
                     }
@@ -63,8 +64,8 @@
                                 ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
                                 if (_userAccessLevel >= managerMetadata.EditableBy)
                                 {
-                                    string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(_selectedItem, null).ToString();
-                                    Action<ChangeEventArgs> onchangeHandler = (e) => typeof(T).GetProperty(propertyInfo.Name).SetValue(_selectedItem, e.Value);
+                                    string propertyValue = propertyInfo.GetValue(_createItem, null).ToString();
+                                    Action<string> onchangeHandler = text => propertyInfo.SetValue(_createItem, text);
                                     switch (managerMetadata.EditFormRepresentation)
                                     {
                                         case FormRepresentation.TextField:
@@ -72,7 +73,7 @@
                                                     Label="@managerMetadata.HeaderDisplayname" 
                                                     Class="mb-3" 
                                                     Value="@propertyValue"
-                                                    @onchange="onchangeHandler" />
+                                                    TextChanged="onchangeHandler" />
                                             break;
 
                                         case FormRepresentation.DatePicker:
@@ -91,7 +92,7 @@
                                 }
                             }
                         }
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add</MudButton>
+                        <MudButton @onclick="OnAddItem" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add</MudButton>
                         <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
                     </MudCardContent>
                 </MudCard>
@@ -124,6 +125,8 @@
     private string _searchString = "";
 
     private T _selectedItem = new T();
+    
+    private T _createItem = new T();
 
     private int _tableSize = 12;
 
@@ -218,7 +221,28 @@
 
     public async Task PostItem()
     {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, _apiAttribute.APIPath);
+        string requestMessage = _createItem.ToJSON();
+        Console.WriteLine(JsonSerializer.Serialize<T>(_createItem));
+        request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
 
+        Console.WriteLine(requestMessage);
+
+        HttpClient client = ClientFactory.CreateClient();
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        Console.WriteLine(response.ToString());
+        @* if (response.IsSuccessStatusCode)
+        {
+
+        } *@
+    }
+
+    public async Task OnAddItem()
+    {
+        await PostItem();
+        await GetItems();
     }
 
     // TODO implement
