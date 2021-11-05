@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 
 [APIAttribute("/Posters")]
-public class Poster
+public class Poster : IManageable
 {
-    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.SysAdmin, FormRepresentation.TextField)]
+    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
     public int posterId { get; set; } = -1;
 
     [ManagerMetadata("Name", AccessLevel.User, AccessLevel.User, FormRepresentation.TextField)]
-    public string name { get; set; } = "nil";
+    public string name { get; set; } = "";
 
     [ManagerMetadata("Start date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
     public DateTimeOffset startDate { get; set; } = new DateTimeOffset();
@@ -28,4 +29,18 @@ public class Poster
     public User createdBy { get; set; } = new User();
 
     public Institution institution { get; set; } = new Institution();
+
+    public string ToJSON()
+    {
+        return JsonSerializer.Serialize<object>
+        (
+            new
+            {
+                name = this.name,
+                startDate = this.startDate,
+                endDate = this.endDate,
+                imageUrl = this.image
+            }
+        );
+    }
 }
