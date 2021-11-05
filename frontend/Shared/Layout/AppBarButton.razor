@@ -1,0 +1,31 @@
+@using MudBlazor
+@inherits MudButton
+@inject NavigationManager navigationManager
+
+<!-- TODO: Text looks bad on light theme
+     labels: enhancement, bug
+-->
+<MudButton Link=@Link Disabled=_disabled Class=@Class @onclick="@OnClickCallBack" StartIcon=@StartIcon>
+    @ChildContent
+</MudButton>
+
+@code
+{
+    private bool _disabled { get; set; } = false;
+
+    [Parameter]
+    public EventCallback OnClickCallBack { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        string currentPage = "/" + navigationManager.ToBaseRelativePath(navigationManager.Uri);
+        if (currentPage == Link)
+        {
+            _disabled = true;
+        }
+        else
+        {
+            _disabled = false;
+        }
+    }
+}

@@ -1,0 +1,104 @@
+@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+@using MudBlazor
+
+<MudThemeProvider Theme="_currentTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<CascadingValue Value="_userAccessLevel">
+    <MudLayout>
+        <MudAppBar Elevation="1">
+            <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
+            <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged Link="/PosterManagement"
+                Class="pl-6">Poster Management</AppBarButton>
+            <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged Link="/UserManagement">User
+                Management</AppBarButton>
+            <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged
+                Link="/InstitutionManagement">Institution Management</AppBarButton>
+            <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged Link="/ScreenManagement">Screen
+                Management</AppBarButton>
+            <MudSpacer />
+            <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme" Label="@(lightTheme ? "Light" : "Dark")" />
+            <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
+                <MudMenuItem>Your Settings</MudMenuItem>
+                <MudMenuItem>Logout</MudMenuItem>
+            </MudMenu>
+            <MudText>User Name (User Role) - Institution</MudText>
+        </MudAppBar>
+
+        <MudMainContent>
+            @Body
+        </MudMainContent>
+    </MudLayout>
+</CascadingValue>
+
+
+@code
+{
+    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.User;
+
+    private AccessLevel GetUserAccessLevel()
+    {
+        // TODO implement this
+        return AccessLevel.SysAdmin;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _userAccessLevel = GetUserAccessLevel();
+        _currentTheme = defaultTheme;
+    }
+
+    private bool lightTheme { get; set; } = true;
+
+    private void DarkMode()
+    {
+        if (_currentTheme == defaultTheme)
+        {
+            _currentTheme = DarkTheme;
+        }
+        else
+        {
+            _currentTheme = defaultTheme;
+        }
+    }
+
+    private MudTheme _currentTheme = new MudTheme();
+    private MudTheme defaultTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Black = "#272c34"
+        }
+    };
+
+
+    private MudTheme DarkTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Black = "#272c34",
+            Background = "#32333d",
+            BackgroundGrey = "#27272f",
+            Surface = "#373740",
+            DrawerBackground = "#27272f",
+            DrawerText = "rgba(255,255,255, 0.50)",
+            DrawerIcon = "rgba(255,255,255, 0.50)",
+            AppbarBackground = "#27272f",
+            AppbarText = "rgba(255,255,255, 0.70)",
+            TextPrimary = "rgba(255,255,255, 0.70)",
+            TextSecondary = "rgba(255,255,255, 0.50)",
+            ActionDefault = "#adadb1",
+            ActionDisabled = "rgba(255,255,255, 0.26)",
+            ActionDisabledBackground = "rgba(255,255,255, 0.12)",
+            Divider = "rgba(255,255,255, 0.12)",
+            DividerLight = "rgba(255,255,255, 0.06)",
+            TableLines = "rgba(255,255,255, 0.12)",
+            LinesDefault = "rgba(255,255,255, 0.12)",
+            LinesInputs = "rgba(255,255,255, 0.3)",
+            TextDisabled = "rgba(255,255,255, 0.2)"
+        }
+    };
+}

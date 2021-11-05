@@ -1,0 +1,42 @@
+@page "/InstitutionManagement"
+@using MudBlazor
+@inject ISnackbar Snackbar
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+    .selected>td {
+        color: white !important;
+    }
+
+    .selected>td .mud-input {
+        color: white !important;
+    }
+</style>
+
+<MudTabs>
+        <Manager T="@Poster">
+            <MudGrid Justify="Justify.FlexEnd">
+                <MudForm>
+                    <MudCard>
+                        <MudCardContent>
+                            <MudTextField @bind-Value="institutionName" Label="Institution name" Placeholder="Institution name..." class="mb-3" />
+                            <MudTextField @bind-Value="instEmail" Label="Email" Placeholder="Email..." class="mb-3" />
+                            <MudNumericField @bind-Value="instPhoneNumber" Label="Phone number" Placeholder="Phone number..." Min="0" Max="99999999" HideSpinButtons="true" text=" " class="mb-3" />
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add Institution</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudForm>
+            </MudGrid>
+        </Manager>
+</MudTabs>
+
+@code
+{
+    private string institutionName;
+    private string instEmail;
+    private int instPhoneNumber;
+}

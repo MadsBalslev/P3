@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MudBlazor.Services;
 
 namespace frontend
 {
@@ -26,6 +27,8 @@ namespace frontend
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddMudServices();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,195 @@
+@using MudBlazor
+@using System.Reflection
+@using System.Runtime
+@using System.IO
+@using System.Text.Json
+@typeparam T
+@inject IHttpClientFactory ClientFactory
+
+<MudContainer>
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="_tableSize">
+            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
+                <ToolBarContent>
+                    <!-- TODO Add dynamic button name -->
+                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@toggle>Create</MudButton>
+                    <MudSpacer />
+                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
+                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+                </ToolBarContent>
+
+                <HeaderContent>
+                    @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
+                        method, where you can vary the renderfragment in the inntermost if statement *@
+                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    {
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        if (attribute is ManagerMetadataAttribute)
+                        {
+                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            {
+                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
+                            }
+                        }
+                    }
+                </HeaderContent>
+                <RowTemplate>
+                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+                    {
+                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        if (attribute is ManagerMetadataAttribute)
+                        {
+                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            {
+                                <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                            }
+                        }
+                    }
+                </RowTemplate>
+            </MudTable>
+        </MudItem>
+        <MudItem for="Create">
+            @if (!Collapsed)
+            {
+                @ChildContent 
+            }
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    private int _tableSize = 12;
+    
+    [Parameter]
+    public bool Collapsed { get; set; } = true;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [CascadingParameter]
+    protected AccessLevel _userAccessLevel { get; set; }
+
+    private readonly APIAttribute _apiAttribute =
+    Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
+
+    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
+    typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+    private List<T> _itemList = new List<T>();
+
+    private string _searchString = "";
+
+    private T _selectedItem;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await GetItems();
+    }
+
+    private bool FilterFunc(T item)
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+        {
+            return true;
+        }
+        else if (SearchStringMatch(item))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool SearchStringMatch(T item)
+    {
+        foreach (PropertyInfo propertyInfo in _propertyInfoList)
+        {
+            if (PropertyIsAvaliableAndSearchStringMatch(item, propertyInfo))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
+    {
+        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+        ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+        if (managerMetadata == null)
+        {
+            return false;
+        }
+
+        if (_userAccessLevel < managerMetadata.AccessLevel)
+        {
+            return false;
+        }
+
+        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+        if (propertyValue == null)
+        {
+            return false;
+        }
+
+        if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    void toggle()
+    {
+        Collapsed = !Collapsed;
+        if (Collapsed)
+        {
+            _tableSize = 12;
+        }
+        else
+        {
+            _tableSize = 8;
+        }
+    }
+
+    // TODO implement
+    private async Task GetItems()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
+
+        HttpClient client = ClientFactory.CreateClient();
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            using Stream responseStream = await response.Content.ReadAsStreamAsync();
+            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream); 
+        }
+    }
+
+    // TODO implement
+    private async Task PostItem()
+    {
+        throw new NotImplementedException();
+    }
+
+    // TODO implement
+    private async Task PutItem()
+    {
+        throw new NotImplementedException();
+    }
+
+    // TODO implement this function
+    private async Task DeleteItem()
+    {
+        throw new NotImplementedException();
+    }
+}
