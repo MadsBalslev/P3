@@ -15,13 +15,13 @@ public abstract class CreateForm<T> : ComponentBase where T : IManageable, new()
     [Inject]
     private IHttpClientFactory _clientFactory { get; set; }
     
-    private async Task OnAddItem()
+    protected async Task OnAddItem()
     {
         await PostItem();
         StateHasChanged();
     }
 
-    private async Task PostItem()
+    protected async Task PostItem()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, _apiAttribute.APIPath);
         string requestMessage = _precreateItem.ToJSON();
