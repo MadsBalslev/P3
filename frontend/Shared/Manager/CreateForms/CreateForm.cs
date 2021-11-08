@@ -1,7 +1,6 @@
 using System;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
@@ -15,8 +14,14 @@ public abstract class CreateForm<T> : ComponentBase where T : IManageable, new()
 
     [Inject]
     private IHttpClientFactory _clientFactory { get; set; }
+    
+    private async Task OnAddItem()
+    {
+        await PostItem();
+        StateHasChanged();
+    }
 
-    public async Task PostItem()
+    private async Task PostItem()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, _apiAttribute.APIPath);
         string requestMessage = _precreateItem.ToJSON();
@@ -28,8 +33,6 @@ public abstract class CreateForm<T> : ComponentBase where T : IManageable, new()
 
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine(response.RequestMessage);
-
         }
     }
 
