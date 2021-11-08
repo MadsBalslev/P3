@@ -19,7 +19,7 @@ public abstract class CreateForm<T> : ComponentBase where T : IManageable, new()
     protected MudForm _form;
 
     protected T _precreateItem = new T();
-    
+
     protected async Task OnAddItem()
     {
         await _form.Validate();
