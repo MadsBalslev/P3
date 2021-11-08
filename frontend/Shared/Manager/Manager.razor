@@ -1,9 +1,9 @@
+@typeparam T
 @using MudBlazor
 @using System.Reflection
 @using System.IO
 @using System.Text.Json
 @using System.Text
-@typeparam T
 @inject IHttpClientFactory ClientFactory
 
 <MudContainer>
@@ -13,12 +13,11 @@
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
-                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@toggle>Create</MudButton>
+                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create</MudButton>
                     <MudSpacer />
                     <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
                         AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
-
                 <HeaderContent>
                     @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
                         method, where you can vary the renderfragment in the inntermost if statement *@
@@ -44,70 +43,43 @@
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
                             if (_userAccessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTd>@propertyInfo.GetValue(context, null)</MudTd>
+                                <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
                             }
                         }
                     }
                 </RowTemplate>
             </MudTable>
         </MudItem>
-
         <MudItem>
-            <MudForm>
-                <MudCard>
-                    <MudCardContent>
-                        @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                        {
-                            Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                            if (attribute is ManagerMetadataAttribute)
-                            {
-                                ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                                if (_userAccessLevel >= managerMetadata.EditableBy)
-                                {
-                                    string propertyValue = propertyInfo.GetValue(_createItem, null).ToString();
-                                    Action<string> onchangeHandler = text => propertyInfo.SetValue(_createItem, text);
-                                    switch (managerMetadata.EditFormRepresentation)
-                                    {
-                                        case FormRepresentation.TextField:
-                                            <MudTextField type="text"
-                                                    Label="@managerMetadata.HeaderDisplayname" 
-                                                    Class="mb-3" 
-                                                    Value="@propertyValue"
-                                                    TextChanged="onchangeHandler" />
-                                            break;
-
-                                        case FormRepresentation.DatePicker:
-                                            <MudDatePicker Label="@managerMetadata.HeaderDisplayname" Class="mb-3" />
-                                            break;
-
-                                        case FormRepresentation.Selector:
-                                            <p>Selector</p>
-                                            break;
-
-                                        case FormRepresentation.PictureUpload:
-                                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
-                                            Class="mb-3">Upload poster</MudButton>
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                        <MudButton @onclick="OnAddItem" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add</MudButton>
-                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
-                    </MudCardContent>
-                </MudCard>
-            </MudForm>
-        </MudItem>
-
-        @* @if (!Collapsed)
+            @if (_currentMode == ManagerMode.Create)
             {
-            } *@
-
+                @CreateForm
+            }
+            else if (_currentMode == ManagerMode.Edit)
+            {
+                @EditForm
+            }
+        </MudItem>
     </MudGrid>
 </MudContainer>
 
 @code
 {
+    private enum ManagerMode
+    {
+        First = 0,
+        Initial = 0,
+        Create = 1,
+        Edit = 2,
+        Last = 2,
+    }
+
+    [Parameter]
+    public RenderFragment CreateForm { get; set; }
+
+    [Parameter]
+    public RenderFragment EditForm { get; set; }
+
     [Parameter]
     public bool Collapsed { get; set; } = true;
 
@@ -125,10 +97,12 @@
     private string _searchString = "";
 
     private T _selectedItem = new T();
-    
+
     private T _createItem = new T();
 
     private int _tableSize = 12;
+
+    private ManagerMode _currentMode = ManagerMode.Initial;
 
     protected override async Task OnInitializedAsync()
     {
@@ -178,7 +152,7 @@
             return false;
         }
 
-        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null).ToString();
         if (propertyValue == null)
         {
             return false;
@@ -191,7 +165,7 @@
         return false;
     }
 
-    void toggle()
+    void OnCreateItem()
     {
         Collapsed = !Collapsed;
         if (Collapsed)
@@ -234,9 +208,9 @@
 
         Console.WriteLine(response.ToString());
         @* if (response.IsSuccessStatusCode)
-        {
+            {
 
-        } *@
+            } *@
     }
 
     public async Task OnAddItem()
@@ -257,3 +231,48 @@
         throw new NotImplementedException();
     }
 }
+@* <MudForm>
+    <MudCard>
+    <MudCardContent>
+    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+    {
+    Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+    if (attribute is ManagerMetadataAttribute)
+    {
+    ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+    if (_userAccessLevel >= managerMetadata.EditableBy)
+    {
+    string propertyValue = propertyInfo.GetValue(_createItem, null).ToString();
+    Action<string> onchangeHandler = text => propertyInfo.SetValue(_createItem, text);
+    switch (managerMetadata.EditFormRepresentation)
+    {
+    case FormRepresentation.TextField:
+    <MudTextField type="text"
+    Label="@managerMetadata.HeaderDisplayname"
+    Class="mb-3"
+    Value="@propertyValue"
+    TextChanged="onchangeHandler" />
+    break;
+
+    case FormRepresentation.DatePicker:
+    <MudDatePicker Label="@managerMetadata.HeaderDisplayname" Class="mb-3" />
+    break;
+
+    case FormRepresentation.Selector:
+    <p>Selector</p>
+    break;
+
+    case FormRepresentation.PictureUpload:
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
+    Class="mb-3">Upload poster</MudButton>
+    break;
+    }
+    }
+    }
+    }
+    <MudButton @onclick="OnAddItem" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
+    class="mb-3">Add</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+    </MudCardContent>
+    </MudCard>
+    </MudForm> *@
