@@ -1,0 +1,27 @@
+@using MudBlazor
+
+<MudForm>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField FullWidth="true" @bind-Value="posterName" Label="Postername" Placeholder="Postername..." class="mb-3" />
+            <MudItem class="mb-3">
+                <MudDatePicker ShowWeekNumbers="true" Label="Start date" @bind-Date="PosterStartDate"
+                    DateFormat="dd/MM/yyyy" />
+            </MudItem>
+            <MudItem class="mb-3">
+                <MudDatePicker ShowWeekNumbers="true" Label="End date" @bind-Date="EndDate" DateFormat="dd/MM/yyyy" />
+            </MudItem>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Apply edit</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true" class="mb-3">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" FullWidth="true">Delete</MudButton>
+
+        </MudCardContent>
+    </MudCard>
+</MudForm>
+
+@code
+{
+    private string posterName;
+    private DateTime? PosterStartDate;
+    private DateTime? EndDate;
+}

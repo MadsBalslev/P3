@@ -1,6 +1,8 @@
 @page "/PosterManagement"
 @using MudBlazor
 @inject ISnackbar Snackbar
+@using frontend.Shared.Manager
+@using frontend.Shared.Manager.CreateForms
 
 <style>
     .selected {
@@ -19,28 +21,12 @@
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Posters">
         <Manager T="@Poster">
-            <MudGrid Justify="Justify.FlexEnd">
-                <MudForm>
-                    <MudCard>
-                        <MudCardContent>
-                            <MudTextField @bind-Value="posterName" Label="Postername" Placeholder="Postername..." class="mb-3" />
-                            <MudItem xs="12" class="mb-3">
-                                <MudDatePicker ShowWeekNumbers="true" Label="Start date" @bind-Date="PosterStartDate"
-                                    DateFormat="dd/MM/yyyy" />
-                            </MudItem>
-                            <MudItem xs="12"class="mb-3">
-                                <MudDatePicker ShowWeekNumbers="true" Label="End date" @bind-Date="EndDate"
-                                    DateFormat="dd/MM/yyyy" />
-                            </MudItem>
-                            <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" />
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput"
-                                FullWidth="true" class="mb-3">Upload poster</MudButton>
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add Poster</MudButton>
-                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
-                        </MudCardContent>
-                    </MudCard>
-                </MudForm>
-            </MudGrid>
+            <CreateForm>
+                <PosterCreateForm />
+            </CreateForm>
+            <EditForm>
+                <PosterEditForm />
+            </EditForm>
         </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
@@ -49,8 +35,5 @@
 
 @code
 {
-    private string posterName;
-    private DateTime? PosterStartDate;
-    private DateTime? EndDate;
-    string[] _displayRowTemplateProperties = new string[] { "Name", "Creator", "Institution" };
+    
 }

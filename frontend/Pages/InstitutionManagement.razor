@@ -1,5 +1,6 @@
 @page "/InstitutionManagement"
 @using MudBlazor
+@using frontend.Shared.Manager
 @inject ISnackbar Snackbar
 
 <style>
@@ -16,7 +17,7 @@
     }
 </style>
 
-<MudTabs>
+@* <MudTabs>
         <Manager T="@Poster">
             <MudGrid Justify="Justify.FlexEnd">
                 <MudForm>
@@ -32,7 +33,7 @@
                 </MudForm>
             </MudGrid>
         </Manager>
-</MudTabs>
+</MudTabs> *@
 
 @code
 {

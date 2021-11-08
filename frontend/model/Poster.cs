@@ -1,31 +1,46 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 
 [APIAttribute("/Posters")]
-public class Poster
+public class Poster : IManageable
 {
-    [ManagerMetadata(AccessLevel.SysAdmin, "ID")]
+    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
     public int posterId { get; set; } = -1;
 
-    [ManagerMetadata(AccessLevel.User, "Name")]
-    public string name { get; set; } = "nil";
+    [ManagerMetadata("Name", AccessLevel.User, AccessLevel.User, FormRepresentation.TextField)]
+    public string name { get; set; } = "";
 
-    [ManagerMetadata(AccessLevel.User, "Start date")]
+    [ManagerMetadata("Start date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
     public DateTimeOffset startDate { get; set; } = new DateTimeOffset();
 
-    [ManagerMetadata(AccessLevel.User, "End date")]
+    [ManagerMetadata("End date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
     public DateTimeOffset endDate { get; set; } = new DateTimeOffset();
 
-    [ManagerMetadata(AccessLevel.InstAdmin, "Created by")]
+    [ManagerMetadata("Creator", AccessLevel.InstAdmin, AccessLevel.None, FormRepresentation.None)]
     public string Creator { get => createdBy.name; }
 
-    [ManagerMetadata(AccessLevel.SysAdmin, "Institution")]
+    [ManagerMetadata("Institution", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
     public string Institution { get => institution.name; }
 
-    [ManagerMetadata(AccessLevel.User, "Image url")]
+    [ManagerMetadata("Image url", AccessLevel.User, AccessLevel.User, FormRepresentation.PictureUpload)]
     public string image { get; set; } = "https://via.placeholder.com/1080x1920";
 
     public User createdBy { get; set; } = new User();
 
     public Institution institution { get; set; } = new Institution();
+
+    public string ToJSON()
+    {
+        return JsonSerializer.Serialize<object>
+        (
+            new
+            {
+                name = this.name,
+                startDate = this.startDate,
+                endDate = this.endDate,
+                imageUrl = this.image
+            }
+        );
+    }
 }

@@ -1,9 +1,9 @@
+@typeparam T
 @using MudBlazor
 @using System.Reflection
-@using System.Runtime
 @using System.IO
 @using System.Text.Json
-@typeparam T
+@using System.Text
 @inject IHttpClientFactory ClientFactory
 
 <MudContainer>
@@ -13,12 +13,11 @@
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
-                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@toggle>Create</MudButton>
+                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create</MudButton>
                     <MudSpacer />
                     <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
                         AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
-
                 <HeaderContent>
                     @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
                         method, where you can vary the renderfragment in the inntermost if statement *@
@@ -28,7 +27,7 @@
                         if (attribute is ManagerMetadataAttribute)
                         {
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            if (_userAccessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
                             }
@@ -42,19 +41,23 @@
                         if (attribute is ManagerMetadataAttribute)
                         {
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.AccessLevel)
+                            if (_userAccessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTd>@typeof(T).GetProperty(propertyInfo.Name).GetValue(context, null)</MudTd>
+                                <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
                             }
                         }
                     }
                 </RowTemplate>
             </MudTable>
         </MudItem>
-        <MudItem for="Create">
-            @if (!Collapsed)
+        <MudItem>
+            @if (_currentMode == ManagerMode.Create)
             {
-                @ChildContent 
+                @CreateForm
+            }
+            else if (_currentMode == ManagerMode.Edit)
+            {
+                @EditForm
             }
         </MudItem>
     </MudGrid>
@@ -62,13 +65,23 @@
 
 @code
 {
-    private int _tableSize = 12;
-    
-    [Parameter]
-    public bool Collapsed { get; set; } = true;
+    private enum ManagerMode
+    {
+        First = 0,
+        Initial = 0,
+        Create = 1,
+        Edit = 2,
+        Last = 2,
+    }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment CreateForm { get; set; }
+
+    [Parameter]
+    public RenderFragment EditForm { get; set; }
+
+    [Parameter]
+    public bool Collapsed { get; set; } = true;
 
     [CascadingParameter]
     protected AccessLevel _userAccessLevel { get; set; }
@@ -83,7 +96,13 @@
 
     private string _searchString = "";
 
-    private T _selectedItem;
+    private T _selectedItem = new T();
+
+    private T _createItem = new T();
+
+    private int _tableSize = 12;
+
+    private ManagerMode _currentMode = ManagerMode.Initial;
 
     protected override async Task OnInitializedAsync()
     {
@@ -128,12 +147,12 @@
             return false;
         }
 
-        if (_userAccessLevel < managerMetadata.AccessLevel)
+        if (_userAccessLevel < managerMetadata.ViewableBy)
         {
             return false;
         }
 
-        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null) as string;
+        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null).ToString();
         if (propertyValue == null)
         {
             return false;
@@ -146,7 +165,7 @@
         return false;
     }
 
-    void toggle()
+    void OnCreateItem()
     {
         Collapsed = !Collapsed;
         if (Collapsed)
@@ -159,7 +178,6 @@
         }
     }
 
-    // TODO implement
     private async Task GetItems()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
@@ -171,14 +189,34 @@
         if (response.IsSuccessStatusCode)
         {
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream); 
+            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
         }
     }
 
-    // TODO implement
-    private async Task PostItem()
+    public async Task PostItem()
     {
-        throw new NotImplementedException();
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, _apiAttribute.APIPath);
+        string requestMessage = _createItem.ToJSON();
+        Console.WriteLine(JsonSerializer.Serialize<T>(_createItem));
+        request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
+
+        Console.WriteLine(requestMessage);
+
+        HttpClient client = ClientFactory.CreateClient();
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        Console.WriteLine(response.ToString());
+        @* if (response.IsSuccessStatusCode)
+            {
+
+            } *@
+    }
+
+    public async Task OnAddItem()
+    {
+        await PostItem();
+        await GetItems();
     }
 
     // TODO implement
@@ -193,3 +231,48 @@
         throw new NotImplementedException();
     }
 }
+@* <MudForm>
+    <MudCard>
+    <MudCardContent>
+    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
+    {
+    Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+    if (attribute is ManagerMetadataAttribute)
+    {
+    ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+    if (_userAccessLevel >= managerMetadata.EditableBy)
+    {
+    string propertyValue = propertyInfo.GetValue(_createItem, null).ToString();
+    Action<string> onchangeHandler = text => propertyInfo.SetValue(_createItem, text);
+    switch (managerMetadata.EditFormRepresentation)
+    {
+    case FormRepresentation.TextField:
+    <MudTextField type="text"
+    Label="@managerMetadata.HeaderDisplayname"
+    Class="mb-3"
+    Value="@propertyValue"
+    TextChanged="onchangeHandler" />
+    break;
+
+    case FormRepresentation.DatePicker:
+    <MudDatePicker Label="@managerMetadata.HeaderDisplayname" Class="mb-3" />
+    break;
+
+    case FormRepresentation.Selector:
+    <p>Selector</p>
+    break;
+
+    case FormRepresentation.PictureUpload:
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
+    Class="mb-3">Upload poster</MudButton>
+    break;
+    }
+    }
+    }
+    }
+    <MudButton @onclick="OnAddItem" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
+    class="mb-3">Add</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+    </MudCardContent>
+    </MudCard>
+    </MudForm> *@

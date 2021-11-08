@@ -1,0 +1,29 @@
+@using MudBlazor
+
+<MudForm>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField FullWidth="true" @bind-Value="posterName" Label="Postername" Placeholder="Postername..." class="mb-3" />
+            <MudItem class="mb-3">
+                <MudDatePicker ShowWeekNumbers="true" Label="Start date" @bind-Date="PosterStartDate"
+                    DateFormat="dd/MM/yyyy" />
+            </MudItem>
+            <MudItem class="mb-3">
+                <MudDatePicker ShowWeekNumbers="true" Label="End date" @bind-Date="EndDate" DateFormat="dd/MM/yyyy" />
+            </MudItem>
+            <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" />
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
+                class="mb-3">Upload poster</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add Poster
+            </MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+        </MudCardContent>
+    </MudCard>
+</MudForm>
+
+@code
+{
+    private string posterName;
+    private DateTime? PosterStartDate;
+    private DateTime? EndDate;
+}
