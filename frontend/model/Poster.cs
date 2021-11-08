@@ -53,7 +53,7 @@ public class Poster : IManageable
     public string Institution { get => institution.name; }
 
     [ManagerMetadata("Image url", AccessLevel.User, AccessLevel.User, FormRepresentation.PictureUpload)]
-    public string image { get; set; } = "https://via.placeholder.com/1080x1920";
+    public string image { get; set; } = "";
 
     public User createdBy { get; set; } = new User();
 
