@@ -12,10 +12,39 @@ public class Poster : IManageable
     public string name { get; set; } = "";
 
     [ManagerMetadata("Start date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
-    public DateTimeOffset startDate { get; set; } = new DateTimeOffset();
+    public DateTime? startDate
+    {
+        get => _startDate;
+        set
+        {
+            // if (value < endDate || endDate == null)
+            if (value <= endDate || endDate == null)
+            {
+                _startDate = value;
+            }
+            else
+            {
+                throw new ArgumentException("startDate can not be after endDate");
+            }
+        }
+    }
 
     [ManagerMetadata("End date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
-    public DateTimeOffset endDate { get; set; } = new DateTimeOffset();
+    public DateTime? endDate
+    {
+        get => _endDate;
+        set
+        {
+            if (startDate <= value || startDate == null)
+            {
+                _endDate = value;
+            }
+            else
+            {
+                throw new ArgumentException("endDate can not be before startDate");
+            }
+        }
+    }
 
     [ManagerMetadata("Creator", AccessLevel.InstAdmin, AccessLevel.None, FormRepresentation.None)]
     public string Creator { get => createdBy.name; }
@@ -30,16 +59,22 @@ public class Poster : IManageable
 
     public Institution institution { get; set; } = new Institution();
 
+    private DateTime? _startDate = null;
+
+    private DateTime? _endDate = null;
+
     public string ToJSON()
     {
         return JsonSerializer.Serialize<object>
         (
             new
             {
+                createdBy = this.createdBy.id,
                 name = this.name,
                 startDate = this.startDate,
                 endDate = this.endDate,
                 imageUrl = this.image
+
             }
         );
     }
