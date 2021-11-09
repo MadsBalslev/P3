@@ -5,33 +5,55 @@
 @using System.Text.Json
 @using System.Text
 @inject IHttpClientFactory _clientFactory
-@inject IManagerService _managerService
+@inject IManagerService<T> _managerService
 
-<MudContainer>
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+    .selected>td {
+        color: white !important;
+    }
+
+    .selected>td .mud-input {
+        color: white !important;
+    }
+</style>
+
+<CascadingValue Value="this">
+    <MudContainer>
     <MudGrid Justify="Justify.Center">
         @if (_currentMode == ManagerMode.Initial)
             _tableSize = 12;
         else if (_currentMode == ManagerMode.Create || _currentMode == ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
-                @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
+            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true"
+                Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_managerService.SelectedItem" SortLabel="Sort By" @ref="_table"
+                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
-                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create</MudButton>
+                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
+                    </MudButton>
                     <MudSpacer />
-                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
-                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+                    <MudTextField @bind-Value="_searchString" Placeholder="Search"
+                        Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                        IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
                 <HeaderContent>
-                    @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
+                    @* // TODO This foreach loop is a lot like the one below, they should be
+                        combined in at private
                         method, where you can vary the renderfragment in the inntermost if statement *@
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        Attribute attribute =
+                        propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
                         if (attribute is ManagerMetadataAttribute)
                         {
-                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            ManagerMetadataAttribute managerMetadata = attribute as
+                            ManagerMetadataAttribute;
                             if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
@@ -42,10 +64,12 @@
                 <RowTemplate>
                     @foreach (PropertyInfo propertyInfo in _propertyInfoList)
                     {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
+                        Attribute attribute =
+                        propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
                         if (attribute is ManagerMetadataAttribute)
                         {
-                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
+                            ManagerMetadataAttribute managerMetadata = attribute as
+                            ManagerMetadataAttribute;
                             if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
@@ -67,6 +91,9 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
+</CascadingValue>
+
+
 
 @code
 {
@@ -101,13 +128,17 @@
 
     private string _searchString = "";
 
-    private T _selectedItem = new T();
-
     private T _createItem = new T();
+
+    private T _proxySelectedItem;
+
+    private int selectedRowNumber = -1;
 
     private int _tableSize = 12;
 
     private ManagerMode _currentMode = ManagerMode.Initial;
+
+    private MudTable<T> _table;
 
     protected override async Task OnInitializedAsync()
     {
@@ -200,11 +231,28 @@
         }
     }
 
-
-    // TODO implement
-    private async Task PutItem()
+    private string SelectedRowClassFunc(T element, int rowNumber)
     {
-        throw new NotImplementedException();
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            return string.Empty;
+        }
+        else if (_table.SelectedItem != null && _table.SelectedItem.Equals(element))
+        {
+            selectedRowNumber = rowNumber;
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    // DONT REMOVE THIS FUNCTION IT TRIGGERS STATE HAS CHANGED!!!
+    private void RowClickEvent(TableRowClickEventArgs<T> tableRowClickEventArgs)
+    {
+        _currentMode = ManagerMode.Edit;
     }
 
     // TODO implement this function
@@ -213,48 +261,3 @@
         throw new NotImplementedException();
     }
 }
-@* <MudForm>
-    <MudCard>
-    <MudCardContent>
-    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-    {
-    Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-    if (attribute is ManagerMetadataAttribute)
-    {
-    ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-    if (_userAccessLevel >= managerMetadata.EditableBy)
-    {
-    string propertyValue = propertyInfo.GetValue(_createItem, null).ToString();
-    Action<string> onchangeHandler = text => propertyInfo.SetValue(_createItem, text);
-    switch (managerMetadata.EditFormRepresentation)
-    {
-    case FormRepresentation.TextField:
-    <MudTextField type="text"
-    Label="@managerMetadata.HeaderDisplayname"
-    Class="mb-3"
-    Value="@propertyValue"
-    TextChanged="onchangeHandler" />
-    break;
-
-    case FormRepresentation.DatePicker:
-    <MudDatePicker Label="@managerMetadata.HeaderDisplayname" Class="mb-3" />
-    break;
-
-    case FormRepresentation.Selector:
-    <p>Selector</p>
-    break;
-
-    case FormRepresentation.PictureUpload:
-    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
-    Class="mb-3">Upload poster</MudButton>
-    break;
-    }
-    }
-    }
-    }
-    <MudButton @onclick="OnAddItem" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
-    class="mb-3">Add</MudButton>
-    <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
-    </MudCardContent>
-    </MudCard>
-    </MudForm> *@

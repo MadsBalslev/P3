@@ -29,7 +29,7 @@ namespace frontend
             services.AddServerSideBlazor();
             services.AddMudServices();
             services.AddHttpClient();
-            services.AddScoped<IManagerService, ManagerService>();
+            services.AddScoped<IManagerService<Poster>, ManagerService<Poster>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

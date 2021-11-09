@@ -5,6 +5,9 @@ using System.Text.Json;
 [APIAttribute("/Posters")]
 public class Poster : IManageable
 {
+    public int Id { get => posterId; }
+    public string Name { get => name; }
+
     [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
     public int posterId { get; set; } = -1;
 
