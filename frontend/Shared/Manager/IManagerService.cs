@@ -1,9 +1,12 @@
 using System;
 using System.Threading.Tasks;
 
-public interface IManagerService<T>
+namespace frontend.Shared.Manager
 {
-    event Func<Task> RefreshRequested;
-    Task RequestRefresh();
-    public T SelectedItem { get; set; }
+    public interface IManagerService
+    {
+        event Func<Task> RefreshRequested;
+        Task RequestRefresh();
+        ManagerMode CurrentMode { get; set; }
+    }
 }
