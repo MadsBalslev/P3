@@ -14,7 +14,7 @@ public abstract class ManagerForm<T> : ComponentBase where T : IManageable, new(
     protected MudForm _form;
 
     [Inject]
-    private ISnackbar _snackbar {get; set;}
+    private ISnackbar _snackbar { get; set; }
 
     [Inject]
     private IHttpClientFactory _clientFactory { get; set; }
@@ -48,10 +48,11 @@ public abstract class ManagerForm<T> : ComponentBase where T : IManageable, new(
             {
                 _snackbar.Add("Action successful", Severity.Success);
             }
-            else {
+            else
+            {
                 _snackbar.Add("Action failed!", Severity.Error);
             }
-            
+
 
             _form.Reset();
             _form.ResetValidation();
