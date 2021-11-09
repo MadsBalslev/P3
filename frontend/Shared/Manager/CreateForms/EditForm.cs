@@ -1,13 +1,19 @@
-using Microsoft.AspNetCore.Components;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-public abstract class EditForm<T> : ComponentBase
+public abstract class EditForm<T> : ManagerForm<T> where T : IManageable, new()
 {
-    [Parameter]
-    public EventCallback<T> OnEdit { get; set; }
+    protected async Task OnEditItem()
+    {
+        T item = _managerService.SelectedItem;
+        string path = _apiAttribute.APIPath + "/" + item.Id;
+        await OnConfirmChanges(HttpMethod.Put, item, path);
+    }
 
-    [Parameter]
-    public EventCallback<T> OnDelete { get; set; }
-
-    [Parameter]
-    public EventCallback<T> OnCancel { get; set; }
+    protected async Task OnDelete()
+    {
+        T item = _managerService.SelectedItem;
+        string path = _apiAttribute.APIPath + "/" + item.Id;
+        await OnConfirmChanges(HttpMethod.Delete, item, path);
+    }
 }
