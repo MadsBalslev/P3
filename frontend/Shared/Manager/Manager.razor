@@ -4,10 +4,15 @@
 @using System.IO
 @using System.Text.Json
 @using System.Text
-@inject IHttpClientFactory ClientFactory
+@inject IHttpClientFactory _clientFactory
+@inject IManagerService _managerService
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
+        @if (_currentMode == ManagerMode.Initial)
+            _tableSize = 12;
+        else if (_currentMode == ManagerMode.Create || _currentMode == ManagerMode.Edit)
+            _tableSize = 8;
         <MudItem xs="_tableSize">
             <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
@@ -27,7 +32,7 @@
                         if (attribute is ManagerMetadataAttribute)
                         {
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.ViewableBy)
+                            if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
                             }
@@ -41,7 +46,7 @@
                         if (attribute is ManagerMetadataAttribute)
                         {
                             ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.ViewableBy)
+                            if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
                                 <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
                             }
@@ -50,7 +55,7 @@
                 </RowTemplate>
             </MudTable>
         </MudItem>
-        <MudItem>
+        <MudItem xs="4">
             @if (_currentMode == ManagerMode.Create)
             {
                 @CreateForm
@@ -84,7 +89,7 @@
     public bool Collapsed { get; set; } = true;
 
     [CascadingParameter]
-    protected AccessLevel _userAccessLevel { get; set; }
+    protected User _user { get; set; }
 
     private readonly APIAttribute _apiAttribute =
     Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
@@ -106,8 +111,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
+        base.OnInitialized();
+        _managerService.RefreshRequested += OnRefresh;
         await GetItems();
+    }
+
+    private async Task OnRefresh()
+    {
+        await GetItems();
+        await InvokeAsync(StateHasChanged);
     }
 
     private bool FilterFunc(T item)
@@ -147,7 +159,7 @@
             return false;
         }
 
-        if (_userAccessLevel < managerMetadata.ViewableBy)
+        if (_user.accessLevel < managerMetadata.ViewableBy)
         {
             return false;
         }
@@ -167,22 +179,17 @@
 
     void OnCreateItem()
     {
-        Collapsed = !Collapsed;
-        if (Collapsed)
-        {
-            _tableSize = 12;
-        }
-        else
-        {
-            _tableSize = 8;
-        }
+        if (_currentMode == ManagerMode.Initial || _currentMode == ManagerMode.Edit)
+            _currentMode = ManagerMode.Create;
+        else if (_currentMode == ManagerMode.Create)
+            _currentMode = ManagerMode.Initial;
     }
 
     private async Task GetItems()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
 
-        HttpClient client = ClientFactory.CreateClient();
+        HttpClient client = _clientFactory.CreateClient();
 
         HttpResponseMessage response = await client.SendAsync(request);
 
@@ -193,31 +200,6 @@
         }
     }
 
-    public async Task PostItem()
-    {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, _apiAttribute.APIPath);
-        string requestMessage = _createItem.ToJSON();
-        Console.WriteLine(JsonSerializer.Serialize<T>(_createItem));
-        request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
-
-        Console.WriteLine(requestMessage);
-
-        HttpClient client = ClientFactory.CreateClient();
-
-        HttpResponseMessage response = await client.SendAsync(request);
-
-        Console.WriteLine(response.ToString());
-        @* if (response.IsSuccessStatusCode)
-            {
-
-            } *@
-    }
-
-    public async Task OnAddItem()
-    {
-        await PostItem();
-        await GetItems();
-    }
 
     // TODO implement
     private async Task PutItem()

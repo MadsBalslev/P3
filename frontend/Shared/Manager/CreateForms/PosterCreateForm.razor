@@ -1,29 +1,41 @@
 @using MudBlazor
+@inherits CreateForm<Poster>
 
-<MudForm>
+<MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <MudTextField FullWidth="true" @bind-Value="posterName" Label="Postername" Placeholder="Postername..." class="mb-3" />
-            <MudItem class="mb-3">
-                <MudDatePicker ShowWeekNumbers="true" Label="Start date" @bind-Date="PosterStartDate"
-                    DateFormat="dd/MM/yyyy" />
-            </MudItem>
-            <MudItem class="mb-3">
-                <MudDatePicker ShowWeekNumbers="true" Label="End date" @bind-Date="EndDate" DateFormat="dd/MM/yyyy" />
-            </MudItem>
-            <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" />
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
-                class="mb-3">Upload poster</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" class="mb-3">Add Poster
-            </MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.name" Label="Poster name"
+                Class="mb-3" />
+            <MudDatePicker Required="@true" Class="mb-3" MinDate="DateTime.Now" MaxDate="_precreateItem.endDate"
+                ShowWeekNumbers="true" Label="Start date" @bind-Date="_precreateItem.startDate"
+                DateFormat="dd/MM/yyyy" />
+            <MudDatePicker Required="@true" Class="mb-3" MinDate="_precreateItem.startDate" ShowWeekNumbers="true"
+                Label="End date" @bind-Date="_precreateItem.endDate" DateFormat="dd/MM/yyyy" />
+            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.image" Label="Image url"
+                Class="mb-3" />
+            @* <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" /> *@
+            <MudButton Disabled="@true" Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput"
+                FullWidth="true" Class="mb-3">Upload poster</MudButton>
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="mb-3"
+                    @onclick="OnAddItem">
+                    Add Poster
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
+            </MudCardActions>
         </MudCardContent>
     </MudCard>
 </MudForm>
 
 @code
 {
-    private string posterName;
-    private DateTime? PosterStartDate;
-    private DateTime? EndDate;
+    [CascadingParameter]
+    protected User _user { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _precreateItem.createdBy = _user;
+        _precreateItem.image = "";
+    }
 }
