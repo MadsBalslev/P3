@@ -14,12 +14,15 @@ public abstract class ManagerForm<T> : ComponentBase where T : IManageable, new(
     protected MudForm _form;
 
     [Inject]
+    private ISnackbar _snackbar {get; set;}
+
+    [Inject]
     private IHttpClientFactory _clientFactory { get; set; }
 
     [Inject]
     protected IManagerService<T> _managerService { get; set; }
 
-    protected async Task UpdateModelWithItem(HttpMethod method, T item, string path)
+    protected async Task<HttpResponseMessage> UpdateModelWithItem(HttpMethod method, T item, string path)
     {
         Debug.Assert(method == HttpMethod.Post || method == HttpMethod.Put || method == HttpMethod.Delete);
 
@@ -31,18 +34,25 @@ public abstract class ManagerForm<T> : ComponentBase where T : IManageable, new(
 
         HttpResponseMessage response = await client.SendAsync(request);
 
-        if (response.IsSuccessStatusCode)
-        {
-        }
+        return response;
     }
 
     protected async Task OnConfirmChanges(HttpMethod method, T item, string path)
     {
-
         await _form.Validate();
         if (_form.IsValid)
         {
-            await UpdateModelWithItem(method, item, path);
+            HttpResponseMessage response = await UpdateModelWithItem(method, item, path);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _snackbar.Add("Action successful", Severity.Success);
+            }
+            else {
+                _snackbar.Add("Action failed!", Severity.Error);
+            }
+            
+
             _form.Reset();
             _form.ResetValidation();
             await _managerService.RequestRefresh();
