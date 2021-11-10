@@ -1,11 +1,11 @@
+@using System.Reflection
 @typeparam T
 @using MudBlazor
-@using System.Reflection
 @using System.IO
 @using System.Text.Json
 @using System.Text
 @inject IHttpClientFactory _clientFactory
-@inject IManagerService<T> _managerService
+@inject IManagerService _managerService
 
 <style>
     .selected {
@@ -21,18 +21,17 @@
     }
 </style>
 
-<CascadingValue Value="this">
-    <MudContainer>
+<MudContainer>
     <MudGrid Justify="Justify.Center">
-        @if (_currentMode == ManagerMode.Initial)
+        @if (_managerService.CurrentMode == ManagerMode.Initial)
             _tableSize = 12;
-        else if (_currentMode == ManagerMode.Create || _currentMode == ManagerMode.Edit)
+        else if (_managerService.CurrentMode == ManagerMode.Create || _managerService.CurrentMode == ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
             <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true"
-                Filter="new Func<T, bool>(FilterFunc)"
-                @bind-SelectedItem="_managerService.SelectedItem" SortLabel="Sort By" @ref="_table"
-                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
+                Filter="new Func<T, bool>(FilterFunc)" @bind-SelectedItem="_selectedItem"
+                SortLabel="Sort By" @ref="_table" OnRowClick="RowClickEvent" T="T"
+                RowClassFunc="@SelectedRowClassFunc">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
@@ -79,41 +78,30 @@
                 </RowTemplate>
             </MudTable>
         </MudItem>
-        <MudItem xs="4">
-            @if (_currentMode == ManagerMode.Create)
-            {
-                @CreateForm
-            }
-            else if (_currentMode == ManagerMode.Edit)
-            {
-                @EditForm
-            }
-        </MudItem>
+            <CascadingValue Value="_selectedItem">
+                <MudItem xs="4">
+                    @if (_managerService.CurrentMode == ManagerMode.Create)
+                    {
+                        @CreateForm
+                    }
+                    else if (_managerService.CurrentMode == ManagerMode.Edit)
+                    {
+                        @EditForm
+                    }
+                </MudItem>
+            </CascadingValue>
     </MudGrid>
 </MudContainer>
-</CascadingValue>
 
 
 
 @code
 {
-    private enum ManagerMode
-    {
-        First = 0,
-        Initial = 0,
-        Create = 1,
-        Edit = 2,
-        Last = 2,
-    }
-
     [Parameter]
     public RenderFragment CreateForm { get; set; }
 
     [Parameter]
     public RenderFragment EditForm { get; set; }
-
-    [Parameter]
-    public bool Collapsed { get; set; } = true;
 
     [CascadingParameter]
     protected User _user { get; set; }
@@ -126,17 +114,15 @@
 
     private List<T> _itemList = new List<T>();
 
+    private T _selectedItem = new T();
+
+    private T _lastItem = new T();
+
     private string _searchString = "";
-
-    private T _createItem = new T();
-
-    private T _proxySelectedItem;
 
     private int selectedRowNumber = -1;
 
     private int _tableSize = 12;
-
-    private ManagerMode _currentMode = ManagerMode.Initial;
 
     private MudTable<T> _table;
 
@@ -210,10 +196,10 @@
 
     void OnCreateItem()
     {
-        if (_currentMode == ManagerMode.Initial || _currentMode == ManagerMode.Edit)
-            _currentMode = ManagerMode.Create;
-        else if (_currentMode == ManagerMode.Create)
-            _currentMode = ManagerMode.Initial;
+        if (_managerService.CurrentMode == ManagerMode.Initial || _managerService.CurrentMode == ManagerMode.Edit)
+            _managerService.CurrentMode = ManagerMode.Create;
+        else if (_managerService.CurrentMode == ManagerMode.Create)
+            _managerService.CurrentMode = ManagerMode.Initial;
     }
 
     private async Task GetItems()
@@ -249,15 +235,16 @@
         }
     }
 
-    // DONT REMOVE THIS FUNCTION IT TRIGGERS STATE HAS CHANGED!!!
     private void RowClickEvent(TableRowClickEventArgs<T> tableRowClickEventArgs)
     {
-        _currentMode = ManagerMode.Edit;
-    }
-
-    // TODO implement this function
-    private async Task DeleteItem()
-    {
-        throw new NotImplementedException();
+        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _managerService.CurrentMode != ManagerMode.Initial)
+        {
+            _managerService.CurrentMode = ManagerMode.Initial;
+        }
+        else
+        {
+            _managerService.CurrentMode = ManagerMode.Edit;
+        }
+        _lastItem = _selectedItem;
     }
 }

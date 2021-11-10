@@ -1,14 +1,17 @@
 using System;
 using System.Threading.Tasks;
 
-public class ManagerService<T> : IManagerService<T> where T : new()
+namespace frontend.Shared.Manager
 {
-    public event Func<Task> RefreshRequested;
-
-    public async Task RequestRefresh()
+    public class ManagerService : IManagerService
     {
-        await RefreshRequested?.Invoke();
-    }
+        public event Func<Task> RefreshRequested;
 
-    public T SelectedItem { get; set; } = new();
+        public async Task RequestRefresh()
+        {
+            await RefreshRequested?.Invoke();
+        }
+
+        public ManagerMode CurrentMode { get; set; } = ManagerMode.Initial;
+    }
 }

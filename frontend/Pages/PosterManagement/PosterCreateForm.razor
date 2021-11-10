@@ -1,4 +1,5 @@
 @using MudBlazor
+@using Shared.Manager
 @inherits CreateForm<Poster>
 
 <MudForm @ref="_form">
@@ -23,7 +24,7 @@
                     Class="mb-3" @onclick="OnAddItem">
                     Add Poster
                 </MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel
+                <MudButton @onclick="OnCancel" Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel
                 </MudButton>
             </MudCardActions>
         </MudCardContent>
