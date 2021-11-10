@@ -25,7 +25,8 @@
     <MudGrid Justify="Justify.Center">
         @if (_managerService.CurrentMode == ManagerMode.Initial)
             _tableSize = 12;
-        else if (_managerService.CurrentMode == ManagerMode.Create || _managerService.CurrentMode == ManagerMode.Edit)
+        else if (_managerService.CurrentMode == ManagerMode.Create || _managerService.CurrentMode ==
+        ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
             <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true"
@@ -55,7 +56,12 @@
                             ManagerMetadataAttribute;
                             if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
+
+                                <MudTh>
+                                    <MudTableSortLabel T="T" SortBy="(x) => propertyInfo.GetValue(x, null)">
+                                        @managerMetadata.HeaderDisplayname
+                                    </MudTableSortLabel>
+                                </MudTh>
                             }
                         }
                     }
@@ -78,18 +84,18 @@
                 </RowTemplate>
             </MudTable>
         </MudItem>
-            <CascadingValue Value="_selectedItem">
-                <MudItem xs="4">
-                    @if (_managerService.CurrentMode == ManagerMode.Create)
-                    {
-                        @CreateForm
-                    }
-                    else if (_managerService.CurrentMode == ManagerMode.Edit)
-                    {
-                        @EditForm
-                    }
-                </MudItem>
-            </CascadingValue>
+        <CascadingValue Value="_selectedItem">
+            <MudItem xs="4">
+                @if (_managerService.CurrentMode == ManagerMode.Create)
+                {
+                    @CreateForm
+                }
+                else if (_managerService.CurrentMode == ManagerMode.Edit)
+                {
+                    @EditForm
+                }
+            </MudItem>
+        </CascadingValue>
     </MudGrid>
 </MudContainer>
 
@@ -196,7 +202,8 @@
 
     void OnCreateItem()
     {
-        if (_managerService.CurrentMode == ManagerMode.Initial || _managerService.CurrentMode == ManagerMode.Edit)
+        if (_managerService.CurrentMode == ManagerMode.Initial || _managerService.CurrentMode ==
+        ManagerMode.Edit)
             _managerService.CurrentMode = ManagerMode.Create;
         else if (_managerService.CurrentMode == ManagerMode.Create)
             _managerService.CurrentMode = ManagerMode.Initial;
@@ -237,7 +244,8 @@
 
     private void RowClickEvent(TableRowClickEventArgs<T> tableRowClickEventArgs)
     {
-        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _managerService.CurrentMode != ManagerMode.Initial)
+        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _managerService.CurrentMode !=
+        ManagerMode.Initial)
         {
             _managerService.CurrentMode = ManagerMode.Initial;
         }
