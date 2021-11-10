@@ -16,12 +16,15 @@ namespace frontend.Shared.Manager
         protected MudForm _form;
 
         [Inject]
+        private ISnackbar _snackbar { get; set; }
+
+        [Inject]
         private IHttpClientFactory _clientFactory { get; set; }
 
         [Inject]
         protected IManagerService _managerService { get; set; }
 
-        protected async Task UpdateModelWithItem(HttpMethod method, T item, string path)
+        protected async Task<HttpResponseMessage> UpdateModelWithItem(HttpMethod method, T item, string path)
         {
             Debug.Assert(method == HttpMethod.Post || method == HttpMethod.Put || method == HttpMethod.Delete);
 
@@ -36,6 +39,8 @@ namespace frontend.Shared.Manager
             if (response.IsSuccessStatusCode)
             {
             }
+
+            return response;
         }
 
         protected async Task OnConfirmChanges(HttpMethod method, T item, string path)
@@ -44,6 +49,16 @@ namespace frontend.Shared.Manager
             await _form.Validate();
             if (_form.IsValid)
             {
+                HttpResponseMessage response = await UpdateModelWithItem(method, item, path);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _snackbar.Add("Action successful", Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add("Action failed!", Severity.Error);
+                }
                 await UpdateModelWithItem(method, item, path);
                 await ResetPage();
             }
