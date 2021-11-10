@@ -29,10 +29,10 @@
         ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true"
-                Filter="new Func<T, bool>(FilterFunc)" @bind-SelectedItem="_selectedItem"
-                SortLabel="Sort By" @ref="_table" OnRowClick="RowClickEvent" T="T"
-                RowClassFunc="@SelectedRowClassFunc">
+            <MudTable Height="586px" FixedHeader="@true" Items="@_itemList"
+                Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
+                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
@@ -82,6 +82,9 @@
                         }
                     }
                 </RowTemplate>
+                <PagerContent>
+                    <MudTablePager />
+                </PagerContent>
             </MudTable>
         </MudItem>
         <CascadingValue Value="_selectedItem">
