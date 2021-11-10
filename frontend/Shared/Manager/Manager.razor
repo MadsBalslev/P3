@@ -1,6 +1,7 @@
 @using System.Reflection
 @typeparam T
 @using MudBlazor
+@using System
 @using System.IO
 @using System.Text.Json
 @using System.Text
@@ -78,7 +79,15 @@
                             ManagerMetadataAttribute;
                             if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
+                                dynamic dateTime = propertyInfo.GetValue(context, null) as DateTime?;
+                                if (dateTime != null)
+                                {
+                                    <MudTd>@dateTime.ToShortDateString()</MudTd>
+                                }
+                                else
+                                {
+                                    <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
+                                }
                             }
                         }
                     }
