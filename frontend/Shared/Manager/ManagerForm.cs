@@ -59,7 +59,6 @@ namespace frontend.Shared.Manager
                 {
                     _snackbar.Add("Action failed!", Severity.Error);
                 }
-                await UpdateModelWithItem(method, item, path);
                 await ResetPage();
             }
         }
