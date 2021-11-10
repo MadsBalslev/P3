@@ -6,6 +6,7 @@
 @using System.Text
 @inject IHttpClientFactory _clientFactory
 @inject IManagerService _managerService
+@inject ISnackbar _snackbar
 
 <style>
     .selected {
@@ -25,13 +26,14 @@
     <MudGrid Justify="Justify.Center">
         @if (_managerService.CurrentMode == ManagerMode.Initial)
             _tableSize = 12;
-        else if (_managerService.CurrentMode == ManagerMode.Create || _managerService.CurrentMode == ManagerMode.Edit)
+        else if (_managerService.CurrentMode == ManagerMode.Create || _managerService.CurrentMode ==
+        ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true"
-                Filter="new Func<T, bool>(FilterFunc)" @bind-SelectedItem="_selectedItem"
-                SortLabel="Sort By" @ref="_table" OnRowClick="RowClickEvent" T="T"
-                RowClassFunc="@SelectedRowClassFunc">
+            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_itemList"
+                Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
+                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
@@ -55,7 +57,12 @@
                             ManagerMetadataAttribute;
                             if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
+
+                                <MudTh>
+                                    <MudTableSortLabel T="T" SortBy="(x) => propertyInfo.GetValue(x, null)">
+                                        @managerMetadata.HeaderDisplayname
+                                    </MudTableSortLabel>
+                                </MudTh>
                             }
                         }
                     }
@@ -76,20 +83,23 @@
                         }
                     }
                 </RowTemplate>
+                <PagerContent>
+                    <MudTablePager />
+                </PagerContent>
             </MudTable>
         </MudItem>
-            <CascadingValue Value="_selectedItem">
-                <MudItem xs="4">
-                    @if (_managerService.CurrentMode == ManagerMode.Create)
-                    {
-                        @CreateForm
-                    }
-                    else if (_managerService.CurrentMode == ManagerMode.Edit)
-                    {
-                        @EditForm
-                    }
-                </MudItem>
-            </CascadingValue>
+        <CascadingValue Value="_selectedItem">
+            <MudItem xs="4">
+                @if (_managerService.CurrentMode == ManagerMode.Create)
+                {
+                    @CreateForm
+                }
+                else if (_managerService.CurrentMode == ManagerMode.Edit)
+                {
+                    @EditForm
+                }
+            </MudItem>
+        </CascadingValue>
     </MudGrid>
 </MudContainer>
 
@@ -126,17 +136,36 @@
 
     private MudTable<T> _table;
 
+    private bool _loading = false;
+
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
         _managerService.RefreshRequested += OnRefresh;
-        await GetItems();
+        await OnRefresh();
     }
 
     private async Task OnRefresh()
     {
-        await GetItems();
-        await InvokeAsync(StateHasChanged);
+        try
+        {
+            _loading = true;
+            HttpResponseMessage response = await GetItems();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _snackbar.Add($"Something went wrong, status code: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+        }
+        finally
+        {
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private bool FilterFunc(T item)
@@ -196,13 +225,14 @@
 
     void OnCreateItem()
     {
-        if (_managerService.CurrentMode == ManagerMode.Initial || _managerService.CurrentMode == ManagerMode.Edit)
+        if (_managerService.CurrentMode == ManagerMode.Initial || _managerService.CurrentMode ==
+        ManagerMode.Edit)
             _managerService.CurrentMode = ManagerMode.Create;
         else if (_managerService.CurrentMode == ManagerMode.Create)
             _managerService.CurrentMode = ManagerMode.Initial;
     }
 
-    private async Task GetItems()
+    private async Task<HttpResponseMessage> GetItems()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
 
@@ -215,6 +245,8 @@
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
             _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
         }
+
+        return response;
     }
 
     private string SelectedRowClassFunc(T element, int rowNumber)
@@ -237,7 +269,8 @@
 
     private void RowClickEvent(TableRowClickEventArgs<T> tableRowClickEventArgs)
     {
-        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _managerService.CurrentMode != ManagerMode.Initial)
+        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _managerService.CurrentMode !=
+        ManagerMode.Initial)
         {
             _managerService.CurrentMode = ManagerMode.Initial;
         }

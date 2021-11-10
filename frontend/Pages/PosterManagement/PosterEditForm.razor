@@ -6,17 +6,31 @@
     <MudCard>
         <MudCardContent>
             <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.name"
-                Label="Postername" Class="mb-3" />
-            <MudDatePicker Required="@true"  ShowWeekNumbers="true" Label="Start date"
+                Label="Postername" />
+            <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date"
+                MinDate="DateTime.Now" MaxDate="_selectedItem.endDate"
                 @bind-Date="_selectedItem.startDate" DateFormat="dd/MM/yyyy" />
             <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date"
-                @bind-Date="_selectedItem.endDate" DateFormat="dd/MM/yyyy" />
-            <MudButton @onclick="OnEditItem" Variant="Variant.Filled" Color="Color.Primary"
-                Class="mb-3">Apply edit
-            </MudButton>
-            <MudButton @onclick="OnCancel" Variant="Variant.Filled" Color="Color.Secondary" Class="mb-3">Cancel
-            </MudButton>
-            <MudButton @onclick="OnDelete" Variant="Variant.Filled" Color="Color.Warning">Delete</MudButton>
+                MinDate="_selectedItem.startDate" @bind-Date="_selectedItem.endDate"
+                DateFormat="dd/MM/yyyy" />
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
+                    Color="Color.Primary">
+                    Apply edit
+                </MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                    Color="Color.Warning">
+                    Cancel
+                </MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnDelete" Variant="Variant.Filled"
+                    Color="Color.Secondary">
+                    Delete
+                </MudButton>
+            </MudCardActions>
         </MudCardContent>
     </MudCard>
 </MudForm>
