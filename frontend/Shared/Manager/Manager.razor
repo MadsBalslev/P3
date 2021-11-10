@@ -78,7 +78,14 @@
                             ManagerMetadataAttribute;
                             if (_user.accessLevel >= managerMetadata.ViewableBy)
                             {
-                                <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
+                                if (propertyInfo.GetValue(context,null) is DateTime)
+                                {
+                                    <MudTd>@propertyInfo.GetValue(context, null).ToString("dd/mm/yyyy")</MudTd>
+                                }
+                                else
+                                {
+                                    <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
+                                }
                             }
                         }
                     }
