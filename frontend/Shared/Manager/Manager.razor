@@ -6,6 +6,7 @@
 @using System.Text
 @inject IHttpClientFactory _clientFactory
 @inject IManagerService _managerService
+@inject ISnackbar _snackbar
 
 <style>
     .selected {
@@ -29,7 +30,7 @@
         ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Height="586px" FixedHeader="@true" Items="@_itemList"
+            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_itemList"
                 Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
                 OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
@@ -135,17 +136,37 @@
 
     private MudTable<T> _table;
 
+    private bool _loading = false;
+
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
         _managerService.RefreshRequested += OnRefresh;
-        await GetItems();
+        await OnRefresh();
     }
 
     private async Task OnRefresh()
     {
-        await GetItems();
-        await InvokeAsync(StateHasChanged);
+        try
+        {
+            _loading = true;
+            HttpResponseMessage response = await GetItems();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _snackbar.Add($"Something went wrong, status code: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+        }
+        finally
+        {
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+
     }
 
     private bool FilterFunc(T item)
@@ -212,7 +233,7 @@
             _managerService.CurrentMode = ManagerMode.Initial;
     }
 
-    private async Task GetItems()
+    private async Task<HttpResponseMessage> GetItems()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
 
@@ -225,6 +246,8 @@
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
             _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
         }
+
+        return response;
     }
 
     private string SelectedRowClassFunc(T element, int rowNumber)

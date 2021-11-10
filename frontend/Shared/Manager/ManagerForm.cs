@@ -45,20 +45,29 @@ namespace frontend.Shared.Manager
 
         protected async Task OnConfirmChanges(HttpMethod method, T item, string path)
         {
-
-            await _form.Validate();
-            if (_form.IsValid)
+            try
             {
-                HttpResponseMessage response = await UpdateModelWithItem(method, item, path);
+                await _form.Validate();
+                if (_form.IsValid)
+                {
+                    HttpResponseMessage response = await UpdateModelWithItem(method, item, path);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    _snackbar.Add("Action successful", Severity.Success);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        _snackbar.Add("Action successful", Severity.Success);
+                    }
+                    else
+                    {
+                        _snackbar.Add($"Action failed!, status code: {response.StatusCode}", Severity.Error);
+                    }
                 }
-                else
-                {
-                    _snackbar.Add("Action failed!", Severity.Error);
-                }
+            }
+            catch (Exception e)
+            {
+                _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+            }
+            finally
+            {
                 await ResetPage();
             }
         }
