@@ -1,26 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json;
 
 [APIAttribute("/Posters")]
 public class Poster : IManageable
 {
     public int Id { get => posterId; }
-    public string Name { get => name; }
 
-    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
+    [ManagerMetadata("ID", AccessLevel.SysAdmin, AccessLevel.None)]
     public int posterId { get; set; } = -1;
 
-    [ManagerMetadata("Name", AccessLevel.User, AccessLevel.User, FormRepresentation.TextField)]
+    [ManagerMetadata("Name", AccessLevel.User, AccessLevel.User)]
     public string name { get; set; } = "";
 
-    [ManagerMetadata("Start date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
+    [ManagerMetadata("Start date", AccessLevel.User, AccessLevel.User)]
     public DateTime? startDate
     {
         get => _startDate;
         set
         {
-            // if (value < endDate || endDate == null)
             if (value <= endDate || endDate == null)
             {
                 _startDate = value;
@@ -32,7 +29,7 @@ public class Poster : IManageable
         }
     }
 
-    [ManagerMetadata("End date", AccessLevel.User, AccessLevel.User, FormRepresentation.DatePicker)]
+    [ManagerMetadata("End date", AccessLevel.User, AccessLevel.User)]
     public DateTime? endDate
     {
         get => _endDate;
@@ -49,13 +46,13 @@ public class Poster : IManageable
         }
     }
 
-    [ManagerMetadata("Creator", AccessLevel.InstAdmin, AccessLevel.None, FormRepresentation.None)]
+    [ManagerMetadata("Creator", AccessLevel.InstAdmin, AccessLevel.None)]
     public string Creator { get => createdBy.name; }
 
-    [ManagerMetadata("Institution", AccessLevel.SysAdmin, AccessLevel.None, FormRepresentation.None)]
+    [ManagerMetadata("Institution", AccessLevel.SysAdmin, AccessLevel.None)]
     public string Institution { get => institution.name; }
 
-    [ManagerMetadata("Image url", AccessLevel.User, AccessLevel.User, FormRepresentation.PictureUpload)]
+    [ManagerMetadata("Image url", AccessLevel.User, AccessLevel.User)]
     public string image { get; set; } = "";
 
     public User createdBy { get; set; } = new User();

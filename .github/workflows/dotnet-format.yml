@@ -14,17 +14,17 @@ jobs:
               run: dotnet tool install -g dotnet-format --version 5.1.250801
 
             - name: Format frontend
-              run: dotnet-format ./frontend
+              run: dotnet-format ./frontend/frontend.csproj
 
             - name: Format server
-              run: dotnet-format ./server
+              run: dotnet-format ./server/server.csproj
 
             - name: Verify Changed files
               uses: tj-actions/verify-changed-files@v8.2
               id: verify-changed-files
               with:
                   files: |
-                    frontend 
+                    frontend
                     server
 
             - name: Commit files
