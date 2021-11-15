@@ -7,6 +7,5 @@ namespace frontend.Shared.Manager
     {
         event Func<Task> RefreshRequested;
         Task RequestRefresh();
-        ManagerMode CurrentMode { get; set; }
     }
 }
