@@ -53,10 +53,10 @@ public class User : IManageable
                 case "Normal user":
                     role = 1;
                     break;
-                case  "Institution admin":
+                case "Institution admin":
                     role = 2;
                     break;
-                case  "System admin":
+                case "System admin":
                     role = 3;
                     break;
                 default:
