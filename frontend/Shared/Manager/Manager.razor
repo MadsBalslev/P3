@@ -30,7 +30,7 @@
         ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@Items"
+            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_items"
                 Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
                 OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
@@ -70,12 +70,9 @@
     </MudGrid>
 </MudContainer>
 
-
-
 @code
 {
-    [Parameter]
-    public List<T> Items { get; set; } = new List<T>();
+    private List<T> _items { get; set; } = new List<T>();
 
     [Parameter]
     public RenderFragment HeaderContent { get; set; }
@@ -222,7 +219,7 @@
         if (response.IsSuccessStatusCode)
         {
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            Items = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
+            _items = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
         }
 
         return response;
