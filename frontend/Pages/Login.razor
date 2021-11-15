@@ -1,19 +1,35 @@
+@using MudBlazor
+@using System.ComponentModel.DataAnnotations
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
 @page "/login"
 
-<div class="container h-100 d-flex flex-column justify-content-center align-items-center">
-  <h1 class="fw-bold">Login</h1>
-  <div>
-    <form class="d-flex flex-column justify-content-center">
-      <div class="form-group">
-        <input class="form-control" type="email" id="login_email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="password" id="login_pswd" placeholder="Enter your password">
-      </div>
-      <button type="submit" class="btn btn-primary">Login</button>
-    </form>
-    <p class="text-muted">
-      Forgot password? <a href="#">reset</a>
-    </p>
-  </div>
-</div>
+<MudContainer>
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="4">
+        <MudCard>
+            <MudCardContent>
+                <MudForm @ref="loginForm" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
+                    <MudTextField InputType="InputType.Email" T="string" FullWidth="true" Required="@true"
+                        RequiredError="Email is required" Label="Email"
+                        Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+                    <MudTextField InputType="InputType.Password" T="string" FullWidth="true" Required="@true"
+                        RequiredError="Password is required" @ref="pwFieldLogin" Label="Password"></MudTextField>
+                    <MudButton class="mt-2" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Link="/">Login
+                    </MudButton>
+                </MudForm>
+            </MudCardContent>
+        </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwFieldLogin;
+    MudForm loginForm;
+}
