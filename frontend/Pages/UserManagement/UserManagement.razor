@@ -1,0 +1,12 @@
+@page "/UserManagement"
+@using frontend.Shared.Manager
+
+
+<Manager T="@User">
+    <CreateForm>
+        <UserCreateForm />
+    </CreateForm>
+    <EditForm>
+        <UserEditForm />
+    </EditForm>
+</Manager>
