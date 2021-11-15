@@ -25,9 +25,9 @@
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
-        @if (_managerService.CurrentMode == ManagerMode.Initial)
+        @if (_currentMode == ManagerMode.Initial)
             _tableSize = 12;
-        else if (_managerService.CurrentMode == ManagerMode.Create || _managerService.CurrentMode ==
+        else if (_currentMode == ManagerMode.Create || _currentMode ==
         ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
@@ -99,11 +99,11 @@
         </MudItem>
         <CascadingValue Value="_selectedItem">
             <MudItem xs="4">
-                @if (_managerService.CurrentMode == ManagerMode.Create)
+                @if (_currentMode == ManagerMode.Create)
                 {
                     @CreateForm
                 }
-                else if (_managerService.CurrentMode == ManagerMode.Edit)
+                else if (_currentMode == ManagerMode.Edit)
                 {
                     @EditForm
                 }
@@ -147,6 +147,8 @@
 
     private bool _loading = false;
 
+    private ManagerMode _currentMode = ManagerMode.Initial;
+
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
@@ -168,10 +170,12 @@
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
         }
         finally
         {
+            _currentMode = ManagerMode.Initial;
             _loading = false;
             await InvokeAsync(StateHasChanged);
         }
@@ -234,11 +238,11 @@
 
     void OnCreateItem()
     {
-        if (_managerService.CurrentMode == ManagerMode.Initial || _managerService.CurrentMode ==
+        if (_currentMode == ManagerMode.Initial || _currentMode ==
         ManagerMode.Edit)
-            _managerService.CurrentMode = ManagerMode.Create;
-        else if (_managerService.CurrentMode == ManagerMode.Create)
-            _managerService.CurrentMode = ManagerMode.Initial;
+            _currentMode = ManagerMode.Create;
+        else if (_currentMode == ManagerMode.Create)
+            _currentMode = ManagerMode.Initial;
     }
 
     private async Task<HttpResponseMessage> GetItems()
@@ -278,14 +282,14 @@
 
     private void RowClickEvent(TableRowClickEventArgs<T> tableRowClickEventArgs)
     {
-        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _managerService.CurrentMode !=
+        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _currentMode !=
         ManagerMode.Initial)
         {
-            _managerService.CurrentMode = ManagerMode.Initial;
+            _currentMode = ManagerMode.Initial;
         }
         else
         {
-            _managerService.CurrentMode = ManagerMode.Edit;
+            _currentMode = ManagerMode.Edit;
         }
         _lastItem = _selectedItem;
     }
