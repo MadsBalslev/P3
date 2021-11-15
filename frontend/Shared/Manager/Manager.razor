@@ -4,7 +4,6 @@
 @using System
 @using System.IO
 @using System.Text.Json
-@using System.Text
 @inject IHttpClientFactory _clientFactory
 @inject IManagerService _managerService
 @inject ISnackbar _snackbar
@@ -34,7 +33,8 @@
             <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@Items"
                 Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
-                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
+                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
+                Context="item">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
@@ -45,62 +45,11 @@
                         IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
                 <HeaderContent>
-                    @* // TODO This foreach loop is a lot like the one below, they should be
-                        combined in at private
-                        method, where you can vary the renderfragment in the inntermost if statement *@
-                    @* @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                        {
-                        Attribute attribute =
-                        propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
-                        {
-                        ManagerMetadataAttribute managerMetadata = attribute as
-                        ManagerMetadataAttribute;
-                        if (_user.accessLevel >= managerMetadata.ViewableBy)
-                        {
-
-                        <MudTh>
-                        <MudTableSortLabel T="T" SortBy="(x) => propertyInfo.GetValue(x, null)">
-                        @managerMetadata.HeaderDisplayname
-                        </MudTableSortLabel>
-                        </MudTh>
-                        }
-                        }
-                        } *@
                     @HeaderContent
                 </HeaderContent>
                 <RowTemplate>
-                    @* @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                        {
-                        Attribute attribute =
-                        propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
-                        {
-                        ManagerMetadataAttribute managerMetadata = attribute as
-                        ManagerMetadataAttribute;
-                        if (_user.accessLevel >= managerMetadata.ViewableBy)
-                        {
-                        dynamic dateTime = propertyInfo.GetValue(context, null) as DateTime?;
-                        if (dateTime != null)
-                        {
-                        <MudTd>@dateTime.ToShortDateString()</MudTd>
-                        }
-                        else
-                        {
-                        <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
-                        }
-                        }
-                        }
-                        }
-                        @RowTemplate *@
-                    @* @RowTemplate *@
+                    @RowTemplate(item)
                 </RowTemplate>
-                <ChildRowContent>
-                    @foreach (T item in Items)
-                    {
-                        <MudTr>@RowTemplate(item)</MudTr>
-                    }
-                </ChildRowContent>
                 <PagerContent>
                     <MudTablePager />
                 </PagerContent>
