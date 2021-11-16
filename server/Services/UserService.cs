@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using server.Models;
+using BCryptNet = BCrypt.Net.BCrypt;
 namespace server.Services
 {
     public class UserService
