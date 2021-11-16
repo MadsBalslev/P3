@@ -37,7 +37,7 @@ namespace server.Controllers
             }
             catch (System.Exception)
             {
-                return NotFound();
+                return NotFound("Poster not found");
             }
         }
 
@@ -73,11 +73,26 @@ namespace server.Controllers
             }
             catch (System.Exception)
             {
-                return NotFound();
+                return NotFound("poster not found");
             }
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Poster p, int id) => _posterService.UpdatePosterJSON(id, p);
+        public ActionResult<Object> Put([FromBody] Poster p, int id)
+        {
+          if (_posterService.SanityCheck(p) != "")
+            {
+                return BadRequest(_posterService.SanityCheck(p));
+            }
+            try
+            {
+                Object poster =  _posterService.UpdatePosterJSON(id, p);
+                return poster;
+            }
+            catch (System.Exception)
+            {
+                throw new Exception();
+            }
+        }
     }
 }

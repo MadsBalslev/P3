@@ -92,7 +92,6 @@ namespace server.Services
         }
 
         public Object UpdatePosterJSON(int id, Poster p) => UpdatePoster(id, p).ToJSON();
-
         public string SanityCheck(Poster p)
         {
             if (p.Name == null || p.Name == "")
@@ -103,6 +102,14 @@ namespace server.Services
             if (string.IsNullOrEmpty(p.ImageUrl) || string.IsNullOrWhiteSpace(p.ImageUrl) )
             {
                 return "Image url cannot be empty";
+            }
+            if (p.StartDate == null)
+            {
+                return "Start date cannot be empty";
+            }
+            if (p.EndDate == null)
+            {
+                return "End date cannot be empty";
             }
 
             return "";
