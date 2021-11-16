@@ -5,7 +5,7 @@ function getData(url) {
     req.open('GET', url, true);
     req.onload = function () {
         var jsonResponse = JSON.parse(req.responseText);
-        generateSlides(jsonResponse);
+        getPreferences(jsonResponse);
     };
     req.send();
 }
@@ -14,7 +14,7 @@ function startGenerating() {
     getData("http://192.168.0.102:5001/Posters");
 }
 
-function generateSlides(posters) {
+function generateSlides(posters, timer) {
     var slides = [];
     var i = 0;
     while (i < posters.length) {
@@ -23,10 +23,20 @@ function generateSlides(posters) {
         i++;
     }
     var slideIndex = 0;
-    showPosters(slides, slideIndex);
+    showPosters(slides, slideIndex, timer);
     console.log(slides);
 }
+function getPreferences(jsonResponse) {
 
+    var req = new XMLHttpRequest();
+    req.overrideMimeType("application/json");
+    req.open('GET', "GET", "/Preferences", true);
+    req.onload = function () {
+       var timer = JSON.parse(req.responseText);
+       generateSlides(jsonResponse, timer);
+    };
+    req.send();
+}
 function generateHTML() {
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img");
@@ -44,16 +54,16 @@ function generateHTML() {
     document.body.appendChild(screenDiv);
 }
 
-function showPosters(slides, slideIndex) {
+function showPosters(slides, slideIndex, timer) {
     console.log(slideIndex);
     setPoster(slides[slideIndex]);
     slideIndex++;
     if (slideIndex == slides.length+1) {getData("http://192.168.0.102:5001/Posters")}
     else
     {
-    setTimeout(showPosters, 4000, slides,slideIndex);
+    setTimeout(showPosters, timer, slides,slideIndex,timer);
     }
-    
+
 }
 
 function setPoster(image) {
