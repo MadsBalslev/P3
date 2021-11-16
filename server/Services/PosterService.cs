@@ -20,14 +20,15 @@ namespace server.Services
 
         public Poster GetPoster(int id)
         {
-            Poster poster = _context.Posters.Find(id);
-
-            if (poster == null)
+            try
             {
-                throw new NullReferenceException("Poster was not found");
+                Poster poster = _context.Posters.Find(id);
+                return poster;
             }
-
-            return poster;
+            catch (System.Exception)
+            {
+                 throw new Exception("Poster not found");
+            }
         }
 
         public Object GetPosterJSON(int id)
@@ -38,10 +39,19 @@ namespace server.Services
 
         public Poster CreatePoster(Poster poster)
         {
+            try
+            {
             _context.Posters.Add(poster);
             _context.SaveChanges();
 
             return _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefault();
+
+            }
+            catch (System.Exception)
+            {
+
+                throw new Exception("Poster not created");
+            }
         }
 
         public Poster DeletePoster(int id)
@@ -58,7 +68,6 @@ namespace server.Services
         {
             IEnumerable<Poster> posters = GetAllPosters();
             List<Object> response = new List<object>();
-
             foreach (Poster p in posters)
             {
                 response.Add(p.ToJSON());
@@ -83,5 +92,20 @@ namespace server.Services
         }
 
         public Object UpdatePosterJSON(int id, Poster p) => UpdatePoster(id, p).ToJSON();
+
+        public string SanityCheck(Poster p)
+        {
+            if (p.Name == null || p.Name == "")
+            {
+                return "Name cannot be empty";
+            }
+
+            if (string.IsNullOrEmpty(p.ImageUrl) || string.IsNullOrWhiteSpace(p.ImageUrl) )
+            {
+                return "Image url cannot be empty";
+            }
+
+            return "";
+        }
     }
 }

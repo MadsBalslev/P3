@@ -44,20 +44,27 @@ namespace server.Controllers
         [HttpPost]
         public ActionResult<Object> Post([FromBody] Poster poster)
         {
+             if (_posterService.SanityCheck(poster) != "")
+            {
+                return BadRequest(_posterService.SanityCheck(poster));
+            }
             try
             {
                 Poster p = _posterService.CreatePoster(poster);
                 return _posterService.GetPosterJSON(p.Id);
             }
+            // Does not only catch invalid id errors, but also others.
             catch (System.Exception)
             {
-                return NotFound();
+
+                return BadRequest("Id does not exist");
             }
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult<Object> Delete(int id)
         {
+
             try
             {
                 Object p = _posterService.GetPosterJSON(id);
