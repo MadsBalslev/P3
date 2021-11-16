@@ -44,7 +44,7 @@ namespace server.Controllers
         [HttpPost]
         public ActionResult<Object> Post([FromBody] Poster poster)
         {
-             if (_posterService.SanityCheck(poster) != "")
+            if (_posterService.SanityCheck(poster) != "")
             {
                 return BadRequest(_posterService.SanityCheck(poster));
             }
@@ -80,13 +80,13 @@ namespace server.Controllers
         [HttpPut("{id:int}")]
         public ActionResult<Object> Put([FromBody] Poster p, int id)
         {
-          if (_posterService.SanityCheck(p) != "")
+            if (_posterService.SanityCheck(p) != "")
             {
                 return BadRequest(_posterService.SanityCheck(p));
             }
             try
             {
-                Object poster =  _posterService.UpdatePosterJSON(id, p);
+                Object poster = _posterService.UpdatePosterJSON(id, p);
                 return poster;
             }
             catch (System.Exception)

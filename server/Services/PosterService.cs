@@ -27,7 +27,7 @@ namespace server.Services
             }
             catch (System.Exception)
             {
-                 throw new Exception("Poster not found");
+                throw new Exception("Poster not found");
             }
         }
 
@@ -41,10 +41,10 @@ namespace server.Services
         {
             try
             {
-            _context.Posters.Add(poster);
-            _context.SaveChanges();
+                _context.Posters.Add(poster);
+                _context.SaveChanges();
 
-            return _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefault();
+                return _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefault();
 
             }
             catch (System.Exception)
@@ -99,7 +99,7 @@ namespace server.Services
                 return "Name cannot be empty";
             }
 
-            if (string.IsNullOrEmpty(p.ImageUrl) || string.IsNullOrWhiteSpace(p.ImageUrl) )
+            if (string.IsNullOrEmpty(p.ImageUrl) || string.IsNullOrWhiteSpace(p.ImageUrl))
             {
                 return "Image url cannot be empty";
             }
