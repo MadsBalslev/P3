@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `database`.`users` (
   `first_name` VARCHAR(256) NOT NULL,
   `last_name` VARCHAR(256) NOT NULL,
   `email` VARCHAR(256) NOT NULL,
+  `password` VARCHAR(256) NOT NULL,
   `phone_number` INT NOT NULL,
   `institution` INT,
   `role` INT NOT NULL,
