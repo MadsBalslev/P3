@@ -1,3 +1,4 @@
+[API("/Institutions")]
 public class Institution
 {
     public int id { get; set; } = -1;
