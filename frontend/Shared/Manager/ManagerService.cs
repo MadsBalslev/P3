@@ -11,7 +11,5 @@ namespace frontend.Shared.Manager
         {
             await RefreshRequested?.Invoke();
         }
-
-        public ManagerMode CurrentMode { get; set; } = ManagerMode.Initial;
     }
 }

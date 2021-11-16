@@ -55,6 +55,7 @@ namespace frontend.Shared.Manager
                     if (response.IsSuccessStatusCode)
                     {
                         _snackbar.Add("Action successful", Severity.Success);
+                        await RefreshManager();
                     }
                     else
                     {
@@ -68,18 +69,16 @@ namespace frontend.Shared.Manager
             }
             finally
             {
-                await ResetPage();
             }
         }
 
         protected async Task OnCancel()
         {
-            await ResetPage();
+            await RefreshManager();
         }
 
-        private async Task ResetPage()
+        private async Task RefreshManager()
         {
-            _managerService.CurrentMode = ManagerMode.Initial;
             _form.Reset();
             _form.ResetValidation();
             await _managerService.RequestRefresh();

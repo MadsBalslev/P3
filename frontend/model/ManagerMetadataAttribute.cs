@@ -32,10 +32,10 @@ public class ManagerMetadataAttribute : Attribute
     private AccessLevel _viewableBy = AccessLevel.None;
     private AccessLevel _editableBy = AccessLevel.None;
 
-    public ManagerMetadataAttribute(string headerDisplayname, AccessLevel viewableBy, AccessLevel editableby)
+    public ManagerMetadataAttribute(string headerDisplayname, AccessLevel viewableBy, AccessLevel editableBy)
     {
         HeaderDisplayname = headerDisplayname;
         ViewableBy = viewableBy;
-        EditableBy = editableby;
+        EditableBy = editableBy;
     }
 }
