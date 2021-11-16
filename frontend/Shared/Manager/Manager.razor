@@ -1,78 +1,84 @@
+@using System.Reflection
 @typeparam T
 @using MudBlazor
-@using System.Reflection
+@using System
 @using System.IO
 @using System.Text.Json
-@using System.Text
-@inject IHttpClientFactory ClientFactory
+@inject IHttpClientFactory _clientFactory
+@inject IManagerService _managerService
+@inject ISnackbar _snackbar
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+    .selected>td {
+        color: white !important;
+    }
+
+    .selected>td .mud-input {
+        color: white !important;
+    }
+</style>
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
+        @if (_currentMode == ManagerMode.Initial)
+            _tableSize = 12;
+        else if (_currentMode == ManagerMode.Create || _currentMode ==
+        ManagerMode.Edit)
+            _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Items="@_itemList" Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
-                @bind-SelectedItem="_selectedItem" SortLabel="Sort By">
+            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_items"
+                Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
+                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
+                Context="item">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
-                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create</MudButton>
+                    <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
+                    </MudButton>
                     <MudSpacer />
-                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start"
-                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+                    <MudTextField @bind-Value="_searchString" Placeholder="Search"
+                        Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                        IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
                 <HeaderContent>
-                    @* // TODO This foreach loop is a lot like the one below, they should be combined in at private
-                        method, where you can vary the renderfragment in the inntermost if statement *@
-                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                    {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
-                        {
-                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.ViewableBy)
-                            {
-                                <MudTh>@managerMetadata.HeaderDisplayname</MudTh>
-                            }
-                        }
-                    }
+                    @HeaderContent
                 </HeaderContent>
                 <RowTemplate>
-                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                    {
-                        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
-                        {
-                            ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-                            if (_userAccessLevel >= managerMetadata.ViewableBy)
-                            {
-                                <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
-                            }
-                        }
-                    }
+                    @RowTemplate(item)
                 </RowTemplate>
+                <PagerContent>
+                    <MudTablePager />
+                </PagerContent>
             </MudTable>
         </MudItem>
-        <MudItem>
-            @if (_currentMode == ManagerMode.Create)
-            {
-                @CreateForm
-            }
-            else if (_currentMode == ManagerMode.Edit)
-            {
-                @EditForm
-            }
-        </MudItem>
+        <CascadingValue Value="_selectedItem">
+            <MudItem xs="4">
+                @if (_currentMode == ManagerMode.Create)
+                {
+                    @CreateForm
+                }
+                else if (_currentMode == ManagerMode.Edit)
+                {
+                    @EditForm
+                }
+            </MudItem>
+        </CascadingValue>
     </MudGrid>
 </MudContainer>
 
 @code
 {
-    private enum ManagerMode
-    {
-        First = 0,
-        Initial = 0,
-        Create = 1,
-        Edit = 2,
-        Last = 2,
-    }
+    private List<T> _items { get; set; } = new List<T>();
+
+    [Parameter]
+    public RenderFragment HeaderContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<T> RowTemplate { get; set; }
 
     [Parameter]
     public RenderFragment CreateForm { get; set; }
@@ -80,11 +86,8 @@
     [Parameter]
     public RenderFragment EditForm { get; set; }
 
-    [Parameter]
-    public bool Collapsed { get; set; } = true;
-
     [CascadingParameter]
-    protected AccessLevel _userAccessLevel { get; set; }
+    protected User _user { get; set; }
 
     private readonly APIAttribute _apiAttribute =
     Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
@@ -92,22 +95,53 @@
     private readonly IEnumerable<PropertyInfo> _propertyInfoList =
     typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-    private List<T> _itemList = new List<T>();
-
-    private string _searchString = "";
 
     private T _selectedItem = new T();
 
-    private T _createItem = new T();
+    private T _lastItem = new T();
+
+    private string _searchString = "";
+
+    private int selectedRowNumber = -1;
 
     private int _tableSize = 12;
+
+    private MudTable<T> _table;
+
+    private bool _loading = false;
 
     private ManagerMode _currentMode = ManagerMode.Initial;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await GetItems();
+        _managerService.RefreshRequested += OnRefresh;
+        await OnRefresh();
+    }
+
+    private async Task OnRefresh()
+    {
+        try
+        {
+            _loading = true;
+            HttpResponseMessage response = await GetItems();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _snackbar.Add($"Something went wrong, status code: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+        }
+        finally
+        {
+            _currentMode = ManagerMode.Initial;
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private bool FilterFunc(T item)
@@ -147,7 +181,7 @@
             return false;
         }
 
-        if (_userAccessLevel < managerMetadata.ViewableBy)
+        if (_user.accessLevel < managerMetadata.ViewableBy)
         {
             return false;
         }
@@ -167,112 +201,59 @@
 
     void OnCreateItem()
     {
-        Collapsed = !Collapsed;
-        if (Collapsed)
-        {
-            _tableSize = 12;
-        }
-        else
-        {
-            _tableSize = 8;
-        }
+        if (_currentMode == ManagerMode.Initial || _currentMode ==
+        ManagerMode.Edit)
+            _currentMode = ManagerMode.Create;
+        else if (_currentMode == ManagerMode.Create)
+            _currentMode = ManagerMode.Initial;
     }
 
-    private async Task GetItems()
+    private async Task<HttpResponseMessage> GetItems()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
 
-        HttpClient client = ClientFactory.CreateClient();
+        HttpClient client = _clientFactory.CreateClient();
 
         HttpResponseMessage response = await client.SendAsync(request);
 
         if (response.IsSuccessStatusCode)
         {
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
+            _items = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
+        }
+
+        return response;
+    }
+
+    private string SelectedRowClassFunc(T element, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            return string.Empty;
+        }
+        else if (_table.SelectedItem != null && _table.SelectedItem.Equals(element))
+        {
+            selectedRowNumber = rowNumber;
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
         }
     }
 
-    public async Task PostItem()
+    private void RowClickEvent(TableRowClickEventArgs<T> tableRowClickEventArgs)
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, _apiAttribute.APIPath);
-        string requestMessage = _createItem.ToJSON();
-        Console.WriteLine(JsonSerializer.Serialize<T>(_createItem));
-        request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
-
-        Console.WriteLine(requestMessage);
-
-        HttpClient client = ClientFactory.CreateClient();
-
-        HttpResponseMessage response = await client.SendAsync(request);
-
-        Console.WriteLine(response.ToString());
-        @* if (response.IsSuccessStatusCode)
-            {
-
-            } *@
-    }
-
-    public async Task OnAddItem()
-    {
-        await PostItem();
-        await GetItems();
-    }
-
-    // TODO implement
-    private async Task PutItem()
-    {
-        throw new NotImplementedException();
-    }
-
-    // TODO implement this function
-    private async Task DeleteItem()
-    {
-        throw new NotImplementedException();
+        if (tableRowClickEventArgs.Item.Equals(_lastItem) && _currentMode !=
+        ManagerMode.Initial)
+        {
+            _currentMode = ManagerMode.Initial;
+        }
+        else
+        {
+            _currentMode = ManagerMode.Edit;
+        }
+        _lastItem = _selectedItem;
     }
 }
-@* <MudForm>
-    <MudCard>
-    <MudCardContent>
-    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-    {
-    Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-    if (attribute is ManagerMetadataAttribute)
-    {
-    ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-    if (_userAccessLevel >= managerMetadata.EditableBy)
-    {
-    string propertyValue = propertyInfo.GetValue(_createItem, null).ToString();
-    Action<string> onchangeHandler = text => propertyInfo.SetValue(_createItem, text);
-    switch (managerMetadata.EditFormRepresentation)
-    {
-    case FormRepresentation.TextField:
-    <MudTextField type="text"
-    Label="@managerMetadata.HeaderDisplayname"
-    Class="mb-3"
-    Value="@propertyValue"
-    TextChanged="onchangeHandler" />
-    break;
-
-    case FormRepresentation.DatePicker:
-    <MudDatePicker Label="@managerMetadata.HeaderDisplayname" Class="mb-3" />
-    break;
-
-    case FormRepresentation.Selector:
-    <p>Selector</p>
-    break;
-
-    case FormRepresentation.PictureUpload:
-    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true"
-    Class="mb-3">Upload poster</MudButton>
-    break;
-    }
-    }
-    }
-    }
-    <MudButton @onclick="OnAddItem" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
-    class="mb-3">Add</MudButton>
-    <MudButton Variant="Variant.Filled" Color="Color.Secondary" FullWidth="true">Cancel</MudButton>
-    </MudCardContent>
-    </MudCard>
-    </MudForm> *@

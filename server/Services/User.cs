@@ -11,7 +11,7 @@ namespace server.Models
                 lastName = this.LastName,
                 email = this.Email,
                 phoneNumber = this.PhoneNumber,
-                institution = this.Institution,
+                institution = this.InstitutionNavigation.ToJSON(),
                 role = this.Role,
             };
         }

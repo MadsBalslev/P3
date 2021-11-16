@@ -29,29 +29,13 @@ public class ManagerMetadataAttribute : Attribute
         }
     }
 
-    public FormRepresentation EditFormRepresentation
-    {
-        get => _editFormRepresentation;
-        private set
-        {
-            if (EditableBy == AccessLevel.None && value != FormRepresentation.None)
-            {
-                throw new ArgumentException("Property ManagerMetaDataAttribute can't have EditFormRepresentation of other than FormRepresentation.None when property have EditableBy of AccessLevel.None.");
-            }
-            _editFormRepresentation = value;
-        }
-    }
-
     private AccessLevel _viewableBy = AccessLevel.None;
     private AccessLevel _editableBy = AccessLevel.None;
-    private FormRepresentation _editFormRepresentation = FormRepresentation.None;
 
-
-    public ManagerMetadataAttribute(string headerDisplayname, AccessLevel viewableBy, AccessLevel editableby, FormRepresentation formRepresentation)
+    public ManagerMetadataAttribute(string headerDisplayname, AccessLevel viewableBy, AccessLevel editableBy)
     {
         HeaderDisplayname = headerDisplayname;
         ViewableBy = viewableBy;
-        EditableBy = editableby;
-        EditFormRepresentation = formRepresentation;
+        EditableBy = editableBy;
     }
 }

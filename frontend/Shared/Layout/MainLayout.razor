@@ -1,25 +1,31 @@
 @inherits LayoutComponentBase
 @inject NavigationManager navigationManager
 @using MudBlazor
+@inject ISnackbar _snackbar
 
 <MudThemeProvider Theme="_currentTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<CascadingValue Value="_userAccessLevel">
+<CascadingValue Value="_user">
     <MudLayout>
         <MudAppBar Elevation="1">
             <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
-            <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged Link="/PosterManagement"
-                Class="pl-6">Poster Management</AppBarButton>
-            <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged Link="/UserManagement">User
+            <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged
+                Link="/PosterManagement" Class="pl-6">Poster Management</AppBarButton>
+            <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged
+                Link="/UserManagement">
+                User
                 Management</AppBarButton>
             <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged
                 Link="/InstitutionManagement">Institution Management</AppBarButton>
-            <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged Link="/ScreenManagement">Screen
+            <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged
+                Link="/ScreenManagement">
+                Screen
                 Management</AppBarButton>
             <MudSpacer />
-            <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme" Label="@(lightTheme ? "Light" : "Dark")" />
+            <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme"
+                Label="@(lightTheme ? "Light" : "Dark")" />
             <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
                 <MudMenuItem>Your Settings</MudMenuItem>
                 <MudMenuItem>Logout</MudMenuItem>
@@ -34,21 +40,25 @@
 </CascadingValue>
 
 
+
+
 @code
 {
-    private AccessLevel _userAccessLevel { get; set; } = AccessLevel.User;
+    private User _user { get; set; } = new User();
 
-    private AccessLevel GetUserAccessLevel()
+    private User GetUserAccessLevel()
     {
         // TODO implement this
-        return AccessLevel.SysAdmin;
+        User user = new User() { id = 1, accessLevel = AccessLevel.SysAdmin };
+        return user;
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _userAccessLevel = GetUserAccessLevel();
+        _user = GetUserAccessLevel();
         _currentTheme = defaultTheme;
+        _snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
     }
 
     private bool lightTheme { get; set; } = true;
