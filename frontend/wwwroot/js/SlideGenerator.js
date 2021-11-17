@@ -37,6 +37,7 @@ function getPreferences(jsonResponse) {
     };
     req.send();
 }
+
 function generateHTML() {
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img");
@@ -63,7 +64,6 @@ function showPosters(slides, slideIndex, timer) {
     {
     setTimeout(showPosters, timer, slides,slideIndex,timer);
     }
-
 }
 
 function setPoster(image) {
