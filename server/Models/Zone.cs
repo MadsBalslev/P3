@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace server.Models
+namespace server.Entities
 {
     public partial class Zone
     {
-        public Zone()
+        public object ToJSON()
         {
-            Screens = new HashSet<Screen>();
+            return new
+            {
+                id = this.Id,
+                name = this.Name
+            };
         }
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-        public virtual ICollection<Screen> Screens { get; set; }
     }
 }

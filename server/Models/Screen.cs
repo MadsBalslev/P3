@@ -1,16 +1,19 @@
-using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace server.Models
+namespace server.Entities
 {
     public partial class Screen
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int? Zone { get; set; }
-
-        public virtual Zone ZoneNavigation { get; set; }
+        public object ToJSON()
+        {
+            return new
+            {
+                id = this.Id,
+                name = this.Name,
+                zone = new
+                {
+                    id = this.Zone,
+                    name = this.ZoneNavigation.Name
+                }
+            };
+        }
     }
 }

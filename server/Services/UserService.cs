@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using server.Models;
+using server.Entities;
 using BCryptNet = BCrypt.Net.BCrypt;
 namespace server.Services
 {
