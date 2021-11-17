@@ -1,12 +1,14 @@
 @using System.Reflection
-@typeparam T
+@using Microsoft.Extensions.Configuration
 @using MudBlazor
 @using System
 @using System.IO
 @using System.Text.Json
-@inject IHttpClientFactory _clientFactory
-@inject IManagerService _managerService
-@inject ISnackbar _snackbar
+@inject IHttpClientFactory ClientFactory
+@inject IManagerService ManagerService
+@inject ISnackbar Snackbar
+@inject IConfiguration Configuration
+@typeparam T
 
 <style>
     .selected {
@@ -114,8 +116,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
-        _managerService.RefreshRequested += OnRefresh;
+        ManagerService.RefreshRequested += OnRefresh;
         await OnRefresh();
     }
 
@@ -123,22 +124,22 @@
     {
         try
         {
+            _currentMode = ManagerMode.Initial;
             _loading = true;
             HttpResponseMessage response = await GetItems();
 
             if (!response.IsSuccessStatusCode)
             {
-                _snackbar.Add($"Something went wrong, status code: {response.StatusCode}", Severity.Error);
+                Snackbar.Add($"Something went wrong, status code: {response.StatusCode}", Severity.Error);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+            Snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
         }
         finally
         {
-            _currentMode = ManagerMode.Initial;
             _loading = false;
             await InvokeAsync(StateHasChanged);
         }
@@ -199,7 +200,7 @@
         return false;
     }
 
-    void OnCreateItem()
+    private void OnCreateItem()
     {
         if (_currentMode == ManagerMode.Initial || _currentMode ==
         ManagerMode.Edit)
@@ -210,9 +211,9 @@
 
     private async Task<HttpResponseMessage> GetItems()
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, _apiAttribute.APIPath);
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Configuration.GetValue<string>("ApiBaseAdress") + _apiAttribute.ApiPath);
 
-        HttpClient client = _clientFactory.CreateClient();
+        HttpClient client = ClientFactory.CreateClient();
 
         HttpResponseMessage response = await client.SendAsync(request);
 
@@ -256,4 +257,6 @@
         }
         _lastItem = _selectedItem;
     }
+
+
 }

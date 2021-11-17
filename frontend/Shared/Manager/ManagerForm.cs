@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using MudBlazor;
 using System;
 using System.Diagnostics;
@@ -16,13 +17,16 @@ namespace frontend.Shared.Manager
         protected MudForm _form;
 
         [Inject]
-        private ISnackbar _snackbar { get; set; }
+        private ISnackbar Snackbar { get; set; }
 
         [Inject]
-        private IHttpClientFactory _clientFactory { get; set; }
+        private IHttpClientFactory ClientFactory { get; set; }
 
         [Inject]
-        protected IManagerService _managerService { get; set; }
+        protected IManagerService ManagerService { get; set; }
+
+        [Inject]
+        protected IConfiguration Configuration { get; set; }
 
         protected async Task<HttpResponseMessage> UpdateModelWithItem(HttpMethod method, T item, string path)
         {
@@ -30,15 +34,12 @@ namespace frontend.Shared.Manager
 
             HttpRequestMessage request = new HttpRequestMessage(method, path);
             string requestMessage = item.ToJSON();
+            Console.WriteLine(requestMessage);
             request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
 
-            HttpClient client = _clientFactory.CreateClient();
+            HttpClient client = ClientFactory.CreateClient();
 
             HttpResponseMessage response = await client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-            }
 
             return response;
         }
@@ -54,21 +55,21 @@ namespace frontend.Shared.Manager
 
                     if (response.IsSuccessStatusCode)
                     {
-                        _snackbar.Add("Action successful", Severity.Success);
-                        await RefreshManager();
+                        Snackbar.Add("Action successful", Severity.Success);
                     }
                     else
                     {
-                        _snackbar.Add($"Action failed!, status code: {response.StatusCode}", Severity.Error);
+                        Snackbar.Add($"Action failed!, status code: {response.StatusCode}", Severity.Error);
                     }
                 }
             }
             catch (Exception e)
             {
-                _snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+                Snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
             }
             finally
             {
+                await RefreshManager();
             }
         }
 
@@ -77,11 +78,16 @@ namespace frontend.Shared.Manager
             await RefreshManager();
         }
 
+        protected string GetPath()
+        {
+            return Configuration.GetValue<string>("ApiBaseAdress") + _apiAttribute.ApiPath + "/";
+        }
+
         private async Task RefreshManager()
         {
             _form.Reset();
             _form.ResetValidation();
-            await _managerService.RequestRefresh();
+            await ManagerService.RequestRefresh();
         }
     }
 }
