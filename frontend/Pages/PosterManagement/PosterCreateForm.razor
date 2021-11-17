@@ -64,11 +64,12 @@
                     _loadedFile = null;
                 }
                 @* else if (_loadedFile)
-                {
+                    {
 
-                } *@
+                    } *@
                 else
                 {
+                    _snackbar.Add($"File was successfully uploaded", Severity.Success);
                     try
                     {
                         var trustedFileNameForFileStorage = Path.GetRandomFileName();
@@ -78,7 +79,6 @@
 
                         await using FileStream fs = new(path, FileMode.Create);
                         await _loadedFile.OpenReadStream(_maxFileSize).CopyToAsync(fs);
-                        _snackbar.Add($"File was successfully uploaded", Severity.Success);
                     }
                     catch (Exception ex)
                     {
