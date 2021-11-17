@@ -32,10 +32,11 @@
         ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_itemList"
+            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_items"
                 Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
-                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc">
+                OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
+                Context="item">
                 <ToolBarContent>
                     <!-- TODO Add dynamic button name -->
                     <MudButton id="Create" Variant="Variant.Outlined" @onclick=@OnCreateItem>Create
@@ -46,52 +47,10 @@
                         IconSize="Size.Medium" Class="mt-0" />
                 </ToolBarContent>
                 <HeaderContent>
-                    @* // TODO This foreach loop is a lot like the one below, they should be
-                        combined in at private
-                        method, where you can vary the renderfragment in the inntermost if statement *@
-                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                    {
-                        Attribute attribute =
-                        propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
-                        {
-                            ManagerMetadataAttribute managerMetadata = attribute as
-                            ManagerMetadataAttribute;
-                            if (_user.accessLevel >= managerMetadata.ViewableBy)
-                            {
-
-                                <MudTh>
-                                    <MudTableSortLabel T="T" SortBy="(x) => propertyInfo.GetValue(x, null)">
-                                        @managerMetadata.HeaderDisplayname
-                                    </MudTableSortLabel>
-                                </MudTh>
-                            }
-                        }
-                    }
+                    @HeaderContent
                 </HeaderContent>
                 <RowTemplate>
-                    @foreach (PropertyInfo propertyInfo in _propertyInfoList)
-                    {
-                        Attribute attribute =
-                        propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-                        if (attribute is ManagerMetadataAttribute)
-                        {
-                            ManagerMetadataAttribute managerMetadata = attribute as
-                            ManagerMetadataAttribute;
-                            if (_user.accessLevel >= managerMetadata.ViewableBy)
-                            {
-                                dynamic dateTime = propertyInfo.GetValue(context, null) as DateTime?;
-                                if (dateTime != null)
-                                {
-                                    <MudTd>@dateTime.ToShortDateString()</MudTd>
-                                }
-                                else
-                                {
-                                    <MudTd>@propertyInfo.GetValue(context, null).ToString()</MudTd>
-                                }
-                            }
-                        }
-                    }
+                    @RowTemplate(item)
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager />
@@ -113,10 +72,16 @@
     </MudGrid>
 </MudContainer>
 
-
-
 @code
 {
+    private List<T> _items { get; set; } = new List<T>();
+
+    [Parameter]
+    public RenderFragment HeaderContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<T> RowTemplate { get; set; }
+
     [Parameter]
     public RenderFragment CreateForm { get; set; }
 
@@ -132,7 +97,6 @@
     private readonly IEnumerable<PropertyInfo> _propertyInfoList =
     typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-    private List<T> _itemList = new List<T>();
 
     private T _selectedItem = new T();
 
@@ -152,7 +116,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
         ManagerService.RefreshRequested += OnRefresh;
         await OnRefresh();
     }
@@ -257,7 +220,7 @@
         if (response.IsSuccessStatusCode)
         {
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _itemList = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
+            _items = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
         }
 
         return response;
