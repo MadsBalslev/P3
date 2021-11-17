@@ -7,16 +7,16 @@
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
-        <MudItem xs="4">
+        <MudItem xs="4" class="mt-8">
         <MudCard>
             <MudCardContent>
-                <MudForm @ref="loginForm" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudForm @ref="_loginForm" @bind-IsValid="@_success" @bind-Errors="@_errors">
                     <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
                     <MudTextField InputType="InputType.Email" T="string" FullWidth="true" Required="@true"
                         RequiredError="Email is required" Label="Email"
                         Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
                     <MudTextField InputType="InputType.Password" T="string" FullWidth="true" Required="@true"
-                        RequiredError="Password is required" @ref="pwFieldLogin" Label="Password"></MudTextField>
+                        RequiredError="Password is required" @ref="_pwFieldLogin" Label="Password"></MudTextField>
                     <MudButton class="mt-2" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Link="/">Login
                     </MudButton>
                 </MudForm>
@@ -28,8 +28,8 @@
 
 @code
 {
-    bool success;
-    string[] errors = { };
-    MudTextField<string> pwFieldLogin;
-    MudForm loginForm;
+    private bool _success;
+    private string[] _errors = { };
+    private MudTextField<string> _pwFieldLogin;
+    private MudForm _loginForm;
 }
