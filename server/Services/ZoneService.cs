@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using server.Models;
+using server.Entities;
 namespace server.Services
 {
     public class ZoneService
