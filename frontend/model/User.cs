@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 [APIAttribute("/Users")]
 public class User : IManageable
 {
@@ -70,6 +72,17 @@ public class User : IManageable
 
     public string ToJSON()
     {
-        throw new System.NotImplementedException();
+        return JsonSerializer.Serialize<object>
+        (
+            new
+            {
+                firstName = this.firstName,
+                lastName = this.lastName,
+                email = this.email,
+                phoneNumber = this.phoneNumber,
+                institution = this.InstitutionId,
+                role = this.role,
+            }
+        );
     }
 }

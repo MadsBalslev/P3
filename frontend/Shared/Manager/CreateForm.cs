@@ -9,8 +9,7 @@ namespace frontend.Shared.Manager
 
         protected async Task OnAddItem()
         {
-            await OnConfirmChanges(HttpMethod.Post, _precreateItem, _apiAttribute.APIPath);
-
+            await OnConfirmChanges(HttpMethod.Post, _precreateItem, GetPath());
         }
     }
 }

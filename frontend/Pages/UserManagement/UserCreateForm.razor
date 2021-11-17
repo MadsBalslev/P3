@@ -2,7 +2,8 @@
 @using MudBlazor
 @using System.Text.Json
 @using System.IO
-@inject IHttpClientFactory _clientFactory
+@using Microsoft.Extensions.Configuration;
+@inject IHttpClientFactory ClientFactory
 
 
 <MudForm @ref="_form">
@@ -10,7 +11,7 @@
         <MudCardContent>
             <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.firstName"
                 Label="First name" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.firstName"
+            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.lastName"
                 Label="Last name" />
             <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.phoneNumber"
                 Label="Phone number" />
@@ -26,7 +27,7 @@
                 Placeholder="Select user role">
                 @foreach (Institution institution in _institutionList)
                 {
-                    <MudSelectItem Value="@(institution.id)">@institution.name</MudSelectItem>
+                    <MudSelectItem Value="@(institution.institutionId)">@institution.name</MudSelectItem>
                 }
             </MudSelect>
             <MudCardActions>
@@ -50,9 +51,9 @@
         APIAttribute instApiAttribute = Attribute.GetCustomAttribute(typeof(Institution),
         typeof(APIAttribute)) as APIAttribute;
 
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, instApiAttribute.APIPath);
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Configuration.GetValue<string>("ApiBaseAdress") + instApiAttribute.ApiPath);
 
-        HttpClient client = _clientFactory.CreateClient();
+        HttpClient client = ClientFactory.CreateClient();
 
         HttpResponseMessage response = await client.SendAsync(request);
 
