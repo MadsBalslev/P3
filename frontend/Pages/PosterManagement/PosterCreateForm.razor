@@ -12,25 +12,31 @@
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.name" Label="Poster name" />
+            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.name"
+                Label="Poster name" />
             <MudDatePicker Required="@true" MinDate="DateTime.Now" MaxDate="_precreateItem.endDate"
                 ShowWeekNumbers="true" Label="Start date" @bind-Date="_precreateItem.startDate"
                 DateFormat="dd/MM/yyyy" />
-            <MudDatePicker Required="@true" MinDate="_precreateItem.startDate" ShowWeekNumbers="true" Label="End date"
-                @bind-Date="_precreateItem.endDate" DateFormat="dd/MM/yyyy" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.image" Label="Image url" />
-            <InputFile id="fileInput" type="file" OnChange="@posterFile" accept=".jpg, .jpeg, .png" />
+            <MudDatePicker Required="@true" MinDate="_precreateItem.startDate"
+                ShowWeekNumbers="true" Label="End date" @bind-Date="_precreateItem.endDate"
+                DateFormat="dd/MM/yyyy" />
+            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.image"
+                Label="Image url" />
+            <InputFile id="fileInput" type="file" OnChange="@posterFile"
+                accept=".jpg, .jpeg, .png" />
             <MudCardActions>
-                <MudButton Variant="Variant.Filled" HtmlTag="label" StartIcon="@Icons.Filled.CloudUpload"
-                    for="fileInput" FullWidth="true">
+                <MudButton Variant="Variant.Filled" HtmlTag="label"
+                    StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true">
                     Upload poster</MudButton>
             </MudCardActions>
             <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem" FullWidth="true">Add
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
+                    FullWidth="true">Add
                     Poster</MudButton>
             </MudCardActions>
             <MudCardActions>
-                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled" Color="Color.Warning">Cancel
+                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                    Color="Color.Warning">Cancel
                 </MudButton>
             </MudCardActions>
         </MudCardContent>
@@ -39,56 +45,36 @@
 
 @code
 {
-    private long _maxFileSize = 1024*100;
-    private bool _isLoading;
+    // Max files size for uploading files in bytes. 1 000 000 bytes = 1mb
+    private long _maxFileSize = 3000000;
 
-    [CascadingParameter]
-    protected User _user { get; set; }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        _precreateItem.createdBy = _user;
-        _precreateItem.image = "";
-        _precreateItem.posterId = -1;
-    }
     private async Task posterFile(InputFileChangeEventArgs e)
     {
-        var _loadedFile = e.File;
+        IBrowserFile _loadedFile = e.File;
+        if (_loadedFile.Size < _maxFileSize)
         {
-            _isLoading = true;
+            try
             {
-                if (_loadedFile.Size > _maxFileSize)
-                {
-                    _snackbar.Add($"Your file is too large, (Maximum 3MB)", Severity.Warning);
-                    _loadedFile = null;
-                }
-                @* else if (_loadedFile)
-                    {
+                string trustedFileNameForFileStorage = Path.GetRandomFileName();
 
-                    } *@
-                else
-                {
-                    _snackbar.Add($"File was successfully uploaded", Severity.Success);
-                    try
-                    {
-                        var trustedFileNameForFileStorage = Path.GetRandomFileName();
-                        var path = Path.Combine(Environment.ContentRootPath,
-                        Environment.EnvironmentName, "unsafe_uploads", @*TODO Give the correct name for EnvironmentName*@
-                        trustedFileNameForFileStorage);
+                @*//TODO Give the correct name for EnvironmentName*@
+                string path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName,
+                                "unsafe_uploads", trustedFileNameForFileStorage);
 
-                        await using FileStream fs = new(path, FileMode.Create);
-                        await _loadedFile.OpenReadStream(_maxFileSize).CopyToAsync(fs);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogError("File: {Filename} Error: {Error}",
-                        _loadedFile.Name, ex.Message);
-                    }
-                }
+                await using FileStream fs = new(path, FileMode.Create);
+                await _loadedFile.OpenReadStream(_maxFileSize).CopyToAsync(fs);
+
+                _snackbar.Add($"File was successfully uploaded", Severity.Success);
             }
-            _isLoading = false;
-            Console.WriteLine(_loadedFile);
+            catch (Exception ex)
+            {
+                _snackbar.Add($"Something went't wrong while uploading your file", Severity.Success);
+            }
+        }
+        else
+        {
+            _snackbar.Add($"Your file is too large, (Maximum 3MB)", Severity.Warning);
+            _loadedFile = null;
         }
     }
 }
