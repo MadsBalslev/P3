@@ -44,20 +44,15 @@ namespace server.Controllers
         [HttpPost]
         public ActionResult<Object> Post([FromBody] Poster poster)
         {
-            if (_posterService.SanityCheck(poster) != "")
-            {
-                return BadRequest(_posterService.SanityCheck(poster));
-            }
             try
             {
                 Poster p = _posterService.CreatePoster(poster);
                 return _posterService.GetPosterJSON(p.Id);
             }
-            // Does not only catch invalid id errors, but also others.
             catch (System.Exception)
             {
 
-                return BadRequest("Id does not exist");
+                return BadRequest("Error creating poster, is id valid?");
             }
         }
 
@@ -80,10 +75,6 @@ namespace server.Controllers
         [HttpPut("{id:int}")]
         public ActionResult<Object> Put([FromBody] Poster p, int id)
         {
-            if (_posterService.SanityCheck(p) != "")
-            {
-                return BadRequest(_posterService.SanityCheck(p));
-            }
             try
             {
                 Object poster = _posterService.UpdatePosterJSON(id, p);
