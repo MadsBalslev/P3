@@ -6,7 +6,7 @@ namespace server.Models
         {
             return new
             {
-                institutionId = this.Id,
+                id = this.Id,
                 name = this.Name,
                 admin = new
                 {
