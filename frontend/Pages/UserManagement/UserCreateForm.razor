@@ -5,7 +5,6 @@
 @using Microsoft.Extensions.Configuration;
 @inject IHttpClientFactory ClientFactory
 
-
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
@@ -17,17 +16,17 @@
                 Label="Phone number" />
             <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.email"
                 Label="Email address" />
-            <MudSelect Required="@true" T="string" @bind-Value="_precreateItem.RoleString"
+            <MudSelect Required="@true" T="int?" @bind-Value="_precreateItem.role"
                 Placeholder="Select user role">
-                <MudSelectItem Value="@("Normal user")" />
-                <MudSelectItem Value="@("Institution admin")" />
-                <MudSelectItem Value="@("System admin")" />
+                <MudSelectItem Value="@((int?)1)">Normal user</MudSelectItem>
+                <MudSelectItem Value="@((int?)2)">Institution admin</MudSelectItem>
+                <MudSelectItem Value="@((int?)3)">System admin</MudSelectItem>
             </MudSelect>
-            <MudSelect Required="@true" T="int" @bind-Value="_precreateItem.InstitutionId"
-                Placeholder="Select user role">
+            <MudSelect Required="@true" T="int?" @bind-Value="_precreateItem.institution.id"
+                Placeholder="Select what institution the user belongs to">
                 @foreach (Institution institution in _institutionList)
                 {
-                    <MudSelectItem Value="@(institution.institutionId)">@institution.name</MudSelectItem>
+                    <MudSelectItem Value="@(institution.id)">@institution.name</MudSelectItem>
                 }
             </MudSelect>
             <MudCardActions>
@@ -48,10 +47,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        APIAttribute instApiAttribute = Attribute.GetCustomAttribute(typeof(Institution),
-        typeof(APIAttribute)) as APIAttribute;
-
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Configuration.GetValue<string>("ApiBaseAdress") + instApiAttribute.ApiPath);
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
+        Configuration.GetValue<string>("ApiBaseAddress") + "/institutions");
 
         HttpClient client = ClientFactory.CreateClient();
 

@@ -12,13 +12,13 @@ namespace frontend.Shared.Manager
 
         protected async Task OnEditItem()
         {
-            string path = GetPath() + _selectedItem.Id;
+            string path = ManagerService.ApiFullAddress + "/" + _selectedItem.id;
             await OnConfirmChanges(HttpMethod.Put, _selectedItem, path);
         }
 
         protected async Task OnDelete()
         {
-            string path = GetPath() + _selectedItem.Id;
+            string path = ManagerService.ApiFullAddress + "/" + _selectedItem.id;
             await OnConfirmChanges(HttpMethod.Delete, _selectedItem, path);
         }
     }

@@ -11,9 +11,6 @@ namespace frontend.Shared.Manager
 {
     public abstract class ManagerForm<T> : ComponentBase where T : IManageable, new()
     {
-        protected readonly APIAttribute _apiAttribute =
-        Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
-
         protected MudForm _form;
 
         [Inject]
@@ -56,6 +53,7 @@ namespace frontend.Shared.Manager
                     if (response.IsSuccessStatusCode)
                     {
                         Snackbar.Add("Action successful", Severity.Success);
+                        await RefreshManager();
                     }
                     else
                     {
@@ -67,20 +65,11 @@ namespace frontend.Shared.Manager
             {
                 Snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
             }
-            finally
-            {
-                await RefreshManager();
-            }
         }
 
         protected async Task OnCancel()
         {
             await RefreshManager();
-        }
-
-        protected string GetPath()
-        {
-            return Configuration.GetValue<string>("ApiBaseAdress") + _apiAttribute.ApiPath + "/";
         }
 
         private async Task RefreshManager()

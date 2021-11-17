@@ -5,24 +5,37 @@
 
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Posters">
-        <Manager T="@Poster" Context="poster">
+        <Manager T="@Poster" ApiPath="/Posters" Context="poster">
             <HeaderContent>
-                <MudTh>Id</MudTh>
-                <MudTd>Name</MudTd>
-                <MudTd>Start date</MudTd>
-                <MudTd>End date</MudTd>
-                <MudTd>Creator</MudTd>
-                <MudTd>Institution</MudTd>
-                <MudTd>Image url</MudTd>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.id">ID</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.startDate">Start date</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.endDate">End date</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.institution.name">Institution
+                    </MudTableSortLabel>
+                </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@poster.posterId</MudTd>
+                <MudTd>@poster.id</MudTd>
                 <MudTd>@poster.name</MudTd>
                 <MudTd>@poster.startDate</MudTd>
                 <MudTd>@poster.endDate</MudTd>
-                <MudTd>@poster.Creator</MudTd>
-                <MudTd>@poster.Institution</MudTd>
-                <MudTd>@poster.image</MudTd>
+                <MudTd>@poster.createdBy.name</MudTd>
+                <MudTd>@poster.institution.name</MudTd>
             </RowTemplate>
             <CreateForm>
                 <PosterCreateForm />

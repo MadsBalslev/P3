@@ -6,7 +6,7 @@ namespace server.Models
         {
             return new
             {
-                posterId = this.Id,
+                id = this.Id,
                 name = this.Name,
                 startDate = this.StartDate,
                 endDate = this.EndDate,
