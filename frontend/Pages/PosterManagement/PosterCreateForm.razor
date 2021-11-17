@@ -50,10 +50,10 @@
 
     private async Task posterFile(InputFileChangeEventArgs e)
     {
-        IBrowserFile _loadedFile = e.File;
-        if (_loadedFile.Size < _maxFileSize)
+        try
         {
-            try
+            IBrowserFile _loadedFile = e.File;
+            if (_loadedFile.Size < _maxFileSize)
             {
                 string trustedFileNameForFileStorage = Path.GetRandomFileName();
 
@@ -66,15 +66,16 @@
 
                 _snackbar.Add($"File was successfully uploaded", Severity.Success);
             }
-            catch (Exception ex)
+            else
             {
-                _snackbar.Add($"Something went't wrong while uploading your file", Severity.Success);
+                _snackbar.Add($"Your file is too large, (Maximum 3MB)", Severity.Warning);
+                _loadedFile = null;
             }
+
         }
-        else
+        catch (Exception ex)
         {
-            _snackbar.Add($"Your file is too large, (Maximum 3MB)", Severity.Warning);
-            _loadedFile = null;
+            _snackbar.Add($"Something went't wrong {ex.ToString()}", Severity.Success);
         }
     }
-}
+}k
