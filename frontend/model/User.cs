@@ -80,7 +80,7 @@ public class User : IManageable
                 lastName = this.lastName,
                 email = this.email,
                 phoneNumber = this.phoneNumber,
-                institution = this.InstitutionId    ,
+                institution = this.InstitutionId,
                 role = this.role,
             }
         );
