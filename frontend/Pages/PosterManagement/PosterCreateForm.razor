@@ -32,17 +32,3 @@
         </MudCardContent>
     </MudCard>
 </MudForm>
-
-@code
-{
-    [CascadingParameter]
-    protected User _user { get; set; }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        _precreateItem.createdBy = _user;
-        _precreateItem.image = "";
-        _precreateItem.posterId = -1;
-    }
-}

@@ -33,7 +33,7 @@
             _tableSize = 8;
         <MudItem xs="_tableSize">
             <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_items"
-                Hover="@true" CanCancelEdit="@true" Filter="new Func<T, bool>(FilterFunc)"
+                Hover="@true" CanCancelEdit="@true" Filter="@Filter"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
                 OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
                 Context="item">
@@ -74,8 +74,6 @@
 
 @code
 {
-    private List<T> _items { get; set; } = new List<T>();
-
     [Parameter]
     public RenderFragment HeaderContent { get; set; }
 
@@ -88,15 +86,13 @@
     [Parameter]
     public RenderFragment EditForm { get; set; }
 
-    [CascadingParameter]
-    protected User _user { get; set; }
+    [Parameter]
+    public string ApiPath { get; set; }
 
-    private readonly APIAttribute _apiAttribute =
-    Attribute.GetCustomAttribute(typeof(T), typeof(APIAttribute)) as APIAttribute;
+    [Parameter]
+    public Func<T, Boolean> Filter { get; set; } = (x) => true;
 
-    private readonly IEnumerable<PropertyInfo> _propertyInfoList =
-    typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
+    private List<T> _items { get; set; } = new List<T>();
 
     private T _selectedItem = new T();
 
@@ -116,6 +112,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        ManagerService.ApiFullAddress = Configuration.GetValue<string>("ApiBaseAddress") + ApiPath;
         ManagerService.RefreshRequested += OnRefresh;
         await OnRefresh();
     }
@@ -145,65 +142,9 @@
         }
     }
 
-    private bool FilterFunc(T item)
-    {
-        if (string.IsNullOrWhiteSpace(_searchString))
-        {
-            return true;
-        }
-        else if (SearchStringMatch(item))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    private bool SearchStringMatch(T item)
-    {
-        foreach (PropertyInfo propertyInfo in _propertyInfoList)
-        {
-            if (PropertyIsAvaliableAndSearchStringMatch(item, propertyInfo))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private bool PropertyIsAvaliableAndSearchStringMatch(T item, PropertyInfo propertyInfo)
-    {
-        Attribute attribute = propertyInfo.GetCustomAttribute(typeof(ManagerMetadataAttribute), true);
-        ManagerMetadataAttribute managerMetadata = attribute as ManagerMetadataAttribute;
-        if (managerMetadata == null)
-        {
-            return false;
-        }
-
-        if (_user.accessLevel < managerMetadata.ViewableBy)
-        {
-            return false;
-        }
-
-        string propertyValue = typeof(T).GetProperty(propertyInfo.Name).GetValue(item, null).ToString();
-        if (propertyValue == null)
-        {
-            return false;
-        }
-
-        if (propertyValue.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-        {
-            return true;
-        }
-        return false;
-    }
-
     private void OnCreateItem()
     {
-        if (_currentMode == ManagerMode.Initial || _currentMode ==
-        ManagerMode.Edit)
+        if (_currentMode == ManagerMode.Initial || _currentMode == ManagerMode.Edit)
             _currentMode = ManagerMode.Create;
         else if (_currentMode == ManagerMode.Create)
             _currentMode = ManagerMode.Initial;
@@ -211,7 +152,8 @@
 
     private async Task<HttpResponseMessage> GetItems()
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Configuration.GetValue<string>("ApiBaseAdress") + _apiAttribute.ApiPath);
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, ManagerService.ApiFullAddress);
+        Console.WriteLine(request.ToString());
 
         HttpClient client = ClientFactory.CreateClient();
 
@@ -257,6 +199,4 @@
         }
         _lastItem = _selectedItem;
     }
-
-
 }

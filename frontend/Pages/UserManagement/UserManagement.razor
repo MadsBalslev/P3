@@ -1,8 +1,44 @@
 @page "/UserManagement"
 @using frontend.Shared.Manager
+@using MudBlazor
 
-
-<Manager T="@User">
+<Manager T="@User" ApiPath="/Users" Context="user">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.id">ID</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.firstName">First name
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.lastName">Last name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.role">Role
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.email">Email Address</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.phoneNumber">Phone number
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@User SortBy="(x) => x.institution.name">Institution
+            </MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@user.id</MudTd>
+        <MudTd>@user.firstName</MudTd>
+        <MudTd>@user.lastName</MudTd>
+        <MudTd>@user.RoleAsString</MudTd>
+        <MudTd>@user.email</MudTd>
+        <MudTd>@user.phoneNumber</MudTd>
+        <MudTd>@user.institution.name</MudTd>
+    </RowTemplate>
     <CreateForm>
         <UserCreateForm />
     </CreateForm>
