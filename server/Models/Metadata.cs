@@ -1,13 +1,12 @@
-namespace server.Models
+namespace server.Entities
 {
-    public partial class Zone
+    public partial class Metadata
     {
         public object ToJSON()
         {
             return new
             {
-                id = this.Id,
-                name = this.Name
+                timerValue = this.Timer
             };
         }
     }

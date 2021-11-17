@@ -1,19 +1,27 @@
-using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace server.Models
+namespace server.Entities
 {
     public partial class Poster
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string ImageUrl { get; set; }
-        public int? CreatedBy { get; set; }
-
-        public virtual User CreatedByNavigation { get; set; }
+        public object ToJSON()
+        {
+            return new
+            {
+                posterId = this.Id,
+                name = this.Name,
+                startDate = this.StartDate,
+                endDate = this.EndDate,
+                image = this.ImageUrl,
+                createdBy = new
+                {
+                    id = this.CreatedBy,
+                    name = $"{this.CreatedByNavigation.FirstName} {this.CreatedByNavigation.LastName}"
+                },
+                institution = new
+                {
+                    id = this.CreatedByNavigation.InstitutionNavigation.Id,
+                    name = this.CreatedByNavigation.InstitutionNavigation.Name,
+                }
+            };
+        }
     }
 }

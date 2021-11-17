@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace server.Models
+namespace server.Entities
 {
     public partial class databaseContext : DbContext
     {
@@ -18,6 +18,7 @@ namespace server.Models
         }
 
         public virtual DbSet<Institution> Institutions { get; set; }
+        public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -57,6 +58,21 @@ namespace server.Models
                     .HasForeignKey(d => d.Admin)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("admin");
+            });
+
+            modelBuilder.Entity<Metadata>(entity =>
+            {
+                entity.ToTable("metadata");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("'1'");
+
+                entity.Property(e => e.Timer)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("timer")
+                    .HasDefaultValueSql("'1'");
             });
 
             modelBuilder.Entity<Poster>(entity =>

@@ -1,28 +1,19 @@
-using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace server.Models
+namespace server.Entities
 {
     public partial class User
     {
-        public User()
+        public object ToJSON()
         {
-            Institutions = new HashSet<Institution>();
-            Posters = new HashSet<Poster>();
+            return new
+            {
+                id = this.Id,
+                firstName = this.FirstName,
+                lastName = this.LastName,
+                email = this.Email,
+                phoneNumber = this.PhoneNumber,
+                institution = this.InstitutionNavigation.ToJSON(),
+                role = this.Role,
+            };
         }
-
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public int PhoneNumber { get; set; }
-        public int? Institution { get; set; }
-        public int Role { get; set; }
-
-        public virtual Institution InstitutionNavigation { get; set; }
-        public virtual ICollection<Institution> Institutions { get; set; }
-        public virtual ICollection<Poster> Posters { get; set; }
     }
 }

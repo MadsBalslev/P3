@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace server.Models
+namespace server.Entities
 {
     public partial class Institution
     {
-        public Institution()
+        public object ToJSON()
         {
-            Users = new HashSet<User>();
+            return new
+            {
+                institutionId = this.Id,
+                name = this.Name,
+                admin = new
+                {
+                    id = this.AdminNavigation.Id,
+                    name = $"{this.AdminNavigation.FirstName} {this.AdminNavigation.LastName}"
+                },
+            };
         }
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int? Admin { get; set; }
-
-        public virtual User AdminNavigation { get; set; }
-        public virtual ICollection<User> Users { get; set; }
     }
 }
