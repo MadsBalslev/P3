@@ -2,7 +2,8 @@ using System.Text.Json;
 
 public class User : IManageable
 {
-    public int? id { get; set; }
+    // TODO
+    public int? id { get; set; } = 1;
 
     public string firstName { get; set; }
 
