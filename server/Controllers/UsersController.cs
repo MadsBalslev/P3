@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,22 +11,33 @@ using server.Services;
 
 namespace server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
         // private readonly databaseContext _context;
         private UserService _userService;
+        private databaseContext _context;
 
         public UsersController(databaseContext context)
         {
             _userService = new UserService(context);
+            _context = context;
         }
 
         [HttpGet]
         public IEnumerable<Object> Get()
         {
             return _userService.GetAllUserJSON();
+        }
+
+        [HttpGet("GetUser")]
+        public async Task<ActionResult<Object>> GetUser()
+        {
+            string email = HttpContext.User.Identity.Name;
+            User user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+            return _userService.GetUserJSON(user.Id);
         }
 
         [HttpGet("{id:int}")]
