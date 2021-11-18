@@ -1,3 +1,47 @@
 @page "/InstitutionManagement"
 @using MudBlazor
 @inject ISnackbar Snackbar
+@using frontend.Shared.Manager
+
+<Manager T="@Institution" ApiPath="/Institutions" Context="institution" Filter="FilterFunc">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T=@Institution SortBy="(x) => x.id">ID</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@Institution SortBy="(x) => x.name">Name
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@Institution SortBy="(x) => x.admin.name">Admin
+            </MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@institution.id</MudTd>
+        <MudTd>@institution.name</MudTd>
+        <MudTd>@institution.admin.name</MudTd>
+    </RowTemplate>
+    <CreateForm>
+        <InstitutionCreateForm />
+    </CreateForm>
+    <EditForm>
+        <InstitutionEditForm />
+    </EditForm>
+</Manager>
+
+@code
+{
+    private bool FilterFunc(Institution institution, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (institution.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (institution.admin.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}
