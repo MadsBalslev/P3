@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -166,7 +166,8 @@ namespace server.Entities
                     .HasColumnName("last_name");
 
                 entity.Property(e => e.PhoneNumber)
-                    .HasColumnType("int(11)")
+                    .IsRequired()
+                    .HasMaxLength(50)
                     .HasColumnName("phone_number");
 
                 entity.Property(e => e.Role)
