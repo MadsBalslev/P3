@@ -12,6 +12,8 @@ public class User : IManageable
 
     public string phoneNumber { get; set; }
 
+    public string password { get; set; }
+
     public int? role { get; set; }
 
     public string RoleAsString
@@ -48,6 +50,7 @@ public class User : IManageable
                 phoneNumber = this.phoneNumber,
                 institution = this.institution.id,
                 role = this.role,
+                password = this.password,
             }
         );
     }

@@ -1,27 +1,11 @@
 @inherits Shared.Manager.EditForm<User>
 @using MudBlazor
-@using System.Text.Json
-@using System.IO
-@using Microsoft.Extensions.Configuration;
 @inject IHttpClientFactory ClientFactory
 
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.firstName"
-                Label="First name" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.lastName"
-                Label="Last name" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.phoneNumber"
-                Label="Phone number" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.email"
-                Label="Email address" />
-            <MudSelect Required="@true" T="int?" @bind-Value="_selectedItem.role"
-                Placeholder="Select user role">
-                <MudSelectItem Value="@((int?)1)">Normal user</MudSelectItem>
-                <MudSelectItem Value="@((int?)2)">Institution admin</MudSelectItem>
-                <MudSelectItem Value="@((int?)3)">System admin</MudSelectItem>
-            </MudSelect>
+            <UserFormCommonComponents User="_selectedItem" PasswordFieldIsRequired="@false" />
             <MudCardActions>
                 <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
                     Color="Color.Primary">
@@ -43,24 +27,3 @@
         </MudCardContent>
     </MudCard>
 </MudForm>
-
-@code
-{
-    List<Institution> _institutionList = new List<Institution>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
-        Configuration.GetValue<string>("ApiBaseAddress") + "/Institutions");
-
-        HttpClient client = ClientFactory.CreateClient();
-
-        HttpResponseMessage response = await client.SendAsync(request);
-
-        if (response.IsSuccessStatusCode)
-        {
-            using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _institutionList = await JsonSerializer.DeserializeAsync<List<Institution>>(responseStream);
-        }
-    }
-}

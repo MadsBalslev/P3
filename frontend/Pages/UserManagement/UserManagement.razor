@@ -2,7 +2,7 @@
 @using frontend.Shared.Manager
 @using MudBlazor
 
-<Manager T="@User" ApiPath="/Users" Context="user">
+<Manager T="@User" ApiPath="/Users" Context="user" Filter="FilterFunc">
     <HeaderContent>
         <MudTh>
             <MudTableSortLabel T=@User SortBy="(x) => x.id">ID</MudTableSortLabel>
@@ -46,3 +46,27 @@
         <UserEditForm />
     </EditForm>
 </Manager>
+
+@code
+{
+    private bool FilterFunc(User user, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (user.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (user.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (user.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (user.RoleAsString.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (user.email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (user.phoneNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (user.institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

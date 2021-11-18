@@ -1,27 +1,14 @@
-@inherits Shared.Manager.CreateForm<User>
 @using MudBlazor
 @using System.Text.Json
 @using System.IO
 @using Microsoft.Extensions.Configuration;
 @inject IHttpClientFactory ClientFactory
+@inherits Shared.Manager.CreateForm<User>
 
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.firstName"
-                Label="First name" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.lastName"
-                Label="Last name" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.phoneNumber"
-                Label="Phone number" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.email"
-                Label="Email address" />
-            <MudSelect Required="@true" T="int?" @bind-Value="_precreateItem.role"
-                Placeholder="Select user role">
-                <MudSelectItem Value="@((int?)1)">Normal user</MudSelectItem>
-                <MudSelectItem Value="@((int?)2)">Institution admin</MudSelectItem>
-                <MudSelectItem Value="@((int?)3)">System admin</MudSelectItem>
-            </MudSelect>
+            <UserFormCommonComponents User=@_precreateItem />
             <MudSelect Required="@true" T="int?" @bind-Value="_precreateItem.institution.id"
                 Placeholder="Select what institution the user belongs to">
                 @foreach (Institution institution in _institutionList)
@@ -43,7 +30,7 @@
 
 @code
 {
-    List<Institution> _institutionList = new List<Institution>();
+    private List<Institution> _institutionList = new List<Institution>();
 
     protected override async Task OnInitializedAsync()
     {
