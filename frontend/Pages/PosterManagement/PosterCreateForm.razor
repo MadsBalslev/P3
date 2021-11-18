@@ -5,16 +5,7 @@
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.name"
-                Label="Poster name" />
-            <MudDatePicker Required="@true" MinDate="DateTime.Now" MaxDate="_precreateItem.endDate"
-                ShowWeekNumbers="true" Label="Start date" @bind-Date="_precreateItem.startDate"
-                DateFormat="dd/MM/yyyy" />
-            <MudDatePicker Required="@true" MinDate="_precreateItem.startDate"
-                ShowWeekNumbers="true" Label="End date" @bind-Date="_precreateItem.endDate"
-                DateFormat="dd/MM/yyyy" />
-            <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.image"
-                Label="Image url" />
+            <PosterFormCommonComponents Poster="_precreateItem" />
             @* <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" /> *@
             <MudCardActions>
                 <MudButton Disabled="@true" Variant="Variant.Filled"
