@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -18,7 +18,6 @@ namespace server.Entities
         }
 
         public virtual DbSet<Institution> Institutions { get; set; }
-        public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -28,12 +27,15 @@ namespace server.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("Name=ConnectionStrings:MySQL");
+                optionsBuilder.UseMySql("name=ConnectionStrings:MySQL", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.22-mariadb"));
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasCharSet("utf8")
+                .UseCollation("utf8_general_ci");
+
             modelBuilder.Entity<Institution>(entity =>
             {
                 entity.ToTable("institutions");
@@ -60,21 +62,6 @@ namespace server.Entities
                     .HasConstraintName("admin");
             });
 
-            modelBuilder.Entity<Metadata>(entity =>
-            {
-                entity.ToTable("metadata");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id")
-                    .HasDefaultValueSql("'1'");
-
-                entity.Property(e => e.Timer)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("timer")
-                    .HasDefaultValueSql("'1'");
-            });
-
             modelBuilder.Entity<Poster>(entity =>
             {
                 entity.ToTable("posters");
@@ -89,7 +76,9 @@ namespace server.Entities
                     .HasColumnType("int(11)")
                     .HasColumnName("created_by");
 
-                entity.Property(e => e.EndDate).HasColumnName("end_date");
+                entity.Property(e => e.EndDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("end_date");
 
                 entity.Property(e => e.ImageUrl)
                     .IsRequired()
@@ -101,7 +90,9 @@ namespace server.Entities
                     .HasMaxLength(256)
                     .HasColumnName("name");
 
-                entity.Property(e => e.StartDate).HasColumnName("start_date");
+                entity.Property(e => e.StartDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("start_date");
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.Posters)
@@ -164,6 +155,11 @@ namespace server.Entities
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("last_name");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .HasColumnName("password");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasColumnType("int(11)")
