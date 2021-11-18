@@ -7,13 +7,13 @@
 
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Institution.name"
     Label="Institution name" />
-@* <MudSelect Required="@true" T="int?" @bind-Value="Institution.admin.id"
+<MudSelect Required="@true" T="int?" @bind-Value="Institution.admin.id"
     Placeholder="Select what institution the user belongs to">
     @foreach (User user in _users)
     {
         <MudSelectItem Value="@(user.id)">@user.name</MudSelectItem>
     }
-</MudSelect> *@
+</MudSelect>
 
 @code
 {
@@ -22,7 +22,7 @@
 
     private List<User> _users = new List<User>();
 
-    @* protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
         Configuration.GetValue<string>("ApiBaseAddress") + "/Users");
@@ -36,6 +36,6 @@
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
             _users = await JsonSerializer.DeserializeAsync<List<User>>(responseStream);
         }
-    } *@
+    }
 
 }
