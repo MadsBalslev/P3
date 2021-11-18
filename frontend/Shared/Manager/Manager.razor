@@ -144,6 +144,8 @@
 
     private void OnCreateItem()
     {
+        _selectedItem = new();
+        _lastItem = _selectedItem;
         if (_currentMode == ManagerMode.Initial || _currentMode == ManagerMode.Edit)
             _currentMode = ManagerMode.Create;
         else if (_currentMode == ManagerMode.Create)
