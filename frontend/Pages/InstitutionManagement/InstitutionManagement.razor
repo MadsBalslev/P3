@@ -40,7 +40,9 @@
             return true;
         if (institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (institution.admin.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (institution.admin.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (institution.admin.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }
