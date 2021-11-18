@@ -17,6 +17,12 @@ public class Poster : IManageable
 
     public Institution institution { get; set; }
 
+    public void InitializeAggregateObjects()
+    {
+        createdBy = new();
+        institution = new();
+    }
+
     public string ToJSON()
     {
         return JsonSerializer.Serialize<object>
