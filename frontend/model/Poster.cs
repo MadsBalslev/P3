@@ -13,9 +13,9 @@ public class Poster : IManageable
 
     public DateTime? endDate { get; set; }
 
-    public User createdBy { get; set; } = new User();
+    public User createdBy { get; set; }
 
-    public Institution institution { get; set; } = new Institution();
+    public Institution institution { get; set; }
 
     public string ToJSON()
     {
