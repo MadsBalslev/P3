@@ -11,7 +11,7 @@
     Placeholder="Select what institution the user belongs to">
     @foreach (User user in _users)
     {
-        <MudSelectItem Value="@(user.id)">@user.name</MudSelectItem>
+        <MudSelectItem Value="@(user.id)">@user.firstName @user.lastName</MudSelectItem>
     }
 </MudSelect>
 
