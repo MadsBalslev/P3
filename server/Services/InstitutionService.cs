@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using server.Entities;
 //using server.Models;
 
@@ -15,26 +18,21 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public IEnumerable<Institution> GetAllInstitutions()
+        public async Task<IEnumerable<Institution>> GetAllInstitutions()
         {
-            return _context.Institutions.ToList();
+            IEnumerable<Institution> insts = await _context.Institutions
+            .Include(i => i.AdminNavigation)
+            .ToListAsync();
+
+            return insts;
         }
 
-        public IEnumerable<Object> GetAllInstitutionsJSON()
+        public async Task<Institution> GetInstitution(int id)
         {
-            IEnumerable<Institution> institutions = GetAllInstitutions();
-            List<Object> response = new List<object>();
-            foreach (Institution i in institutions)
-            {
-                response.Add(i.ToJSON());
-            }
-
-            return response;
-        }
-
-        public Institution GetInstitution(int id)
-        {
-            Institution institution = _context.Institutions.Find(id);
+            Institution institution = await _context.Institutions
+                .Include(i => i.AdminNavigation)
+                .Where(i => i.Id == id)
+                .FirstOrDefaultAsync();
 
             if (institution == null)
             {
@@ -43,53 +41,38 @@ namespace server.Services
 
             return institution;
         }
-
-        public Object GetInstitutionJSON(int id)
+        public async Task<Institution> CreateInstitution(Institution institution)
         {
-            Institution i = GetInstitution(id);
-            List<Object> iUsers = new List<Object>();
-            foreach (User u in i.Users)
-            {
-                iUsers.Add(u.ToJSON());
-            }
+            await _context.Institutions.AddAsync(institution);
+            await _context.SaveChangesAsync();
 
-            return new
-            {
-                institutionDetails = i.ToJSON(),
-                users = iUsers,
-            };
+            Institution inst = await _context.Institutions
+                .Include(i => i.AdminNavigation)
+                .Where(i => i.Name == institution.Name)
+                .FirstOrDefaultAsync();
+
+            return inst;
         }
-
-        public Institution CreateInstitution(Institution institution)
+        public async Task<Institution> DeleteInstitution(int id)
         {
-            _context.Institutions.Add(institution);
-            _context.SaveChanges();
-
-            return _context.Institutions.Where(i => i.Name == institution.Name).FirstOrDefault();
-        }
-
-        public Institution DeleteInstitution(int id)
-        {
-            Institution institution = _context.Institutions.Find(id);
+            Institution institution = await _context.Institutions.FindAsync(id);
             _context.Institutions.Remove(institution);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return institution;
         }
 
         // PUT request
-        public Institution UpdateInstitution(int id, Institution institution)
+        public async Task<Institution> UpdateInstitution(int id, Institution institution)
         {
-            Institution inst = GetInstitution(id);
+            Institution inst = await GetInstitution(id);
             inst.Name = institution.Name;
             inst.Admin = institution.Admin;
 
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return inst;
         }
-
-        public Object UpdateInstitutionJSON(int id, Institution i) => UpdateInstitution(id, i).ToJSON();
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using server.Entities;
 using server.Services;
 
@@ -24,18 +25,19 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get()
+        public async Task<string> Get()
         {
-            return _institutionService.GetAllInstitutionsJSON();
+            IEnumerable<Institution> insts = await _institutionService.GetAllInstitutions();
+            return JsonConvert.SerializeObject(insts);
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Object> GetInstitutionDetails(int id)
+        public async Task<ActionResult<string>> GetInstitutionDetails(int id)
         {
             try
             {
-                Object institution = _institutionService.GetInstitutionJSON(id);
-                return institution;
+                Institution institution = await _institutionService.GetInstitution(id);
+                return JsonConvert.SerializeObject(institution);
             }
             catch (System.Exception)
             {
@@ -44,12 +46,12 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Institution> Post([FromBody] Institution institution)
+        public async Task<ActionResult<string>> Post([FromBody] Institution institution)
         {
             try
             {
-                Institution i = _institutionService.CreateInstitution(institution);
-                return _institutionService.GetInstitution(i.Id);
+                Institution i = await _institutionService.CreateInstitution(institution);
+                return JsonConvert.SerializeObject(i);
             }
             catch (System.Exception)
             {
@@ -58,13 +60,13 @@ namespace server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Object> Delete(int id)
+        public async Task<ActionResult<string>> Delete(int id)
         {
             try
             {
-                Object i = _institutionService.GetInstitutionJSON(id);
-                _institutionService.DeleteInstitution(id);
-                return i;
+                Institution i = await _institutionService.GetInstitution(id);
+                await _institutionService.DeleteInstitution(id);
+                return JsonConvert.SerializeObject(i);
             }
             catch (System.Exception)
             {
@@ -73,6 +75,10 @@ namespace server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Institution inst, int id) => _institutionService.UpdateInstitutionJSON(id, inst);
+        public async Task<ActionResult<string>> Put([FromBody] Institution inst, int id)
+        {
+            Institution i = await _institutionService.UpdateInstitution(id, inst);
+            return JsonConvert.SerializeObject(i);
+        }
     }
 }
