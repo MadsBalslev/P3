@@ -6,7 +6,7 @@ namespace server.Entities
         {
             return new
             {
-                posterId = this.Id,
+                Id = this.Id,
                 name = this.Name,
                 startDate = this.StartDate,
                 endDate = this.EndDate,

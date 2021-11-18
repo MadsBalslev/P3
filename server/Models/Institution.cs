@@ -6,7 +6,7 @@ namespace server.Entities
         {
             return new
             {
-                institutionId = this.Id,
+                Id = this.Id,
                 name = this.Name,
                 admin = new
                 {

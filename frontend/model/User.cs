@@ -2,7 +2,7 @@ using System.Text.Json;
 
 public class User : IManageable
 {
-    public int? id { get; set; }
+    public int? id { get; set; } = 1;
 
     public string firstName { get; set; }
 
@@ -10,7 +10,7 @@ public class User : IManageable
 
     public string email { get; set; }
 
-    public int? phoneNumber { get; set; }
+    public string phoneNumber { get; set; }
 
     public int? role { get; set; }
 
