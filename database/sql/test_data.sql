@@ -1,10 +1,10 @@
 DELETE FROM `database`.`users`;
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
-VALUES (1, 'Christian', 'Hove', 'k@k.dk', 'testpw', 1, NULL, 3);
+VALUES (1, 'Christian', 'Hove', 'k@k.dk', 'testpw', "1", NULL, 3);
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
-VALUES (2, 'Mads', 'Balslev', 'k@k.dk', 'testpw', 1, NULL, 2);
+VALUES (2, 'Mads', 'Balslev', 'k@k.dk', 'testpw', "1", NULL, 2);
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
-VALUES (3, 'Simon', 'Andersen', 'k@k.dk', 'testpw', 1, NULL, 2);
+VALUES (3, 'Simon', 'Andersen', 'k@k.dk', 'testpw', "1", NULL, 2);
 
 DELETE FROM `database`.`institutions`;
 INSERT INTO `database`.`institutions` (`id`, `name`, `admin`) VALUES ('1', 'Nordkraft', '1');

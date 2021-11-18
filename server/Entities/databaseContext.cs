@@ -46,7 +46,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Admin)
                     .HasColumnType("int(11)")
-                    .HasColumnName("admin");
+                    .HasColumnName("admin")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -66,13 +67,11 @@ namespace server.Entities
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("id")
-                    .HasDefaultValueSql("'1'");
+                    .HasColumnName("id");
 
                 entity.Property(e => e.Timer)
                     .HasColumnType("int(11)")
-                    .HasColumnName("timer")
-                    .HasDefaultValueSql("'1'");
+                    .HasColumnName("timer");
             });
 
             modelBuilder.Entity<Poster>(entity =>
@@ -87,7 +86,8 @@ namespace server.Entities
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnType("int(11)")
-                    .HasColumnName("created_by");
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
@@ -127,7 +127,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Zone)
                     .HasColumnType("int(11)")
-                    .HasColumnName("zone");
+                    .HasColumnName("zone")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.HasOne(d => d.ZoneNavigation)
                     .WithMany(p => p.Screens)
@@ -158,16 +159,22 @@ namespace server.Entities
 
                 entity.Property(e => e.Institution)
                     .HasColumnType("int(11)")
-                    .HasColumnName("institution");
+                    .HasColumnName("institution")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("last_name");
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .HasColumnName("password");
+
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(256)
                     .HasColumnName("phone_number");
 
                 entity.Property(e => e.Role)

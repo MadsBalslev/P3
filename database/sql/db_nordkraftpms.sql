@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`users` (
   `last_name` VARCHAR(256) NOT NULL,
   `email` VARCHAR(256) NOT NULL,
   `password` VARCHAR(256) NOT NULL,
-  `phone_number` INT NOT NULL,
+  `phone_number` VARCHAR(256) NOT NULL,
   `institution` INT,
   `role` INT NOT NULL,
   PRIMARY KEY (`id`),
