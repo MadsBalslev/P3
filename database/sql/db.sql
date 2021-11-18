@@ -116,6 +116,20 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
 AUTO_INCREMENT=1;
 
+-- -----------------------------------------------------
+-- Table `database`.`metadata`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `database`.`metadata` ;
+
+CREATE TABLE IF NOT EXISTS `database`.`metadata` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `timer` INT NOT NULL,
+  PRIMARY KEY (`id`))
+PACK_KEYS = Default
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = DEFAULT
+AUTO_INCREMENT=1;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
