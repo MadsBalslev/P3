@@ -11,9 +11,9 @@ namespace server.Services
             _context = context;
         }
         private databaseContext _context;
-        public Metadata GetTimer(int id)
+        public Metadatum GetTimer(int id)
         {
-            Metadata metadata = _context.Metadatas.Find(id);
+            Metadatum metadata = _context.Metadata.Find(id);
 
             if (metadata == null)
             {
@@ -25,7 +25,7 @@ namespace server.Services
         public Object GetTimerJSON(int id)
         {
 
-            Metadata md = GetTimer(id);
+            Metadatum md = GetTimer(id);
             return md.ToJSON();
         }
 

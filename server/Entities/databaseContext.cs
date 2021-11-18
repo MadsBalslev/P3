@@ -18,6 +18,7 @@ namespace server.Entities
         }
 
         public virtual DbSet<Institution> Institutions { get; set; }
+        public virtual DbSet<Metadatum> Metadata { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -60,6 +61,19 @@ namespace server.Entities
                     .HasForeignKey(d => d.Admin)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("admin");
+            });
+
+            modelBuilder.Entity<Metadatum>(entity =>
+            {
+                entity.ToTable("metadata");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Timer)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("timer");
             });
 
             modelBuilder.Entity<Poster>(entity =>
@@ -162,7 +176,8 @@ namespace server.Entities
                     .HasColumnName("password");
 
                 entity.Property(e => e.PhoneNumber)
-                    .HasColumnType("int(11)")
+                    .IsRequired()
+                    .HasMaxLength(256)
                     .HasColumnName("phone_number");
 
                 entity.Property(e => e.Role)
