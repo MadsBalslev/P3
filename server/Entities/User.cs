@@ -17,7 +17,7 @@ namespace server.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public int? Institution { get; set; }
         public int Role { get; set; }
 
