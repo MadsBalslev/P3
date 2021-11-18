@@ -2,7 +2,7 @@ using System.Text.Json;
 
 public class User : IManageable
 {
-    public int? id { get; set; } = 1;
+    public int? id { get; set; }
 
     public string firstName { get; set; }
 
@@ -37,6 +37,11 @@ public class User : IManageable
     public string name { get; set; }
 
     public Institution institution { get; set; }
+
+    public void InitializeAggregateObjects()
+    {
+        institution = new();
+    }
 
     public string ToJSON()
     {
