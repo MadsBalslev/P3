@@ -31,16 +31,29 @@ namespace server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+
             var connectionString = "server=localhost;port=3306;database=database;user=root;password=123;";
             var serverVersion = new MariaDbServerVersion(new Version(10, 4, 22));
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("*");
+                    }
+                );
+            });
 
             services.AddDbContext<databaseContext>(
             dbContextOptions => dbContextOptions
                 .UseMySql(connectionString, serverVersion)
-                .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
-        );
+            );
 
             services.AddControllers();
             services.AddMvc(options => options.EnableEndpointRouting = false)
@@ -67,6 +80,7 @@ namespace server
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
