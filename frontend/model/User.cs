@@ -36,7 +36,7 @@ public class User : IManageable
 
     public string name { get; set; }
 
-    public Institution institution { get; set; } = new();
+    public Institution institution { get; set; }
 
     public string ToJSON()
     {
