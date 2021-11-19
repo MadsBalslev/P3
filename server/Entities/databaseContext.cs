@@ -16,7 +16,6 @@ namespace server.Entities
             : base(options)
         {
         }
-
         public virtual DbSet<Institution> Institutions { get; set; }
         public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }

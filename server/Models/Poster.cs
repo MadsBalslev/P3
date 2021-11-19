@@ -1,7 +1,12 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace server.Entities
 {
-    public partial class Poster
+     [MetadataType(typeof(IPosterMetadata))]
+    public partial class Poster :IPosterMetadata
     {
+        
         public object ToJSON()
         {
             return new
@@ -23,5 +28,11 @@ namespace server.Entities
                 }
             };
         }
+    }
+    public interface IPosterMetadata
+    {
+        [MaxLength(10)]
+        [Required]
+        string Name {get; set;}
     }
 }
