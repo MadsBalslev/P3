@@ -22,14 +22,14 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get() => _zoneService.GetAllZonesJSON();
+        public async Task<IEnumerable<Object>> Get() => await _zoneService.GetAllZonesJSON();
 
         [HttpGet("{id:int}")]
-        public ActionResult<Object> GetZoneDetails(int id)
+        public async Task<ActionResult<Object>> GetZoneDetails(int id)
         {
             try
             {
-                Object zone = _zoneService.GetZoneJSON(id);
+                Object zone = await _zoneService.GetZoneJSON(id);
                 return zone;
             }
             catch (System.NullReferenceException)
@@ -39,12 +39,12 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Object> Post([FromBody] Zone zone)
+        public async Task<ActionResult<Object>> Post([FromBody] Zone zone)
         {
             try
             {
-                Zone z = _zoneService.CreateZone(zone);
-                return _zoneService.GetZoneJSON(z.Id);
+                Zone z = await _zoneService.CreateZone(zone);
+                return await _zoneService.GetZoneJSON(z.Id);
             }
             catch (System.Exception)
             {
@@ -53,12 +53,12 @@ namespace server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Object> Delete(int id)
+        public async Task<ActionResult<Object>> Delete(int id)
         {
             try
             {
-                Object z = _zoneService.GetZoneJSON(id);
-                _zoneService.DeleteZone(id);
+                Object z = await _zoneService.GetZoneJSON(id);
+                await _zoneService.DeleteZone(id);
                 return z;
             }
             catch (System.Exception)
@@ -68,6 +68,6 @@ namespace server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Zone z, int id) => _zoneService.UpdateZoneJSON(id, z);
+        public async Task<ActionResult<Object>> Put([FromBody] Zone z, int id) => await _zoneService.UpdateZoneJSON(id, z);
     }
 }

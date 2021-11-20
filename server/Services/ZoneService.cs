@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using server.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+
 namespace server.Services
 {
     public class ZoneService
@@ -12,12 +15,12 @@ namespace server.Services
             _context = context;
         }
 
-        public IEnumerable<Zone> GetAllZones() => _context.Zones.ToList();
+        public async Task<IEnumerable<Zone>> GetAllZones() => await _context.Zones.ToListAsync();
 
         // Get requests
-        public IEnumerable<Object> GetAllZonesJSON()
+        public async Task<IEnumerable<Object>> GetAllZonesJSON()
         {
-            IEnumerable<Zone> zones = GetAllZones();
+            IEnumerable<Zone> zones = await GetAllZones();
             List<Object> response = new List<Object>();
             foreach (Zone z in zones)
             {
@@ -27,9 +30,9 @@ namespace server.Services
             return response;
         }
 
-        public Zone GetZone(int id)
+        public async Task<Zone> GetZone(int id)
         {
-            Zone zone = _context.Zones.Find(id);
+            Zone zone = await _context.Zones.FindAsync(id);
 
             if (zone == null)
             {
@@ -39,9 +42,9 @@ namespace server.Services
             return zone;
         }
 
-        public Object GetZoneJSON(int id)
+        public async Task<Object> GetZoneJSON(int id)
         {
-            Zone z = GetZone(id);
+            Zone z = await GetZone(id);
             List<Object> zScreens = new List<Object>();
             foreach (Screen s in z.Screens)
             {
@@ -56,35 +59,39 @@ namespace server.Services
         }
 
         // Post requests
-        public Zone CreateZone(Zone zone)
+        public async Task<Zone> CreateZone(Zone zone)
         {
-            _context.Zones.Add(zone);
-            _context.SaveChanges();
+            await _context.Zones.AddAsync(zone);
+            await _context.SaveChangesAsync();
 
-            return _context.Zones.Where(z => z.Name == zone.Name).FirstOrDefault();
+            return await _context.Zones.Where(z => z.Name == zone.Name).FirstOrDefaultAsync();
         }
 
         // Delete requests
-        public Zone DeleteZone(int id)
+        public async Task<Zone> DeleteZone(int id)
         {
-            Zone zone = _context.Zones.Find(id);
+            Zone zone = await _context.Zones.FindAsync(id);
             _context.Zones.Remove(zone);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return zone;
         }
 
         // PUT request
-        public Zone UpdateZone(int id, Zone zone)
+        public async Task<Zone> UpdateZone(int id, Zone zone)
         {
-            Zone z = GetZone(id);
+            Zone z = await GetZone(id);
             z.Name = zone.Name;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return z;
         }
 
-        public Object UpdateZoneJSON(int id, Zone z) => UpdateZone(id, z).ToJSON();
+        public async Task<Object> UpdateZoneJSON(int id, Zone zone)
+        {
+            Zone z = await UpdateZone(id, zone);
+            return z.ToJSON();
+        }
     }
 }
