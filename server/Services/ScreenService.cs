@@ -17,7 +17,7 @@ namespace server.Services
         }
 
         // Get requests
-        public async Task<IEnumerable<Screen>> GetAllScreens() => await _context.Screens.ToListAsync();
+        public async Task<IEnumerable<Screen>> GetAllScreens() => await _context.Screens.Include(s => s.ZoneNavigation).ToListAsync();
         public async Task<IEnumerable<Object>> GetAllScreensJSON()
         {
             IEnumerable<Screen> screens = await GetAllScreens();
@@ -33,7 +33,10 @@ namespace server.Services
 
         public async Task<Screen> GetScreen(int id)
         {
-            Screen s = await _context.Screens.FindAsync(id);
+            Screen s = await _context.Screens
+                .Include(s => s.ZoneNavigation)
+                .Where(s => s.Id == id)
+                .FirstAsync();
             if (s == null)
             {
                 throw new NullReferenceException("Screen not found");

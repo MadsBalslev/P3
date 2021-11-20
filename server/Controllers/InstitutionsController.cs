@@ -12,7 +12,7 @@ using server.Services;
 
 namespace server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class InstitutionsController : ControllerBase

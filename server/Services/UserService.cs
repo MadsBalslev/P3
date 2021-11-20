@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using System.Text.Json;
 using System.Linq;
 using server.Entities;
 using BCryptNet = BCrypt.Net.BCrypt;
@@ -19,12 +20,17 @@ namespace server.Services
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.InstitutionNavigation)
+                .ToListAsync();
         }
 
         public async Task<User> GetUser(int id)
         {
-            User user = await _context.Users.FindAsync(id);
+            User user = await _context.Users
+                .Include(u => u.InstitutionNavigation)
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -70,7 +76,7 @@ namespace server.Services
         public async Task<IEnumerable<Object>> GetAllUserJSON()
         {
             IEnumerable<User> users = await GetAllUsers();
-            List<Object> response = new List<object>();
+            List<Object> response = new List<Object>();
 
             foreach (User u in users)
             {
