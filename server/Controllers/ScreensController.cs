@@ -22,14 +22,14 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get() => _screenService.GetAllScreensJSON();
+        public async Task<IEnumerable<Object>> Get() =>  await _screenService.GetAllScreensJSON();
 
         [HttpGet("{id:int}")]
-        public ActionResult<Object> GetScreenDetails(int id)
+        public async Task<ActionResult<Object>> GetScreenDetails(int id)
         {
             try
             {
-                Object screen = _screenService.GetScreenJSON(id);
+                Object screen = await _screenService.GetScreenJSON(id);
                 return screen;
             }
             catch (System.NullReferenceException)
@@ -39,12 +39,12 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Object> Post([FromBody] Screen screen)
+        public async Task<ActionResult<Object>> Post([FromBody] Screen screen)
         {
             try
             {
-                Screen s = _screenService.CreateScreen(screen);
-                return _screenService.GetScreenJSON(s.Id);
+                Screen s = await _screenService.CreateScreen(screen);
+                return await _screenService.GetScreenJSON(s.Id);
             }
             catch (System.Exception)
             {
@@ -53,12 +53,12 @@ namespace server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Object> Delete(int id)
+        public async Task<ActionResult<Object>> Delete(int id)
         {
             try
             {
-                Object s = _screenService.GetScreenJSON(id);
-                _screenService.DeleteScreen(id);
+                Object s = await _screenService.GetScreenJSON(id);
+                await _screenService.DeleteScreen(id);
                 return s;
             }
             catch (System.Exception)
@@ -68,6 +68,6 @@ namespace server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Screen s, int id) => _screenService.UpdateScreenJSON(id, s);
+        public async Task<ActionResult<Object>> Put([FromBody] Screen s, int id) => await _screenService.UpdateScreenJSON(id, s);
     }
 }
