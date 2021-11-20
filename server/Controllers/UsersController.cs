@@ -25,11 +25,13 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get()
+        public async Task<IEnumerable<Object>> Get()
         {
-            return _userService.GetAllUserJSON();
+            return await _userService.GetAllUserJSON();
         }
 
+        // Gets currently logged in User
+        // /users/GetUser
         [HttpGet("GetUser")]
         public async Task<ActionResult<Object>> GetUser()
         {
@@ -39,11 +41,11 @@ namespace server.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Object> GetUserDetails(int id)
+        public async Task<ActionResult<Object>> GetUserDetails(int id)
         {
             try
             {
-                Object user = _userService.GetUserJSON(id);
+                Object user = await _userService.GetUserJSON(id);
                 return user;
             }
             catch (System.NullReferenceException)
@@ -53,12 +55,12 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Object> Post([FromBody] User user)
+        public async Task<ActionResult<Object>> Post([FromBody] User user)
         {
             try
             {
-                User u = _userService.CreateUser(user);
-                return _userService.GetUserJSON(u.Id);
+                User u = await _userService.CreateUser(user);
+                return await _userService.GetUserJSON(u.Id);
             }
             catch (System.Exception)
             {
@@ -67,12 +69,12 @@ namespace server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Object> Delete(int id)
+        public async Task<ActionResult<Object>> Delete(int id)
         {
             try
             {
-                Object u = _userService.GetUserJSON(id);
-                _userService.DeleteUser(id);
+                Object u = await _userService.GetUserJSON(id);
+                await _userService.DeleteUser(id);
                 return u;
             }
             catch (System.Exception)
@@ -82,6 +84,6 @@ namespace server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] User user, int id) => _userService.UpdateUserJSON(id, user);
+        public async Task<ActionResult<Object>> Put([FromBody] User user, int id) => await _userService.UpdateUserJSON(id, user);
     }
 }
