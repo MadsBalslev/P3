@@ -27,19 +27,17 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public async Task<string> Get()
+        public async Task<IEnumerable<Object>> Get()
         {
-            IEnumerable<Institution> insts = await _institutionService.GetAllInstitutions();
-            return JsonConvert.SerializeObject(insts);
+            return await _institutionService.GetAllInstitutionsJSON();
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<string>> GetInstitutionDetails(int id)
+        public async Task<ActionResult<Object>> GetInstitutionDetails(int id)
         {
             try
             {
-                Institution institution = await _institutionService.GetInstitution(id);
-                return JsonConvert.SerializeObject(institution);
+                return await _institutionService.GetInstitutionJSON(id);
             }
             catch (System.Exception)
             {

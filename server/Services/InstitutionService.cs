@@ -30,6 +30,7 @@ namespace server.Services
         {
             Institution institution = await _context.Institutions
                 .Include(i => i.AdminNavigation)
+                .Include(i => i.Users)
                 .Where(i => i.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -72,6 +73,35 @@ namespace server.Services
             await _context.SaveChangesAsync();
 
             return inst;
+        }
+
+        // JSON
+        public async Task<IEnumerable<Object>> GetAllInstitutionsJSON()
+        {
+            IEnumerable<Institution> institutions = await GetAllInstitutions();
+            List<Object> response = new List<object>();
+            foreach (Institution i in institutions)
+            {
+                response.Add(i.ToJSON());
+            }
+
+            return response;
+        }
+
+        public async Task<Object> GetInstitutionJSON(int id)
+        {
+            Institution i = await GetInstitution(id);
+            List<Object> iUsers = new List<Object>();
+            foreach (User u in i.Users)
+            {
+
+            }
+
+            return new
+            {
+                institutionDetails = i.ToJSON(),
+                users = iUsers,
+            };
         }
     }
 }

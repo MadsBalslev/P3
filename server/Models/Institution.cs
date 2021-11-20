@@ -11,7 +11,7 @@ namespace server.Entities
                 admin = new
                 {
                     id = this.AdminNavigation.Id,
-                    // name = $"{this.AdminNavigation.FirstName} {this.AdminNavigation.LastName}"
+                    name = $"{this.AdminNavigation.FirstName} {this.AdminNavigation.LastName}"
                 },
             };
         }
