@@ -16,14 +16,12 @@ namespace server.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        // private readonly databaseContext _context;
         private UserService _userService;
         private databaseContext _context;
 
         public UsersController(databaseContext context)
         {
             _userService = new UserService(context);
-            _context = context;
         }
 
         [HttpGet]
