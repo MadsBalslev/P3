@@ -1,6 +1,6 @@
 var posters = [];
 var currentPosterIndex = 0;
-var timerValue = 1000;
+var timerValue = 5000;
 
 function starPosterScreen() {
     initializePage();
@@ -17,7 +17,7 @@ function initializePage() {
     screenDiv.classList = "container";
     screenDiv.appendChild(Image);
 
-    Image.src = "https://cdn.discordapp.com/attachments/884375897015205928/905464229480521758/img1.jpg";
+    Image.src = "https://via.placeholder.com/1080x1920"
     Image.id = ("imageId");
     Image.classList = "image";
     Image.style.height = "100vh";
