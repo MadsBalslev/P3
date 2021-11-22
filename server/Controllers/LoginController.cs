@@ -22,7 +22,7 @@ namespace server.Controllers
             _loginService = new LoginService(context);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult<string> Login([FromForm] string email, [FromForm] string password)
         {
             try

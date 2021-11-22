@@ -22,6 +22,7 @@ namespace server.Controllers
         public UsersController(databaseContext context)
         {
             _userService = new UserService(context);
+            _context = context;
         }
 
         [HttpGet]
