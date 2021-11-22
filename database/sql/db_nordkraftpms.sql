@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`users` (
   `last_name` VARCHAR(256) NOT NULL,
   `email` VARCHAR(256) NOT NULL,
   `password` VARCHAR(256) NOT NULL,
-  `phone_number` INT NOT NULL,
+  `phone_number` VARCHAR(256) NOT NULL,
   `institution` INT,
   `role` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -116,6 +116,20 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
 AUTO_INCREMENT=1;
 
+
+-- -----------------------------------------------------
+-- Table `NordkraftPMS`.`metadata`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `NordkraftPMS`.`metadata` ;
+
+CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`metadata` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `timer` INT NOT NULL,
+  PRIMARY KEY (`id`))
+PACK_KEYS = Default
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = DEFAULT
+AUTO_INCREMENT=1;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

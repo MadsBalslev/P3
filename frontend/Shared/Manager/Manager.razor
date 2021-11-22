@@ -33,7 +33,7 @@
             _tableSize = 8;
         <MudItem xs="_tableSize">
             <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_items"
-                Hover="@true" CanCancelEdit="@true" Filter="@Filter"
+                Hover="@true" CanCancelEdit="@true" Filter="@_filter"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
                 OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
                 Context="item">
@@ -90,7 +90,10 @@
     public string ApiPath { get; set; }
 
     [Parameter]
-    public Func<T, Boolean> Filter { get; set; } = (x) => true;
+    public Func<T, string, Boolean> Filter { get; set; }
+
+    private Func<T, Boolean> _filter { get; set; } = (x) => true;
+
 
     private List<T> _items { get; set; } = new List<T>();
 
@@ -112,6 +115,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _filter = item => Filter(item, _searchString);
         ManagerService.ApiFullAddress = Configuration.GetValue<string>("ApiBaseAddress") + ApiPath;
         ManagerService.RefreshRequested += OnRefresh;
         await OnRefresh();
@@ -144,6 +148,8 @@
 
     private void OnCreateItem()
     {
+        _selectedItem = new();
+        _lastItem = _selectedItem;
         if (_currentMode == ManagerMode.Initial || _currentMode == ManagerMode.Edit)
             _currentMode = ManagerMode.Create;
         else if (_currentMode == ManagerMode.Create)

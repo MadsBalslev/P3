@@ -49,7 +49,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Admin)
                     .HasColumnType("int(11)")
-                    .HasColumnName("admin");
+                    .HasColumnName("admin")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -88,7 +89,8 @@ namespace server.Entities
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnType("int(11)")
-                    .HasColumnName("created_by");
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.EndDate)
                     .HasColumnType("datetime")
@@ -132,7 +134,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Zone)
                     .HasColumnType("int(11)")
-                    .HasColumnName("zone");
+                    .HasColumnName("zone")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.HasOne(d => d.ZoneNavigation)
                     .WithMany(p => p.Screens)
@@ -163,7 +166,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Institution)
                     .HasColumnType("int(11)")
-                    .HasColumnName("institution");
+                    .HasColumnName("institution")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()

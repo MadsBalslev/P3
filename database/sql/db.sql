@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `database`.`users` (
   `last_name` VARCHAR(256) NOT NULL,
   `email` VARCHAR(256) NOT NULL,
   `password` VARCHAR(256) NOT NULL,
-  `phone_number` INT NOT NULL,
+  `phone_number` VARCHAR(256) NOT NULL,
   `institution` INT,
   `role` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -112,6 +112,20 @@ CREATE TABLE IF NOT EXISTS `database`.`screens` (
     REFERENCES `database`.`zones` (`id`)
     ON DELETE SET NULL
     ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = DEFAULT
+AUTO_INCREMENT=1;
+
+-- -----------------------------------------------------
+-- Table `database`.`metadata`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `database`.`metadata` ;
+
+CREATE TABLE IF NOT EXISTS `database`.`metadata` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `timer` INT NOT NULL,
+  PRIMARY KEY (`id`))
+PACK_KEYS = Default
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
 AUTO_INCREMENT=1;
