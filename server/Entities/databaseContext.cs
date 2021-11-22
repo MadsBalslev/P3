@@ -18,7 +18,7 @@ namespace server.Entities
         }
 
         public virtual DbSet<Institution> Institutions { get; set; }
-        public virtual DbSet<Metadatum> Metadata { get; set; }
+        public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
@@ -47,7 +47,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Admin)
                     .HasColumnType("int(11)")
-                    .HasColumnName("admin");
+                    .HasColumnName("admin")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -61,7 +62,7 @@ namespace server.Entities
                     .HasConstraintName("admin");
             });
 
-            modelBuilder.Entity<Metadatum>(entity =>
+            modelBuilder.Entity<Metadata>(entity =>
             {
                 entity.ToTable("metadata");
 
@@ -86,7 +87,8 @@ namespace server.Entities
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnType("int(11)")
-                    .HasColumnName("created_by");
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
@@ -127,7 +129,8 @@ namespace server.Entities
 
                 entity.Property(e => e.PosterId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("poster_id");
+                    .HasColumnName("poster_id")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.StartDate).HasColumnName("start_date");
 
@@ -160,7 +163,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Zone)
                     .HasColumnType("int(11)")
-                    .HasColumnName("zone");
+                    .HasColumnName("zone")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.HasOne(d => d.ZoneNavigation)
                     .WithMany(p => p.Screens)
@@ -191,7 +195,8 @@ namespace server.Entities
 
                 entity.Property(e => e.Institution)
                     .HasColumnType("int(11)")
-                    .HasColumnName("institution");
+                    .HasColumnName("institution")
+                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()

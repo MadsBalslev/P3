@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace server.Entities
 {
-    public partial class Metadatum
+    public partial class Metadata
     {
         public int Id { get; set; }
         public int Timer { get; set; }

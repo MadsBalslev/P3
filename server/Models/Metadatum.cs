@@ -1,6 +1,6 @@
 namespace server.Entities
 {
-    public partial class Metadatum
+    public partial class Metadata
     {
         public object ToJSON()
         {
