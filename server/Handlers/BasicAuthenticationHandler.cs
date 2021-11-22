@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using server.Entities;
@@ -37,7 +38,7 @@ namespace server.Handlers
                 string email = credentials[0];
                 string pswd = credentials[1];
 
-                User user = _context.Users.Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
+                User user = await _context.Users.Where(u => u.Email == email && u.Password == pswd).FirstOrDefaultAsync();
                 if (user == null)
                     throw new NullReferenceException();
                 else
