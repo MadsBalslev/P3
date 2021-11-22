@@ -3,7 +3,6 @@ function starPosterScreen() {
     getTimerValueThenGetPostersThenDisplayPosters();
 }
 
-// Adds a <div> with id screenDiv containing a <img> with id imageId to the page.
 function initializePage() {
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img");
@@ -38,18 +37,18 @@ function getPostersThenDisplayPosters(timerValue) {
     req.open('GET', "http://localhost:5000/Posters", true);
     req.onload = function () {
         var posters = JSON.parse(req.responseText);
-        displayNextPoster(timerValue, posters, 0)
+        displayPosters(timerValue, posters, 0)
     };
     req.send();
 }
 
-function displayNextPoster(timerValue, posters, posterIndex) {
+function displayPosters(timerValue, posters, posterIndex) {
     const image = document.getElementById("imageId");
 
     if (posterIndex < posters.length) {
         image.src = posters[posterIndex].image;
         posterIndex++;
-        setTimeout(displayNextPoster, timerValue, timerValue, posters, posterIndex);
+        setTimeout(displayPosters, timerValue, timerValue, posters, posterIndex);
     } else {
         location.reload()
     }
