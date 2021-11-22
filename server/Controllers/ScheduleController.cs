@@ -13,20 +13,20 @@ namespace server.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class PosterScheduleController : ControllerBase
+    public class ScheduleController : ControllerBase
     {
 
-        PosterScheduleService _posterscheduleService;
+        ScheduleService _scheduleService;
 
-        public PosterScheduleController(databaseContext context)
+        public ScheduleController(databaseContext context)
         {
-            _posterscheduleService = new PosterScheduleService(context);
+            _scheduleService = new ScheduleService(context);
         }
 
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            // deez nuts
+
         }
 
         [HttpPost]
