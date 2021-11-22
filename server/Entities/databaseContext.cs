@@ -20,6 +20,7 @@ namespace server.Entities
         public virtual DbSet<Institution> Institutions { get; set; }
         public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
@@ -46,8 +47,7 @@ namespace server.Entities
 
                 entity.Property(e => e.Admin)
                     .HasColumnType("int(11)")
-                    .HasColumnName("admin")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("admin");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -86,8 +86,7 @@ namespace server.Entities
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnType("int(11)")
-                    .HasColumnName("created_by")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("created_by");
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
@@ -110,6 +109,40 @@ namespace server.Entities
                     .HasConstraintName("created_by");
             });
 
+            modelBuilder.Entity<Schedule>(entity =>
+            {
+                entity.ToTable("schedules");
+
+                entity.HasIndex(e => e.PosterId, "poster_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Daily)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("daily");
+
+                entity.Property(e => e.EndDate).HasColumnName("end_date");
+
+                entity.Property(e => e.PosterId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("poster_id");
+
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
+
+                entity.Property(e => e.Weekday)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("weekday");
+
+                entity.HasOne(d => d.Poster)
+                    .WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.PosterId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("poster_id");
+            });
+
             modelBuilder.Entity<Screen>(entity =>
             {
                 entity.ToTable("screens");
@@ -127,8 +160,7 @@ namespace server.Entities
 
                 entity.Property(e => e.Zone)
                     .HasColumnType("int(11)")
-                    .HasColumnName("zone")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("zone");
 
                 entity.HasOne(d => d.ZoneNavigation)
                     .WithMany(p => p.Screens)
@@ -159,8 +191,7 @@ namespace server.Entities
 
                 entity.Property(e => e.Institution)
                     .HasColumnType("int(11)")
-                    .HasColumnName("institution")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("institution");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
