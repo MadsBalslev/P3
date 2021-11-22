@@ -53,6 +53,52 @@
         </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
+                <Manager T="@Poster" ApiPath="/Posters" Context="poster" Filter="FilterFunc">
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.id">ID</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.startDate">Start date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.endDate">End date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.institution.name">Institution
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Poster SortBy="(x) => x.image">Image url
+                    </MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@poster.id</MudTd>
+                <MudTd>@poster.name</MudTd>
+                <MudTd>@poster.startDate</MudTd>
+                <MudTd>@poster.endDate</MudTd>
+                <MudTd>@poster.createdBy.name</MudTd>
+                <MudTd>@poster.institution.name</MudTd>
+                <MudTd>@poster.image</MudTd>
+            </RowTemplate>
+            <CreateForm>
+                <PosterCreateForm />
+            </CreateForm>
+            <EditForm>
+                <PosterEditForm />
+            </EditForm>
+        </Manager>
     </MudTabPanel>
 </MudTabs>
 
