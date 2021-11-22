@@ -99,7 +99,7 @@ namespace server.Services
             List<Object> iUsers = new List<Object>();
             foreach (User u in i.Users)
             {
-
+                iUsers.Add(u.ToJSON());
             }
 
             return new
