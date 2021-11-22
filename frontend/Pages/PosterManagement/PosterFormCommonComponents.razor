@@ -6,6 +6,7 @@
     @bind-Date="Poster.endDate" DateFormat="dd/MM/yyyy" />
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Poster.image"
     Label="Image url" />
+<img class="imagePreview" src="@Poster.image">
 
 @code
 {
