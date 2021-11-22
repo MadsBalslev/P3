@@ -24,7 +24,9 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public
+        public IEnumerable<Object> Get() {
+            // deez nuts
+        }
 
         [HttpPost]
 
