@@ -1,11 +1,11 @@
-using System.Collections.Generic;
 using System;
-using System.Text.Json;
+using System.Collections.Generic;
 using System.Linq;
-using server.Entities;
-using BCryptNet = BCrypt.Net.BCrypt;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using server.Entities;
+using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace server.Services
 {
@@ -14,9 +14,12 @@ namespace server.Services
         public UserService(databaseContext context)
         {
             _context = context;
+            _instService = new InstitutionService(context);
         }
 
         private databaseContext _context;
+        InstitutionService _instService;
+
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
@@ -58,6 +61,10 @@ namespace server.Services
 
         public async Task<User> CreateUser(User user)
         {
+            if (_context.Users.Any(u => u.Email == user.Email))
+                throw new ApplicationException("Email: " + user.Email + "is already taken");
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
@@ -80,7 +87,9 @@ namespace server.Services
 
             foreach (User u in users)
             {
-                response.Add(u.ToJSON());
+                response.Add(
+                    u.ToJSON()
+                );
             }
 
             return response;

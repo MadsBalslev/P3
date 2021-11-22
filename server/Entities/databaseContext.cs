@@ -28,15 +28,12 @@ namespace server.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("name=ConnectionStrings:MySQL", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.22-mariadb"));
+                optionsBuilder.UseMySQL("Name=ConnectionStrings:MySQL");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasCharSet("utf8")
-                .UseCollation("utf8_general_ci");
-
             modelBuilder.Entity<Institution>(entity =>
             {
                 entity.ToTable("institutions");
@@ -92,9 +89,7 @@ namespace server.Entities
                     .HasColumnName("created_by")
                     .HasDefaultValueSql("'NULL'");
 
-                entity.Property(e => e.EndDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("end_date");
+                entity.Property(e => e.EndDate).HasColumnName("end_date");
 
                 entity.Property(e => e.ImageUrl)
                     .IsRequired()
@@ -106,9 +101,7 @@ namespace server.Entities
                     .HasMaxLength(256)
                     .HasColumnName("name");
 
-                entity.Property(e => e.StartDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("start_date");
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.Posters)

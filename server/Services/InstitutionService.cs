@@ -26,8 +26,10 @@ namespace server.Services
             return insts;
         }
 
-        public async Task<Institution> GetInstitution(int id)
+        public async Task<Institution> GetInstitution(int? id)
         {
+            if(id == null)
+                throw new NullReferenceException("Instituion null");
             Institution institution = await _context.Institutions
                 .Include(i => i.AdminNavigation)
                 .Include(i => i.Users)
@@ -88,8 +90,11 @@ namespace server.Services
             return response;
         }
 
-        public async Task<Object> GetInstitutionJSON(int id)
+        public async Task<Object> GetInstitutionJSON(int? id)
         {
+            if(id == null)
+                return new {};
+
             Institution i = await GetInstitution(id);
             List<Object> iUsers = new List<Object>();
             foreach (User u in i.Users)

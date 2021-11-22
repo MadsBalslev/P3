@@ -11,7 +11,7 @@ using server.Services;
 
 namespace server.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UsersController : ControllerBase
@@ -55,6 +55,7 @@ namespace server.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Object>> Post([FromBody] User user)
         {
             try

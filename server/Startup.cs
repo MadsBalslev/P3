@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using server.Entities;
 using server.Handlers;
 
@@ -31,15 +30,6 @@ namespace server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                Formatting = Formatting.Indented
-            };
-
-            var connectionString = "server=localhost;port=3306;database=database;user=root;password=123;";
-            var serverVersion = new MariaDbServerVersion(new Version(10, 4, 22));
-
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -50,14 +40,11 @@ namespace server
                 );
             });
 
-            services.AddDbContext<databaseContext>(
-            dbContextOptions => dbContextOptions
-                .UseMySql(connectionString, serverVersion)
-            );
+            services.AddDbContext<databaseContext>(options =>
+                     options.UseLazyLoadingProxies().UseMySQL(Configuration.GetConnectionString("MySQL")));
 
             services.AddControllers();
-            services.AddMvc(options => options.EnableEndpointRouting = false)
-            .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "server", Version = "v1" });
