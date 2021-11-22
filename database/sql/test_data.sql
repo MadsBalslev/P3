@@ -30,6 +30,12 @@ INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('4', 'Screen4', 
 DELETE FROM `database`.`metadata`;
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '10');
 
+DELETE FROM `database`.`schedules`;
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('1', '1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', '0', '{0, 0, 0, 1, 0, 0, 1}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('2', '2', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '1', '{0, 0, 0, 0, 0, 0, 0}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('3', '3', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '0', '{1, 1, 0, 0, 0, 0, 0}');
+
+
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
 UPDATE `users` SET `institution` = 2 WHERE `id` = 2;
 UPDATE `users` SET `institution` = 3 WHERE `id` = 3;
