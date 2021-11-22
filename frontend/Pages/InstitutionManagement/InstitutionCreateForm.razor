@@ -1,0 +1,20 @@
+
+@using MudBlazor
+@using Shared.Manager
+@inherits CreateForm<Institution>
+
+<MudForm @ref="_form">
+    <MudCard>
+        <MudCardContent>
+            <InstitutionFormCommonComponents Institution="_precreateItem" />
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
+                    FullWidth="true">Add Institution</MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                    Color="Color.Warning">Cancel</MudButton>
+            </MudCardActions>
+        </MudCardContent>
+    </MudCard>
+</MudForm>
