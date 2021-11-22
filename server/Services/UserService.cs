@@ -1,8 +1,12 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Entities;
 using BCryptNet = BCrypt.Net.BCrypt;
+
 namespace server.Services
 {
     public class UserService
@@ -10,18 +14,26 @@ namespace server.Services
         public UserService(databaseContext context)
         {
             _context = context;
+            _instService = new InstitutionService(context);
         }
 
         private databaseContext _context;
+        InstitutionService _instService;
 
-        public IEnumerable<User> GetAllUsers()
+
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return await _context.Users
+                .Include(u => u.InstitutionNavigation)
+                .ToListAsync();
         }
 
-        public User GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
-            User user = _context.Users.Find(id);
+            User user = await _context.Users
+                .Include(u => u.InstitutionNavigation)
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -31,9 +43,9 @@ namespace server.Services
             return user;
         }
 
-        public Object GetUserJSON(int id)
+        public async Task<Object> GetUserJSON(int id)
         {
-            User u = GetUser(id);
+            User u = await GetUser(id);
             List<Object> uPosters = new List<Object>();
             foreach (Poster p in u.Posters)
             {
@@ -47,51 +59,61 @@ namespace server.Services
             };
         }
 
-        public User CreateUser(User user)
+        public async Task<User> CreateUser(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            if (_context.Users.Any(u => u.Email == user.Email))
+                throw new ApplicationException("Email: " + user.Email + "is already taken");
 
-            return _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return await _context.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
         }
 
-        public User DeleteUser(int id)
+        public async Task<User> DeleteUser(int id)
         {
-            User user = _context.Users.Find(id);
+            User user = await _context.Users.FindAsync(id);
             _context.Users.Remove(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return user;
         }
 
-        public IEnumerable<Object> GetAllUserJSON()
+        public async Task<IEnumerable<Object>> GetAllUserJSON()
         {
-            IEnumerable<User> users = GetAllUsers();
-            List<Object> response = new List<object>();
+            IEnumerable<User> users = await GetAllUsers();
+            List<Object> response = new List<Object>();
 
             foreach (User u in users)
             {
-                response.Add(u.ToJSON());
+                response.Add(
+                    u.ToJSON()
+                );
             }
 
             return response;
         }
 
         // PUT request
-        public User UpdateUser(int id, User user)
+        public async Task<User> UpdateUser(int id, User user)
         {
-            User u = GetUser(id);
+            User u = await GetUser(id);
             u.FirstName = user.FirstName;
             u.LastName = user.LastName;
             u.Email = user.Email;
             u.PhoneNumber = user.PhoneNumber;
             u.Role = user.Role;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return u;
         }
 
-        public Object UpdateUserJSON(int id, User user) => UpdateUser(id, user).ToJSON();
+        public async Task<Object> UpdateUserJSON(int id, User user)
+        {
+            User u = await UpdateUser(id, user);
+            return u.ToJSON();
+        }
     }
 }
