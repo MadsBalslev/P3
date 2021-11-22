@@ -1,14 +1,9 @@
-var posters = [];
-var currentPosterIndex = 0;
-var timerValue = 5000;
-
 function starPosterScreen() {
     initializePage();
-    getTimerValue();
-    getPosters();
-    setInterval(displayNextPoster, timerValue);
+    getTimerValueThenGetPostersThenDisplayPosters();
 }
 
+// Adds a <div> with id screenDiv containing a <img> with id imageId to the page.
 function initializePage() {
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img");
@@ -26,34 +21,36 @@ function initializePage() {
     document.body.appendChild(screenDiv);
 }
 
-function getTimerValue() {
+function getTimerValueThenGetPostersThenDisplayPosters() {
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open('GET', "http://localhost:5000/metadata/1", true);
     req.onload = function () {
-        timerValue = JSON.parse(req.responseText);
+        var timerValue = JSON.parse(req.responseText).timerValue;
+        getPostersThenDisplayPosters(timerValue);
     };
     req.send();
 }
 
-function getPosters() {
+function getPostersThenDisplayPosters(timerValue) {
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open('GET', "http://localhost:5000/Posters", true);
     req.onload = function () {
-        posters = JSON.parse(req.responseText);
+        var posters = JSON.parse(req.responseText);
+        displayNextPoster(timerValue, posters, 0)
     };
     req.send();
 }
 
-function displayNextPoster() {
-    const Image = document.getElementById("imageId");
-    if (currentPosterIndex < posters.length) {
-        Image.src = posters[currentPosterIndex].image;
-        currentPosterIndex++;
+function displayNextPoster(timerValue, posters, posterIndex) {
+    const image = document.getElementById("imageId");
+
+    if (posterIndex < posters.length) {
+        image.src = posters[posterIndex].image;
+        posterIndex++;
+        setTimeout(displayNextPoster, timerValue, timerValue, posters, posterIndex);
     } else {
-        currentPosterIndex = 0;
-        getTimerValue();
-        getPosters();
+        location.reload()
     }
 }
