@@ -108,5 +108,11 @@ namespace server.Services
                 users = iUsers,
             };
         }
+
+        public async Task<Object> UpdateInstitutionJSON(int id, Institution inst)
+        {
+            Institution i = await UpdateInstitution(id, inst);
+            return i.ToJSON();
+        }
     }
 }
