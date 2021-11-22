@@ -53,44 +53,39 @@
         </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
-                <Manager T="@Poster" ApiPath="/Posters" Context="poster" Filter="FilterFunc">
+        <Manager T="@Schedule" ApiPath="/Schedule" Context="schedule" Filter="FilterFuncSchedule">
             <HeaderContent>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.id">ID</MudTableSortLabel>
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.posterId">Poster ID
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.startDate">Start date
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.startDate">Start date
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.endDate">End date
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.endDate">End date
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.dailyToString">Repeat daily
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.institution.name">Institution
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.image">Image url
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.weekday">Weekday
                     </MudTableSortLabel>
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@poster.id</MudTd>
-                <MudTd>@poster.name</MudTd>
-                <MudTd>@poster.startDate</MudTd>
-                <MudTd>@poster.endDate</MudTd>
-                <MudTd>@poster.createdBy.name</MudTd>
-                <MudTd>@poster.institution.name</MudTd>
-                <MudTd>@poster.image</MudTd>
+                <MudTd>@schedule.id</MudTd>
+                <MudTd>@schedule.posterId</MudTd>
+                <MudTd>@schedule.startDate</MudTd>
+                <MudTd>@schedule.endDate</MudTd>
+                <MudTd>@schedule.dailyToString</MudTd>
+                <MudTd>@schedule.weekday</MudTd>
             </RowTemplate>
             <CreateForm>
                 <PosterCreateForm />
@@ -121,6 +116,25 @@
         if (poster.institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (poster.image.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private bool FilterFuncSchedule(Schedule schedule, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (schedule.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.posterId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.dailyToString.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.weekday.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

@@ -5,23 +5,44 @@ public class Schedule : IManageable
 {
     public int? id { get; set; }
     public int posterId { get; set; }
-    public DateTime startDate { get; set; }
-    public DateTime endDate { get; set; }
+    public DateTime? startDate { get; set; }
+    public DateTime? endDate { get; set; }
     public int daily { get; set; }
-    public string? weekday { get; set; }
-}
-
-
-public string ToJSON()
-{
-    return JsonSerializer.Serialize<object>
+    public string dailyToString
     {
-        new
+        get
         {
-            posterId = this.posterId;
-
+            if (daily == 0)
+            {
+                return "No";
+            }
+            if (daily == 1)
+            {
+                return "Yes";
+            }
+            return "Error";
         }
     }
+    public string weekday { get; set; }
 
+    public void InitializeAggregateObjects()
+    {
+        posterId = new();
+    }
 
+    public string ToJSON()
+    {
+        return JsonSerializer.Serialize<object>
+        (
+            new
+            {
+                id = this.id,
+                posterId = this.posterId,
+                startDate = this.startDate,
+                endDate = this.endDate,
+                daily = this.dailyToString,
+                weekday = this.weekday,
+            }
+        );
+    }
 }
