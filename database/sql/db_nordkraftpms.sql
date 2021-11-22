@@ -131,6 +131,28 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
 AUTO_INCREMENT=1;
 
+-- -----------------------------------------------------
+-- Table `NordkraftPMS`.`schedules`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `NordkraftPMS`.`schedules` ;
+
+CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`schedules` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `poster_id` INT,
+    `start_date` DATETIME NOT NULL,
+    `end_date` DATETIME NOT NULL,
+    `daily` INT NOT NULL,
+    `weekday` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `poster_id`
+    FOREIGN KEY (`poster_id`)
+    REFERENCES `NordkraftPMS`.`posters` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = DEFAULT
+AUTO_INCREMENT=1;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
