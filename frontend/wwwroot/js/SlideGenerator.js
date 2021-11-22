@@ -1,4 +1,4 @@
-const DISPLAY_POSTER_MAX_CALL_COUNT = 100;
+const MAX_LOOP_COUNT = 100;
 const API_BASE_ADDRESS = "http://localhost:5000";
 
 function starPosterScreen() {
@@ -23,37 +23,37 @@ function initializePage() {
     document.body.appendChild(screenDiv);
 }
 
-function getTimerValueThenGetPostersThenDisplayPosters(displayPostersCallCount) {
+function getTimerValueThenGetPostersThenDisplayPosters(loopCount) {
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open('GET', API_BASE_ADDRESS + "/metadata/1", true);
     req.onload = function () {
         var timerValue = JSON.parse(req.responseText).timerValue;
-        getPostersThenDisplayPosters(timerValue, displayPostersCallCount);
+        getPostersThenDisplayPosters(timerValue, loopCount);
     };
     req.send();
 }
 
-function getPostersThenDisplayPosters(timerValue, displayPostersCallCount) {
+function getPostersThenDisplayPosters(timerValue, loopCount) {
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open('GET', API_BASE_ADDRESS + "/Posters", true);
     req.onload = function () {
         var posters = JSON.parse(req.responseText);
-        displayPosters(timerValue, posters, 0, displayPostersCallCount)
+        displayPosters(timerValue, posters, 0, loopCount)
     };
     req.send();
 }
 
 function displayPosters(timerValue, posters, posterIndex, displayPostersCallCount) {
     const image = document.getElementById("imageId");
-    displayPostersCallCount++;
 
     if (posterIndex < posters.length) {
         image.src = posters[posterIndex].image;
         posterIndex++;
         setTimeout(displayPosters, timerValue, timerValue, posters, posterIndex, displayPostersCallCount);
-    } else if (displayPostersCallCount < DISPLAY_POSTER_MAX_CALL_COUNT) {
+    } else if (displayPostersCallCount < MAX_LOOP_COUNT) {
+        displayPostersCallCount++;
         getTimerValueThenGetPostersThenDisplayPosters(displayPostersCallCount);
     } else {
         location.reload()
