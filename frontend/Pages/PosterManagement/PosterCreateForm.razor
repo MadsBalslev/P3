@@ -14,8 +14,9 @@
                 ShowWeekNumbers="true" Label="End date" @bind-Date="_precreateItem.endDate"
                 DateFormat="dd/MM/yyyy" />
             <MudTextField Required="@true" FullWidth="true" @bind-Value="_precreateItem.image"
-                Label="Image url" />
+                Label="Image url" class="mb-2" />
             @* <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" /> *@
+            <img src="@_precreateItem.image" width="200" height="auto" />
             <MudCardActions>
                 <MudButton Disabled="@true" Variant="Variant.Filled"
                     StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true">
@@ -32,3 +33,11 @@
         </MudCardContent>
     </MudCard>
 </MudForm>
+
+@code
+{
+    private void showPreCreateItem()
+    {
+        Console.WriteLine(_precreateItem.image);
+    }
+}

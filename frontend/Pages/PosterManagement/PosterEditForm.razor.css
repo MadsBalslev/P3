@@ -1,0 +1,7 @@
+.imagePreview
+{
+    width: 363px;
+    background-size: 100%;
+    object-position: center;
+    object-fit: contain;
+}

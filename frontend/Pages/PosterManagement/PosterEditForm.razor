@@ -3,7 +3,7 @@
 @inherits EditForm<Poster>
 
 <MudForm @ref="_form">
-    <MudCard>
+    <MudCard class="MudCard">
         <MudCardContent>
             <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.name"
                 Label="Postername" />
@@ -13,6 +13,10 @@
             <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date"
                 MinDate="_selectedItem.startDate" @bind-Date="_selectedItem.endDate"
                 DateFormat="dd/MM/yyyy" />
+            <MudTextField Required="@true" FullWidth="true" @bind-Value="_selectedItem.image"
+                Label="Image url" class="mb-2" />
+                <img class="imagePreview" src="@_selectedItem.image" />
+
             <MudCardActions>
                 <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
                     Color="Color.Primary">
