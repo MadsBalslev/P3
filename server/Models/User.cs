@@ -15,7 +15,8 @@ namespace server.Entities
                 phoneNumber = this.PhoneNumber,
                 role = this.Role,
                 hashedPswd = this.Password,
-                Institution = new {
+                Institution = new
+                {
                     id = this.InstitutionNavigation.Id,
                     name = this.InstitutionNavigation.Name
                 }

@@ -22,7 +22,7 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Object>> Get() =>  await _screenService.GetAllScreensJSON();
+        public async Task<IEnumerable<Object>> Get() => await _screenService.GetAllScreensJSON();
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Object>> GetScreenDetails(int id)
