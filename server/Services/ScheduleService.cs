@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using server.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 namespace server.Services
 {
     public class ScheduleService
@@ -13,14 +15,23 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public IEnumerable<Schedule> GetAllSchedules()
+        public async Task<IEnumerable<Schedule>> GetAllSchedules() => await _context.Schedules.ToListAsync();
+
+        public async Task<IEnumerable<Object>> GetAllSchedulesJSON()
         {
-            return _context.Schedules.ToList();
+            IEnumerable<Schedule> schedules = await GetAllSchedules();
+            List<Object> response = new List<Object>();
+            foreach (Schedule s in schedules)
+            {
+                response.Add(s.ToJSON());
+            }
+
+            return response;
         }
 
-        public Schedule GetSchedule(int id)
+        public async Task<Schedule> GetSchedule(int id)
         {
-            Schedule schedule = _context.Schedules.Find(id);
+            Schedule schedule = await _context.Schedules.FindAsync(id);
 
             if (schedule == null)
             {
@@ -30,71 +41,53 @@ namespace server.Services
             return schedule;
         }
 
-        public Object GetScheduleJSON(int id)
+        public async Task<Object> GetScheduleJSON(int id)
         {
-            Schedule s = GetSchedule(id);
+            Schedule s = await GetSchedule(id);
             List<Object> SchedulesList = new List<Object>();
 
             SchedulesList.Add(s.ToJSON());
 
-            // Unecessary loop?
-            // foreach (Schedule s in u.Posters)
-            // {
-            //     SchedulesList.Add(s.ToJSON());
-            // }
-
-            return new
-            {
-                userDetail = u.ToJSON(),
-                posters = uPosters,
-            };
+            return SchedulesList;
         }
 
-        public User CreateUser(User user)
+        public async Task<Schedule> CreateSchedule(Schedule schedule)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Schedules.AddAsync(schedule);
+            await _context.SaveChangesAsync();
 
-            return _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+            return await _context.Schedules.Where(s => s.Id == schedule.Id).FirstOrDefaultAsync();
         }
 
-        public User DeleteUser(int id)
+        public async Task<Schedule> DeleteSchedule(int id)
         {
-            User user = _context.Users.Find(id);
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            Schedule schedule = await _context.Schedules.FindAsync(id);
+            _context.Schedules.Remove(schedule);
+            await _context.SaveChangesAsync();
 
-            return user;
+            return schedule;
         }
 
-        public IEnumerable<Object> GetAllUserJSON()
+        //PUT request
+        public async Task<Schedule> UpdateSchedule(int id, Schedule schedule)
         {
-            IEnumerable<User> users = GetAllUsers();
-            List<Object> response = new List<object>();
+            Schedule s = await GetSchedule(id);
+            s.Id = schedule.Id;
+            s.PosterId = schedule.PosterId;
+            s.StartDate = schedule.StartDate;
+            s.EndDate = schedule.EndDate;
+            s.Daily = schedule.Daily;
+            s.Weekday = schedule.Weekday;
 
-            foreach (User u in users)
-            {
-                response.Add(u.ToJSON());
-            }
+            await _context.SaveChangesAsync();
 
-            return response;
+            return s;
         }
 
-        // PUT request
-        public User UpdateUser(int id, User user)
+        public async Task<Object> UpdateScheduleJSON(int id, Schedule schedule)
         {
-            User u = GetUser(id);
-            u.FirstName = user.FirstName;
-            u.LastName = user.LastName;
-            u.Email = user.Email;
-            u.PhoneNumber = user.PhoneNumber;
-            u.Role = user.Role;
-
-            _context.SaveChanges();
-
-            return u;
+            Schedule s = await UpdateSchedule(id, schedule);
+            return s.ToJSON();
         }
-
-        public Object UpdateUserJSON(int id, User user) => UpdateUser(id, user).ToJSON();
     }
 }

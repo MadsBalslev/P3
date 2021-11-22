@@ -1,17 +1,16 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using System.Threading.Tasks;
-// using Microsoft.AspNetCore.Http;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using server.Entities;
-// using server.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using server.Entities;
+using server.Services;
 
-// namespace server.Controllers
-// {
+namespace server.Controllers
+{
 
-<<<<<<< HEAD:server/Controllers/ScheduleController.cs
     [ApiController]
     [Route("[controller]")]
     public class ScheduleController : ControllerBase
@@ -25,35 +24,57 @@
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get()
+        public async Task<IEnumerable<Object>> Get()
         {
-
+            return await _scheduleService.GetAllSchedules();
         }
-=======
-//     [ApiController]
-//     [Route("[controller]")]
-//     public class PosterScheduleController : ControllerBase
-//     {
 
-//         PosterScheduleService _posterscheduleService;
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Object>> GetScheduleDetails(int id)
+        {
+            try
+            {
+                return await _scheduleService.GetScheduleJSON(id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
 
-//         public PosterScheduleController(databaseContext context)
-//         {
-//             _psterscheduleService = new PosterScheduleService(context);
-//         }
+        [HttpPost]
+        public async Task<ActionResult<Object>> Post([FromBody] Schedule schedule)
+        {
+            try
+            {
+                Schedule s = await _scheduleService.CreateSchedule(schedule);
+                return await _scheduleService.GetScheduleJSON(s.Id);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
 
-//         [HttpGet]
-//         public IEnumerable<Object> Get()
-//         {
-//             // deez nuts
-//         }
->>>>>>> 0e44ef67065fe2ce39983e68cc9fff866192339c:server/Controllers/PosterScheduleController.cs
 
-//         [HttpPost]
+        [HttpDelete("{int:id}")]
+        public async Task<ActionResult<Object>> Delete(int id)
+        {
+            try
+            {
+                Object s = await _scheduleService.GetScheduleJSON(id);
+                await _scheduleService.DeleteSchedule(id);
+                return s;
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
 
-//         [HttpDelete]
 
-//         [HttpPut]
-//     }
+        [HttpPut("{int:id}")]
+        public async Task<ActionResult<Object>> Put([FromBody] Schedule s, int id) => await _scheduleService.UpdateScheduleJSON(id, s);
+    }
 
-// }
+}
