@@ -29,5 +29,16 @@ namespace server.Services
             return md.ToJSON();
         }
 
+        public Metadata UpdateTimer(int id, Metadata metadata)
+        {
+            Metadata md = GetTimer(id);
+            md.Timer = metadata.Timer;
+
+            _context.SaveChanges();
+
+            return md;
+        }
+
+        public Object UpdateTimerJSON(int id, Metadata md) => UpdateTimer(id, md).ToJSON();
     }
 }
