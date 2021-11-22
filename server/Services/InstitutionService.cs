@@ -28,7 +28,7 @@ namespace server.Services
 
         public async Task<Institution> GetInstitution(int? id)
         {
-            if(id == null)
+            if (id == null)
                 throw new NullReferenceException("Instituion null");
             Institution institution = await _context.Institutions
                 .Include(i => i.AdminNavigation)
@@ -92,8 +92,8 @@ namespace server.Services
 
         public async Task<Object> GetInstitutionJSON(int? id)
         {
-            if(id == null)
-                return new {};
+            if (id == null)
+                return new { };
 
             Institution i = await GetInstitution(id);
             List<Object> iUsers = new List<Object>();

@@ -27,8 +27,8 @@ namespace server.Controllers
         {
             try
             {
-                 string AuthString = _loginService.Login(email, password);
-                 return AuthString;
+                string AuthString = _loginService.Login(email, password);
+                return AuthString;
             }
             catch (System.Exception)
             {
