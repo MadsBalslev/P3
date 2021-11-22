@@ -16,7 +16,7 @@ namespace server.Controllers
     public class ScheduleController : ControllerBase
     {
 
-        ScheduleService _scheduleService;
+        private ScheduleService _scheduleService;
 
         public ScheduleController(databaseContext context)
         {
@@ -26,7 +26,7 @@ namespace server.Controllers
         [HttpGet]
         public async Task<IEnumerable<Object>> Get()
         {
-            return await _scheduleService.GetAllSchedules();
+            return await _scheduleService.GetAllSchedulesJSON();
         }
 
         [HttpGet("{id:int}")]
@@ -57,7 +57,7 @@ namespace server.Controllers
         }
 
 
-        [HttpDelete("{int:id}")]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult<Object>> Delete(int id)
         {
             try
@@ -73,7 +73,7 @@ namespace server.Controllers
         }
 
 
-        [HttpPut("{int:id}")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult<Object>> Put([FromBody] Schedule s, int id) => await _scheduleService.UpdateScheduleJSON(id, s);
     }
 

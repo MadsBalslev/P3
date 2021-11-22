@@ -72,7 +72,6 @@ namespace server.Services
         public async Task<Schedule> UpdateSchedule(int id, Schedule schedule)
         {
             Schedule s = await GetSchedule(id);
-            s.Id = schedule.Id;
             s.PosterId = schedule.PosterId;
             s.StartDate = schedule.StartDate;
             s.EndDate = schedule.EndDate;
