@@ -34,10 +34,8 @@ namespace server.Controllers
             }
         }
 
-        // [HttpPut]
-        // public ActionResult<int> PutTimerValue()
-        // {
-
-        // }
+        //PUT request for timer
+        [HttpPut("{id:int}")]
+        public ActionResult<Object> PutTimerValue([FromBody] Metadata md, int id) => _metaDataService.UpdateTimerJSON(id, md);
     }
 }

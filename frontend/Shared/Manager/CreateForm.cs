@@ -7,6 +7,12 @@ namespace frontend.Shared.Manager
     {
         protected T _precreateItem = new T();
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            _precreateItem.InitializeAggregateObjects();
+        }
+
         protected async Task OnAddItem()
         {
             await OnConfirmChanges(HttpMethod.Post, _precreateItem, ManagerService.ApiFullAddress);

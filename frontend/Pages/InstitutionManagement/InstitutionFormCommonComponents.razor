@@ -1,0 +1,41 @@
+@using MudBlazor
+@using System.Text.Json
+@using System.IO
+@using Microsoft.Extensions.Configuration
+@inject IHttpClientFactory ClientFactory
+@inject IConfiguration Configuration
+
+<MudTextField Required="@true" FullWidth="true" @bind-Value="Institution.name"
+    Label="Institution name" />
+<MudSelect Required="@true" T="int?" @bind-Value="Institution.admin.id"
+    Placeholder="Select what institution the user belongs to">
+    @foreach (User user in _users)
+    {
+        <MudSelectItem Value="@(user.id)">@user.firstName @user.lastName</MudSelectItem>
+    }
+</MudSelect>
+
+@code
+{
+    [Parameter]
+    public Institution Institution { get; set; }
+
+    private List<User> _users = new List<User>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
+        Configuration.GetValue<string>("ApiBaseAddress") + "/Users");
+
+        HttpClient client = ClientFactory.CreateClient();
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            using Stream responseStream = await response.Content.ReadAsStreamAsync();
+            _users = await JsonSerializer.DeserializeAsync<List<User>>(responseStream);
+        }
+    }
+
+}

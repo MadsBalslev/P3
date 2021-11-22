@@ -1,0 +1,55 @@
+@using MudBlazor
+
+<MudTextField Required="@true" @bind-Value="User.firstName" Label="First name" />
+<MudTextField Required="@true" @bind-Value="User.lastName" Label="Last name" />
+<MudTextField Required="@true" @bind-Value="User.phoneNumber" Label="Phone number" />
+<MudTextField Required="@true" @bind-Value="User.email" Label="Email address" />
+<MudTextField Required="PasswordFieldIsRequired" @bind-Value="User.password" Label="Password"
+    InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon"
+    OnAdornmentClick="ShowOrHidePassword" />
+<MudTextField Required="PasswordFieldIsRequired"
+    Validation="new Func<string, bool>(ValidatePassword)" @bind-Value="_confirmedPassword"
+    Label="Confirm password" InputType="@PasswordInput" Adornment="Adornment.End"
+    AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" />
+<MudSelect Required="@true" T="int?" @bind-Value="User.role" Placeholder="Select user role">
+    <MudSelectItem Value="@((int?)1)">Normal user</MudSelectItem>
+    <MudSelectItem Value="@((int?)2)">Institution admin</MudSelectItem>
+    <MudSelectItem Value="@((int?)3)">System admin</MudSelectItem>
+</MudSelect>
+
+@code
+{
+    [Parameter]
+    public User User { get; set; }
+
+    [Parameter]
+    public bool PasswordFieldIsRequired { get; set; } = true;
+
+    private string _confirmedPassword;
+
+    private bool _passwordIsVisible;
+
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    private bool ValidatePassword(string password)
+    {
+        return password == _confirmedPassword;
+    }
+
+    private void ShowOrHidePassword()
+    {
+        @if (_passwordIsVisible)
+        {
+            _passwordIsVisible = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            _passwordIsVisible = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

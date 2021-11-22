@@ -1,20 +1,15 @@
+
 @using MudBlazor
 @using Shared.Manager
-@inherits CreateForm<Poster>
+@inherits CreateForm<Institution>
 
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <PosterFormCommonComponents Poster="_precreateItem" />
-            @* <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" /> *@
-            <MudCardActions>
-                <MudButton Disabled="@true" Variant="Variant.Filled"
-                    StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true">
-                    Upload poster</MudButton>
-            </MudCardActions>
+            <InstitutionFormCommonComponents Institution="_precreateItem" />
             <MudCardActions>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
-                    FullWidth="true">Add Poster</MudButton>
+                    FullWidth="true">Add Institution</MudButton>
             </MudCardActions>
             <MudCardActions>
                 <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
