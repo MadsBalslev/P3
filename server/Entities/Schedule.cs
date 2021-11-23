@@ -11,8 +11,8 @@ namespace server.Entities
         public int? PosterId { get; set; }
         public string Name { get; set; }
         // Er også udkommenteret i Models/Schedule
-        // public DateTime StartDate { get; set; }
-        // public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public int Daily { get; set; }
         public string Weekday { get; set; }
 
