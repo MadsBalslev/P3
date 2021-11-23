@@ -1,0 +1,19 @@
+@using MudBlazor
+@using Shared.Manager
+@inherits CreateForm<Zone>
+
+<MudForm @ref="_form">
+    <MudCard>
+        <MudCardContent>
+            <ScreenzoneFormCommonComponent Zone="_precreateItem" />
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
+                    FullWidth="true">Add Screenzone</MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                    Color="Color.Warning">Cancel</MudButton>
+            </MudCardActions>
+        </MudCardContent>
+    </MudCard>
+</MudForm>

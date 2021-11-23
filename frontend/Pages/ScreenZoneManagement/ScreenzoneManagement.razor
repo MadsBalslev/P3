@@ -1,0 +1,40 @@
+@page "/ScreenManagement"
+@using MudBlazor
+@inject ISnackbar Snackbar
+@using frontend.Shared.Manager
+
+<Manager T="@Zone" ApiPath="/Zones" Context="screenzone" Filter="FilterFunc">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T=@Zone SortBy="(x) => x.id">ID</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T=@Zone SortBy="(x) => x.name">Name
+            </MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@screenzone.id</MudTd>
+        <MudTd>@screenzone.name</MudTd>
+    </RowTemplate>
+    <CreateForm>
+        <ScreenzoneCreateForm />
+    </CreateForm>
+    <EditForm>
+        <ScreenzoneEditForm />
+    </EditForm>
+</Manager>
+
+@code
+{
+    private bool FilterFunc(Zone zone, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (zone.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (zone.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

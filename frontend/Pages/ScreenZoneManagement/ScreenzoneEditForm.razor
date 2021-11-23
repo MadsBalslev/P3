@@ -1,0 +1,25 @@
+@using MudBlazor
+@using Shared.Manager
+@inherits EditForm<Zone>
+
+<MudForm @ref="_form">
+    <MudCard>
+        <MudCardContent>
+            <ScreenzoneFormCommonComponent Zone="_selectedItem" />
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnEditItem"
+                    FullWidth="true">Apply Edit</MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                    Color="Color.Warning">Cancel</MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnDelete" Variant="Variant.Filled"
+                    Color="Color.Secondary">
+                    Delete
+                </MudButton>
+            </MudCardActions>
+        </MudCardContent>
+    </MudCard>
+</MudForm>
