@@ -15,7 +15,7 @@ namespace frontend.Shared.Manager
 
         protected async Task OnAddItem()
         {
-            await OnConfirmChanges(HttpMethod.Post, _precreateItem, ManagerService.ApiFullAddress);
+            await OnRequestAction(HttpMethod.Post, ManagerService.ApiPath, _precreateItem, validate:true);
         }
     }
 }
