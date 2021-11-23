@@ -58,8 +58,12 @@
                 <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID</MudTableSortLabel>
                 </MudTh>
-                <MudTh>
+                @* <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.posterId">Poster ID
+                    </MudTableSortLabel>
+                </MudTh> *@
+                <MudTh>
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.name">Schedule Name
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
@@ -81,14 +85,15 @@
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@schedule.id</MudTd>
-                <MudTd>@schedule.posterId</MudTd>
+                @*<MudTd>@schedule.posterId</MudTd>*@
+                <MudTd>@schedule.name</MudTd>
                 <MudTd>@schedule.startDate</MudTd>
                 <MudTd>@schedule.endDate</MudTd>
                 <MudTd>@schedule.dailyToString</MudTd>
                 <MudTd>@schedule.weekday</MudTd>
             </RowTemplate>
             <CreateForm>
-                <PosterCreateForm />
+                <ScheduleCreateForm />
             </CreateForm>
             <EditForm>
                 <PosterEditForm />
@@ -126,7 +131,9 @@
             return true;
         if (schedule.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (schedule.posterId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+         // if (schedule.posterId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+         // return true;
+        if (schedule.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
