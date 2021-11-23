@@ -1,0 +1,8 @@
+@using MudBlazor
+<MudTextField Required="@true" FullWidth="true" @bind-Value="Zone.name" Label="Screenzone name" />
+
+@code
+{
+    [Parameter]
+    public Zone Zone { get; set; }
+}
