@@ -10,7 +10,7 @@
 @using System.IO
 @using frontend.Shared.Layout
 @layout BlankMudBlazorPage
-@inject IUserInformation UserInformation
+@inject IUser User
 
 @page "/login"
 
@@ -70,7 +70,7 @@
                 if (response.IsSuccessStatusCode)
                 {
                     using Stream responseStream = await response.Content.ReadAsStreamAsync();
-                    UserInformation.AuthenticationString = await JsonSerializer.DeserializeAsync<string>(responseStream);
+                    User.password = await JsonSerializer.DeserializeAsync<string>(responseStream);
                     Snackbar.Add("Login successful", Severity.Success);
                     NavigationManager.NavigateTo("/");
                 }
