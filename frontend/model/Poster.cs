@@ -9,9 +9,9 @@ public class Poster : IManageable
 
     public string image { get; set; }
 
-    public DateTime? startDate { get; set; }
+    // public DateTime? startDate { get; set; }
 
-    public DateTime? endDate { get; set; }
+    // public DateTime? endDate { get; set; }
 
     public User createdBy { get; set; }
 
@@ -31,8 +31,8 @@ public class Poster : IManageable
             {
                 createdBy = this.createdBy.id,
                 name = this.name,
-                startDate = this.startDate,
-                endDate = this.endDate,
+                //startDate = this.startDate,
+                //endDate = this.endDate,
                 imageUrl = this.image
             }
         );
