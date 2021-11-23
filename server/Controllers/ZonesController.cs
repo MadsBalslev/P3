@@ -15,10 +15,12 @@ namespace server.Controllers
     public class ZonesController : ControllerBase
     {
         private ZoneService _zoneService;
+        private PosterService _posterService;
 
         public ZonesController(databaseContext context)
         {
             _zoneService = new ZoneService(context);
+            _posterService = new PosterService(context);
         }
 
         [HttpGet]
@@ -36,6 +38,12 @@ namespace server.Controllers
             {
                 return NotFound();
             }
+        }
+
+        [HttpGet("{id:int}/active")]
+        public async Task<IEnumerable<Object>> GetZonePosters(int id)
+        {
+            return await _posterService.GetActivePostersJSON();
         }
 
         [HttpPost]

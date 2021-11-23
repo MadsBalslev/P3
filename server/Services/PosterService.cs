@@ -90,5 +90,33 @@ namespace server.Services
 
             return p;
         }
+
+        public async Task<IEnumerable<Poster>> GetActivePosters()
+        {
+            DateTime Today = DateTime.Now;
+            IEnumerable<Poster> AllPosters = await GetAllPosters();
+            List<Poster> ActivePosters = new List<Poster>();
+
+            foreach (Poster p in AllPosters)
+            {
+                if(p.StartDate <= Today && p.EndDate >= Today)
+                    ActivePosters.Add(p);
+            }
+
+            return ActivePosters;
+        }
+
+        public async Task<IEnumerable<Object>> GetActivePostersJSON()
+        {
+            IEnumerable<Poster> Posters = await GetActivePosters();
+            List<Object> response = new List<object>();
+
+            foreach (Poster p in Posters)
+            {
+                response.Add(p.ToJSON());
+            }
+
+            return response;
+        }
     }
 }
