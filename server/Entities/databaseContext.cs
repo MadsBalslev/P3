@@ -20,6 +20,7 @@ namespace server.Entities
         public virtual DbSet<Institution> Institutions { get; set; }
         public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
@@ -108,6 +109,41 @@ namespace server.Entities
                     .HasForeignKey(d => d.CreatedBy)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("created_by");
+            });
+
+            modelBuilder.Entity<Schedule>(entity =>
+            {
+                entity.ToTable("schedules");
+
+                entity.HasIndex(e => e.PosterId, "poster_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Daily)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("daily");
+
+                entity.Property(e => e.EndDate).HasColumnName("end_date");
+
+                entity.Property(e => e.PosterId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("poster_id")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
+
+                entity.Property(e => e.Weekday)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("weekday");
+
+                entity.HasOne(d => d.Poster)
+                    .WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.PosterId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("poster_id");
             });
 
             modelBuilder.Entity<Screen>(entity =>

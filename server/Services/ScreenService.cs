@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Entities;
 
 namespace server.Services
@@ -15,10 +17,10 @@ namespace server.Services
         }
 
         // Get requests
-        public IEnumerable<Screen> GetAllScreens() => _context.Screens.ToList();
-        public IEnumerable<Object> GetAllScreensJSON()
+        public async Task<IEnumerable<Screen>> GetAllScreens() => await _context.Screens.Include(s => s.ZoneNavigation).ToListAsync();
+        public async Task<IEnumerable<Object>> GetAllScreensJSON()
         {
-            IEnumerable<Screen> screens = GetAllScreens();
+            IEnumerable<Screen> screens = await GetAllScreens();
             List<Object> response = new List<Object>();
 
             foreach (Screen s in screens)
@@ -29,9 +31,12 @@ namespace server.Services
             return response;
         }
 
-        public Screen GetScreen(int id)
+        public async Task<Screen> GetScreen(int id)
         {
-            Screen s = _context.Screens.Find(id);
+            Screen s = await _context.Screens
+                .Include(s => s.ZoneNavigation)
+                .Where(s => s.Id == id)
+                .FirstAsync();
             if (s == null)
             {
                 throw new NullReferenceException("Screen not found");
@@ -40,40 +45,48 @@ namespace server.Services
             return s;
         }
 
-        public Object GetScreenJSON(int id) => GetScreen(id).ToJSON();
+        public async Task<Object> GetScreenJSON(int id)
+        {
+            Screen s = await GetScreen(id);
+
+            return s.ToJSON();
+        }
 
         // Post requests
-        public Screen CreateScreen(Screen screen)
+        public async Task<Screen> CreateScreen(Screen screen)
         {
-            _context.Screens.Add(screen);
-            _context.SaveChanges();
+            await _context.Screens.AddAsync(screen);
+            await _context.SaveChangesAsync();
 
-            return _context.Screens.Where(s => s.Name == screen.Name && s.Zone == screen.Zone).FirstOrDefault();
+            return await _context.Screens.Where(s => s.Name == screen.Name && s.Zone == screen.Zone).FirstOrDefaultAsync();
         }
 
         // Delete request
-        public Screen DeleteScreen(int id)
+        public async Task<Screen> DeleteScreen(int id)
         {
-            Screen screen = _context.Screens.Find(id);
+            Screen screen = await _context.Screens.FindAsync(id);
             _context.Screens.Remove(screen);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return screen;
         }
 
         // PUT request
-        public Screen UpdateScreen(int id, Screen screen)
+        public async Task<Screen> UpdateScreen(int id, Screen screen)
         {
-            Screen s = GetScreen(id);
+            Screen s = await GetScreen(id);
             s.Name = screen.Name;
             s.Zone = screen.Zone;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return s;
         }
 
-        public Object UpdateScreenJSON(int id, Screen screen) => UpdateScreen(id, screen).ToJSON();
-
+        public async Task<Object> UpdateScreenJSON(int id, Screen screen)
+        {
+            Screen s = await UpdateScreen(id, screen);
+            return s.ToJSON();
+        }
     }
 }

@@ -1,44 +1,12 @@
-function getData(url) {
-    var req = new XMLHttpRequest();
-    req.overrideMimeType("application/json");
-    req.open('GET', url, true);
-    req.onload = function () {
-        var jsonResponse = JSON.parse(req.responseText);
-        getPreferences(jsonResponse);
-    };
-    req.send();
-}
-function startGenerating() {
-    generateHTML();
-    getData("http://localhost:5000/Posters");
+const MAX_LOOP_COUNT = 100;
+const API_BASE_ADDRESS = "http://localhost:5000";
+
+function starPosterScreen() {
+    initializePage();
+    getTimerValueThenGetPostersThenDisplayPosters(0);
 }
 
-function generateSlides(posters, timer) {
-    var slides = [];
-    var i = 0;
-    while (i < posters.length) {
-        const imgUrl = posters[i].image
-        slides.push(imgUrl)
-        i++;
-    }
-    var slideIndex = 0;
-    showPosters(slides, slideIndex, timer);
-    console.log(slides);
-}
-function getPreferences(jsonResponse) {
-
-    var req = new XMLHttpRequest();
-    req.overrideMimeType("application/json");
-    req.open('GET', "http://localhost:5000/metadata/1", true);
-    req.onload = function () {
-        const obj = JSON.parse(req.responseText);
-        console.log(obj.timerValue);
-       generateSlides(jsonResponse, obj.timerValue);
-    };
-    req.send();
-}
-
-function generateHTML() {
+function initializePage() {
     const screenDiv = document.createElement("div");
     const Image = document.createElement("img");
 
@@ -46,7 +14,7 @@ function generateHTML() {
     screenDiv.classList = "container";
     screenDiv.appendChild(Image);
 
-    Image.src = "https://cdn.discordapp.com/attachments/884375897015205928/905464229480521758/img1.jpg";
+    Image.src = "https://via.placeholder.com/1080x1920"
     Image.id = ("imageId");
     Image.classList = "image";
     Image.style.height = "100vh";
@@ -55,19 +23,39 @@ function generateHTML() {
     document.body.appendChild(screenDiv);
 }
 
-function showPosters(slides, slideIndex, timer) {
-    console.log(slideIndex);
-    setPoster(slides[slideIndex]);
-    slideIndex++;
-    if (slideIndex == slides.length+1) {getData("http://localhost:5000/Posterss")}
-    else
-    {
-    setTimeout(showPosters, timer, slides,slideIndex,timer);
+function getTimerValueThenGetPostersThenDisplayPosters(loopCount) {
+    var req = new XMLHttpRequest();
+    req.overrideMimeType("application/json");
+    req.open('GET', API_BASE_ADDRESS + "/metadata/1", true);
+    req.onload = function () {
+        var timerValue = JSON.parse(req.responseText).timerValue;
+        getPostersThenDisplayPosters(timerValue, loopCount);
+    };
+    req.send();
+}
+
+function getPostersThenDisplayPosters(timerValue, loopCount) {
+    var req = new XMLHttpRequest();
+    req.overrideMimeType("application/json");
+    req.open('GET', API_BASE_ADDRESS + "/Posters", true);
+    req.onload = function () {
+        var posters = JSON.parse(req.responseText);
+        displayPosters(timerValue, posters, 0, loopCount)
+    };
+    req.send();
+}
+
+function displayPosters(timerValue, posters, posterIndex, displayPostersCallCount) {
+    const image = document.getElementById("imageId");
+
+    if (posterIndex < posters.length) {
+        image.src = posters[posterIndex].image;
+        posterIndex++;
+        setTimeout(displayPosters, timerValue, timerValue, posters, posterIndex, displayPostersCallCount);
+    } else if (displayPostersCallCount < MAX_LOOP_COUNT) {
+        displayPostersCallCount++;
+        getTimerValueThenGetPostersThenDisplayPosters(displayPostersCallCount);
+    } else {
+        location.reload()
     }
 }
-
-function setPoster(image) {
-    const Image = document.getElementById("imageId");
-    Image.src = image;
-}
-
