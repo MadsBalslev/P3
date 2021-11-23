@@ -27,7 +27,7 @@ namespace frontend
             services.AddHttpClient();
             services.AddScoped<IManagerService, ManagerService>();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IUserInformation, UserInformation>();
+            services.AddSingleton<IUser, User>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
