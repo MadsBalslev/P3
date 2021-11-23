@@ -1,7 +1,7 @@
 @inherits LayoutComponentBase
 @using MudBlazor
 @inject ISnackbar Snackbar
-@inject IUserInformation UserInformation
+@inject IUser User
 @inject NavigationManager NavManager
 
 
@@ -51,7 +51,7 @@
         _currentTheme = defaultTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
 
-        bool userIsNotLoggedIn = UserInformation.AuthenticationString == null || UserInformation.User ==
+        bool userIsNotLoggedIn = User.password == null || User ==
         null;
         if (userIsNotLoggedIn)
         {
