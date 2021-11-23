@@ -14,14 +14,14 @@
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
                     </MudTableSortLabel>
                 </MudTh>
-                <MudTh>
+                <!-- <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.startDate">Start date
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.endDate">End date
                     </MudTableSortLabel>
-                </MudTh>
+                </MudTh> -->
                 <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
                     </MudTableSortLabel>
@@ -38,8 +38,8 @@
             <RowTemplate>
                 <MudTd>@poster.id</MudTd>
                 <MudTd>@poster.name</MudTd>
-                <MudTd>@poster.startDate</MudTd>
-                <MudTd>@poster.endDate</MudTd>
+                <!-- <MudTd>@poster.startDate</MudTd>
+                <MudTd>@poster.endDate</MudTd> -->
                 <MudTd>@poster.createdBy.name</MudTd>
                 <MudTd>@poster.institution.name</MudTd>
                 <MudTd>@poster.image</MudTd>
@@ -112,10 +112,10 @@
             return true;
         if (poster.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (poster.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (poster.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+        // if (poster.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //     return true;
+        // if (poster.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //     return true;
         if (poster.createdBy.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (poster.institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
