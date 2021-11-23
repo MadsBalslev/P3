@@ -8,8 +8,8 @@ namespace server.Entities
             {
                 Id = this.Id,
                 name = this.Name,
-                startDate = this.StartDate,
-                endDate = this.EndDate,
+                // startDate = this.StartDate,
+                // endDate = this.EndDate,
                 image = this.ImageUrl,
                 createdBy = new
                 {
