@@ -88,8 +88,6 @@ namespace server.Entities
                     .HasColumnType("int(11)")
                     .HasColumnName("created_by");
 
-                entity.Property(e => e.EndDate).HasColumnName("end_date");
-
                 entity.Property(e => e.ImageUrl)
                     .IsRequired()
                     .HasMaxLength(256)
@@ -99,8 +97,6 @@ namespace server.Entities
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("name");
-
-                entity.Property(e => e.StartDate).HasColumnName("start_date");
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.Posters)

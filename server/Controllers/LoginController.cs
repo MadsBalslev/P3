@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using server.Entities;
 using server.Services;
+using server.Models;
 
 namespace server.Controllers
 {
@@ -23,11 +24,11 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Login([FromBody] User user)
+        public ActionResult<string> Login([FromBody] LoginObject body)
         {
             try
             {
-                string AuthString = _loginService.Login(user.Email, user.Password);
+                string AuthString = _loginService.Login(body.Email, body.Password);
                 return AuthString;
             }
             catch (System.Exception)
