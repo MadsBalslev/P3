@@ -67,8 +67,6 @@ DROP TABLE IF EXISTS `database`.`posters` ;
 CREATE TABLE IF NOT EXISTS `database`.`posters` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
-  `start_date` DATETIME NOT NULL,
-  `end_date` DATETIME NOT NULL,
   `image_url` VARCHAR(256) NOT NULL,
   `created_by` INT,
   PRIMARY KEY (`id`),
