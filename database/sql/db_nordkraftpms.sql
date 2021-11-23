@@ -139,6 +139,7 @@ DROP TABLE IF EXISTS `NordkraftPMS`.`schedules` ;
 CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`schedules` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `poster_id` INT,
+    `name` VARCHAR(255) NOT NULL,
     `start_date` DATETIME NOT NULL,
     `end_date` DATETIME NOT NULL,
     `daily` INT NOT NULL,

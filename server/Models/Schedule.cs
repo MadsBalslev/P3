@@ -8,6 +8,7 @@ namespace server.Entities
             {
                 Id = this.Id,
                 PosterId = this.PosterId,
+                Name = this.Name,
                 StartDate = this.StartDate,
                 EndDate = this.EndDate,
                 Daily = this.Daily,
