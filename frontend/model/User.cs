@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-public class User : IManageable
+public class User : IManageable, IUser
 {
     public int? id { get; set; }
 

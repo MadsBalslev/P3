@@ -1,13 +1,8 @@
-@using Microsoft.Extensions.Configuration
 @using MudBlazor
 @using System
-@using System.IO
-@using System.Text.Json
-@inject IHttpClientFactory ClientFactory
-@inject IManagerService ManagerService
-@inject ISnackbar Snackbar
-@inject IConfiguration Configuration
 @typeparam T
+@inherits ApiComponent
+@inject IManagerService ManagerService
 
 <style>
     .selected {
@@ -115,34 +110,18 @@
     protected override async Task OnInitializedAsync()
     {
         _filter = item => Filter(item, _searchString);
-        ManagerService.ApiFullAddress = Configuration.GetValue<string>("ApiBaseAddress") + ApiPath;
+        ManagerService.ApiPath = ApiPath;
         ManagerService.RefreshRequested += OnRefresh;
         await OnRefresh();
     }
 
     private async Task OnRefresh()
     {
-        try
-        {
-            _currentMode = ManagerMode.Initial;
-            _loading = true;
-            HttpResponseMessage response = await GetItems();
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Snackbar.Add($"Something went wrong, status code: {response.StatusCode}", Severity.Error);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            Snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
-        }
-        finally
-        {
-            _loading = false;
-            await InvokeAsync(StateHasChanged);
-        }
+        _currentMode = ManagerMode.Initial;
+        _loading = true;
+        _items = await RequestHandler<T, List<T>>(HttpMethod.Get, ApiPath);
+        _loading = false;
+        await InvokeAsync(StateHasChanged);
     }
 
     private void OnCreateItem()
@@ -153,23 +132,6 @@
             _currentMode = ManagerMode.Create;
         else if (_currentMode == ManagerMode.Create)
             _currentMode = ManagerMode.Initial;
-    }
-
-    private async Task<HttpResponseMessage> GetItems()
-    {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, ManagerService.ApiFullAddress);
-
-        HttpClient client = ClientFactory.CreateClient();
-
-        HttpResponseMessage response = await client.SendAsync(request);
-
-        if (response.IsSuccessStatusCode)
-        {
-            using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            _items = await JsonSerializer.DeserializeAsync<List<T>>(responseStream);
-        }
-
-        return response;
     }
 
     private string SelectedRowClassFunc(T element, int rowNumber)

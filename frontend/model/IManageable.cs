@@ -1,6 +1,7 @@
-public interface IManageable
+using frontend.Shared;
+
+public interface IManageable : IToJSON
 {
-    public string ToJSON();
     public int? id { get; }
 
     public void InitializeAggregateObjects();
