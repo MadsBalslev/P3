@@ -12,12 +12,12 @@ namespace frontend.Shared.Manager
 
         protected async Task OnEditItem()
         {
-            await OnRequestAction(HttpMethod.Post, FullApiAddress(), _selectedItem, validate:true);
+            await OnRequestAction(HttpMethod.Post, FullApiAddress(), _selectedItem, validate: true);
         }
 
         protected async Task OnDelete()
         {
-            await OnRequestAction(HttpMethod.Delete, FullApiAddress(), _selectedItem, validate:false);
+            await OnRequestAction(HttpMethod.Delete, FullApiAddress(), _selectedItem, validate: false);
         }
 
         private string FullApiAddress()
