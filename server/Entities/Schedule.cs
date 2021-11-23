@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -9,6 +9,7 @@ namespace server.Entities
     {
         public int Id { get; set; }
         public int? PosterId { get; set; }
+        public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Daily { get; set; }

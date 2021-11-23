@@ -73,6 +73,7 @@ namespace server.Services
         {
             Schedule s = await GetSchedule(id);
             s.PosterId = schedule.PosterId;
+            s.Name = schedule.Name;
             s.StartDate = schedule.StartDate;
             s.EndDate = schedule.EndDate;
             s.Daily = schedule.Daily;

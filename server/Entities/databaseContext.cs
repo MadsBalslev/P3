@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -47,8 +47,7 @@ namespace server.Entities
 
                 entity.Property(e => e.Admin)
                     .HasColumnType("int(11)")
-                    .HasColumnName("admin")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("admin");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -87,8 +86,7 @@ namespace server.Entities
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnType("int(11)")
-                    .HasColumnName("created_by")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("created_by");
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
@@ -127,10 +125,14 @@ namespace server.Entities
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("name");
+
                 entity.Property(e => e.PosterId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("poster_id")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("poster_id");
 
                 entity.Property(e => e.StartDate).HasColumnName("start_date");
 
@@ -163,8 +165,7 @@ namespace server.Entities
 
                 entity.Property(e => e.Zone)
                     .HasColumnType("int(11)")
-                    .HasColumnName("zone")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("zone");
 
                 entity.HasOne(d => d.ZoneNavigation)
                     .WithMany(p => p.Screens)
@@ -195,8 +196,7 @@ namespace server.Entities
 
                 entity.Property(e => e.Institution)
                     .HasColumnType("int(11)")
-                    .HasColumnName("institution")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnName("institution");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
