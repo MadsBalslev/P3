@@ -6,7 +6,7 @@ namespace frontend.Shared.Manager
     public interface IManagerService
     {
 
-        string ApiFullAddress { get; set; }
+        string ApiPath { get; set; }
         event Func<Task> RefreshRequested;
         Task RequestRefresh();
     }
