@@ -1,7 +1,7 @@
 const MAX_LOOP_COUNT = 100;
 const API_BASE_ADDRESS = "http://localhost:5000";
 
-function starPosterScreen() {
+function startPosterScreen() {
     initializePage();
     getTimerValueThenGetPostersThenDisplayPosters(0);
 }
