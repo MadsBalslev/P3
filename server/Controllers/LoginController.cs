@@ -23,11 +23,11 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Login([FromBody] Object body)
+        public ActionResult<string> Login([FromBody] User user)
         {
             try
             {
-                string AuthString = _loginService.Login(body.email, body.password);
+                string AuthString = _loginService.Login(user.Email, user.Password);
                 return AuthString;
             }
             catch (System.Exception)
