@@ -1,4 +1,3 @@
-@using System.Reflection
 @using Microsoft.Extensions.Configuration
 @using MudBlazor
 @using System
@@ -159,7 +158,6 @@
     private async Task<HttpResponseMessage> GetItems()
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, ManagerService.ApiFullAddress);
-        Console.WriteLine(request.ToString());
 
         HttpClient client = ClientFactory.CreateClient();
 

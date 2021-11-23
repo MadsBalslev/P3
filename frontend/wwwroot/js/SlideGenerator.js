@@ -1,7 +1,7 @@
 const MAX_LOOP_COUNT = 100;
 const API_BASE_ADDRESS = "http://localhost:5000";
 
-function starPosterScreen() {
+function startPosterScreen() {
     initializePage();
     getTimerValueThenGetPostersThenDisplayPosters(0);
 }
@@ -14,7 +14,7 @@ function initializePage() {
     screenDiv.classList = "container";
     screenDiv.appendChild(Image);
 
-    Image.src = "https://via.placeholder.com/1080x1920"
+    Image.src = "/images/Nordkraft.png"
     Image.id = ("imageId");
     Image.classList = "image";
     Image.style.height = "100vh";
@@ -40,21 +40,21 @@ function getPostersThenDisplayPosters(timerValue, loopCount) {
     req.open('GET', API_BASE_ADDRESS + "/Posters", true);
     req.onload = function () {
         var posters = JSON.parse(req.responseText);
-        displayPosters(timerValue, posters, 0, loopCount)
+        setTimeout(displayPosters, timerValue, timerValue, posters, 0, loopCount);
     };
     req.send();
 }
 
-function displayPosters(timerValue, posters, posterIndex, displayPostersCallCount) {
+function displayPosters(timerValue, posters, posterIndex, loopCount) {
     const image = document.getElementById("imageId");
 
     if (posterIndex < posters.length) {
         image.src = posters[posterIndex].image;
         posterIndex++;
-        setTimeout(displayPosters, timerValue, timerValue, posters, posterIndex, displayPostersCallCount);
-    } else if (displayPostersCallCount < MAX_LOOP_COUNT) {
-        displayPostersCallCount++;
-        getTimerValueThenGetPostersThenDisplayPosters(displayPostersCallCount);
+        setTimeout(displayPosters, timerValue, timerValue, posters, posterIndex, loopCount);
+    } else if (loopCount < MAX_LOOP_COUNT) {
+        loopCount++;
+        getTimerValueThenGetPostersThenDisplayPosters(loopCount);
     } else {
         location.reload()
     }

@@ -31,7 +31,6 @@ namespace frontend.Shared.Manager
 
             HttpRequestMessage request = new HttpRequestMessage(method, path);
             string requestMessage = item.ToJSON();
-            Console.WriteLine(requestMessage);
             request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
 
             HttpClient client = ClientFactory.CreateClient();
