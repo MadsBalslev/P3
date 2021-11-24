@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using server.Entities;
-//using server.Models;
 
 namespace server.Services
 {
@@ -15,14 +17,70 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public IEnumerable<Institution> GetAllInstitutions()
+        public async Task<IEnumerable<Institution>> GetAllInstitutions()
         {
-            return _context.Institutions.ToList();
+            IEnumerable<Institution> insts = await _context.Institutions
+            .Include(i => i.AdminNavigation)
+            .ToListAsync();
+
+            return insts;
         }
 
-        public IEnumerable<Object> GetAllInstitutionsJSON()
+        public async Task<Institution> GetInstitution(int? id)
         {
-            IEnumerable<Institution> institutions = GetAllInstitutions();
+            if (id == null)
+                throw new NullReferenceException("Instituion null");
+            Institution institution = await _context.Institutions
+                .Include(i => i.AdminNavigation)
+                .Include(i => i.Users)
+                .Where(i => i.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (institution == null)
+            {
+                throw new NullReferenceException("Institution was not found");
+            }
+
+            return institution;
+        }
+        public async Task<Institution> CreateInstitution(Institution institution)
+        {
+            await _context.Institutions.AddAsync(institution);
+            await _context.SaveChangesAsync();
+
+            Institution inst = await _context.Institutions
+                .Include(i => i.AdminNavigation)
+                .Where(i => i.Name == institution.Name)
+                .FirstOrDefaultAsync();
+
+            return inst;
+        }
+        public async Task<Institution> DeleteInstitution(int id)
+        {
+            Institution institution = await _context.Institutions.FindAsync(id);
+            _context.Institutions.Remove(institution);
+            await _context.SaveChangesAsync();
+
+            return institution;
+        }
+
+        // PUT request
+        public async Task<Institution> UpdateInstitution(int id, Institution institution)
+        {
+            Institution inst = await GetInstitution(id);
+            inst.Name = institution.Name;
+            inst.Admin = institution.Admin;
+
+
+            await _context.SaveChangesAsync();
+
+            return inst;
+        }
+
+        // JSON
+        public async Task<IEnumerable<Object>> GetAllInstitutionsJSON()
+        {
+            IEnumerable<Institution> institutions = await GetAllInstitutions();
             List<Object> response = new List<object>();
             foreach (Institution i in institutions)
             {
@@ -32,21 +90,12 @@ namespace server.Services
             return response;
         }
 
-        public Institution GetInstitution(int id)
+        public async Task<Object> GetInstitutionJSON(int? id)
         {
-            Institution institution = _context.Institutions.Find(id);
+            if (id == null)
+                return new { };
 
-            if (institution == null)
-            {
-                throw new NullReferenceException("Institution was not found");
-            }
-
-            return institution;
-        }
-
-        public Object GetInstitutionJSON(int id)
-        {
-            Institution i = GetInstitution(id);
+            Institution i = await GetInstitution(id);
             List<Object> iUsers = new List<Object>();
             foreach (User u in i.Users)
             {
@@ -60,36 +109,10 @@ namespace server.Services
             };
         }
 
-        public Institution CreateInstitution(Institution institution)
+        public async Task<Object> UpdateInstitutionJSON(int id, Institution inst)
         {
-            _context.Institutions.Add(institution);
-            _context.SaveChanges();
-
-            return _context.Institutions.Where(i => i.Name == institution.Name).FirstOrDefault();
+            Institution i = await UpdateInstitution(id, inst);
+            return i.ToJSON();
         }
-
-        public Institution DeleteInstitution(int id)
-        {
-            Institution institution = _context.Institutions.Find(id);
-            _context.Institutions.Remove(institution);
-            _context.SaveChanges();
-
-            return institution;
-        }
-
-        // PUT request
-        public Institution UpdateInstitution(int id, Institution institution)
-        {
-            Institution inst = GetInstitution(id);
-            inst.Name = institution.Name;
-            inst.Admin = institution.Admin;
-
-
-            _context.SaveChanges();
-
-            return inst;
-        }
-
-        public Object UpdateInstitutionJSON(int id, Institution i) => UpdateInstitution(id, i).ToJSON();
     }
 }

@@ -1,19 +1,28 @@
 @using MudBlazor
 @using Shared.Manager
-@inherits CreateForm<Institution>
+@inherits CreateForm<Schedule>
 
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <InstitutionFormCommonComponents Institution="_precreateItem" />
+            <ScheduleFormCommonComponents Schedule="_precreateItem" />
+            @* <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" /> *@
+        <!-- <MudCardActions>
+            <MudCheckBox @bind-Checked="Label_CheckBox1" Label="Repeat Daily"></MudCheckBox>
+        </MudCardActions> -->
             <MudCardActions>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
-                    FullWidth="true">Add Institution</MudButton>
+                    FullWidth="true">Add Schedule</MudButton>
             </MudCardActions>
             <MudCardActions>
                 <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
                     Color="Color.Warning">Cancel</MudButton>
             </MudCardActions>
+
         </MudCardContent>
     </MudCard>
 </MudForm>
+
+@code {
+    public int Label_CheckBox1 { get; set; } = 0;
+}

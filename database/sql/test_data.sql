@@ -17,9 +17,9 @@ INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('2', 'Biffen_gang');
 INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('3', 'Skråen');
 
 DELETE FROM `database`.`posters`;
-INSERT INTO `database`.`posters` (`id`, `name`, `start_date`, `end_date`, `image_url`, `created_by`) VALUES ('1', 'Poster1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', 'ww.gg.dk', '1');
-INSERT INTO `database`.`posters` (`id`, `name`, `start_date`, `end_date`, `image_url`, `created_by`) VALUES ('2', 'Poster2', '2021-10-26 13:30:45', '2022-10-26 13:30:47', 'ww.gg.dk', '2');
-INSERT INTO `database`.`posters` (`id`, `name`, `start_date`, `end_date`, `image_url`, `created_by`) VALUES ('3', 'Poster3', '2021-10-26 13:30:45', '2022-10-26 13:30:47', 'ww.gg.dk', '3');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('1', 'Poster1', 'ww.gg.dk', '1');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('2', 'Poster2', 'ww.gg.dk', '2');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('3', 'Poster3', 'ww.gg.dk', '3');
 
 DELETE FROM `database`.`screens`;
 INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('1', 'Screen1', '1');
@@ -31,9 +31,9 @@ DELETE FROM `database`.`metadata`;
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '10');
 
 DELETE FROM `database`.`schedules`;
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('1', '1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', '0', '{0, 0, 0, 1, 0, 0, 1}');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('2', '2', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '1', '{0, 0, 0, 0, 0, 0, 0}');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('3', '3', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '0', '{1, 1, 0, 0, 0, 0, 0}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', '0', '{0, 0, 0, 1, 0, 0, 1}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '1', '{0, 0, 0, 0, 0, 0, 0}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '0', '{1, 1, 0, 0, 0, 0, 0}');
 
 
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;

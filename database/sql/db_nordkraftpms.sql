@@ -67,8 +67,6 @@ DROP TABLE IF EXISTS `NordkraftPMS`.`posters` ;
 CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`posters` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
-  `start_date` DATETIME NOT NULL,
-  `end_date` DATETIME NOT NULL,
   `image_url` VARCHAR(256) NOT NULL,
   `created_by` INT,
   PRIMARY KEY (`id`),
@@ -139,6 +137,7 @@ DROP TABLE IF EXISTS `NordkraftPMS`.`schedules` ;
 CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`schedules` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `poster_id` INT,
+    `name` VARCHAR(255) NOT NULL,
     `start_date` DATETIME NOT NULL,
     `end_date` DATETIME NOT NULL,
     `daily` INT NOT NULL,

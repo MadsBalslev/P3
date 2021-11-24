@@ -23,17 +23,17 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get()
+        public async Task<IEnumerable<Object>> Get()
         {
-            return _posterService.GetAllPosterJSON();
+            return await _posterService.GetAllPosterJSON();
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Object> GetPosterDetails(int id)
+        public async Task<ActionResult<Object>> GetPosterDetails(int id)
         {
             try
             {
-                return _posterService.GetPosterJSON(id);
+                return await _posterService.GetPosterJSON(id);
             }
             catch (System.Exception)
             {
@@ -42,12 +42,12 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Object> Post([FromBody] Poster poster)
+        public async Task<ActionResult<Object>> Post([FromBody] Poster poster)
         {
             try
             {
-                Poster p = _posterService.CreatePoster(poster);
-                return _posterService.GetPosterJSON(p.Id);
+                Poster p = await _posterService.CreatePoster(poster);
+                return await _posterService.GetPosterJSON(p.Id);
             }
             catch (System.Exception)
             {
@@ -56,12 +56,12 @@ namespace server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Object> Delete(int id)
+        public async Task<ActionResult<Object>> Delete(int id)
         {
             try
             {
-                Object p = _posterService.GetPosterJSON(id);
-                _posterService.DeletePoster(id);
+                Object p = await _posterService.GetPosterJSON(id);
+                await _posterService.DeletePoster(id);
                 return p;
             }
             catch (System.Exception)
@@ -71,6 +71,6 @@ namespace server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Object> Put([FromBody] Poster p, int id) => _posterService.UpdatePosterJSON(id, p);
+        public async Task<ActionResult<Object>> Put([FromBody] Poster p, int id) => await _posterService.UpdatePosterJSON(id, p);
     }
 }

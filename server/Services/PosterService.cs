@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Entities;
 namespace server.Services
 {
@@ -13,14 +15,14 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public IEnumerable<Poster> GetAllPosters()
+        public async Task<IEnumerable<Poster>> GetAllPosters()
         {
-            return _context.Posters.ToList();
+            return await _context.Posters.ToListAsync();
         }
 
-        public Poster GetPoster(int id)
+        public async Task<Poster> GetPoster(int id)
         {
-            Poster poster = _context.Posters.Find(id);
+            Poster poster = await _context.Posters.FindAsync(id);
 
             if (poster == null)
             {
@@ -30,33 +32,33 @@ namespace server.Services
             return poster;
         }
 
-        public Object GetPosterJSON(int id)
+        public async Task<Object> GetPosterJSON(int id)
         {
-            Poster p = GetPoster(id);
+            Poster p = await GetPoster(id);
             return p.ToJSON();
         }
 
-        public Poster CreatePoster(Poster poster)
+        public async Task<Poster> CreatePoster(Poster poster)
         {
-            _context.Posters.Add(poster);
-            _context.SaveChanges();
+            await _context.Posters.AddAsync(poster);
+            await _context.SaveChangesAsync();
 
-            return _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefault();
+            return await _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefaultAsync();
         }
 
-        public Poster DeletePoster(int id)
+        public async Task<Poster> DeletePoster(int id)
         {
-            Poster poster = _context.Posters.Find(id);
+            Poster poster = await _context.Posters.FindAsync(id);
             _context.Posters.Remove(poster);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return poster;
         }
 
 
-        public IEnumerable<Object> GetAllPosterJSON()
+        public async Task<IEnumerable<Object>> GetAllPosterJSON()
         {
-            IEnumerable<Poster> posters = GetAllPosters();
+            IEnumerable<Poster> posters = await GetAllPosters();
             List<Object> response = new List<object>();
 
             foreach (Poster p in posters)
@@ -68,20 +70,25 @@ namespace server.Services
         }
 
         // PUT request
-        public Poster UpdatePoster(int id, Poster poster)
+        public async Task<Poster> UpdatePoster(int id, Poster poster)
         {
-            Poster p = GetPoster(id);
+            Poster p = await GetPoster(id);
             p.Name = poster.Name;
-            p.StartDate = poster.StartDate;
-            p.EndDate = poster.EndDate;
+            // p.StartDate = poster.StartDate;
+            // p.EndDate = poster.EndDate;
             p.ImageUrl = poster.ImageUrl;
 
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return p;
         }
 
-        public Object UpdatePosterJSON(int id, Poster p) => UpdatePoster(id, p).ToJSON();
+        public async Task<Object> UpdatePosterJSON(int id, Poster poster)
+        {
+            Poster p = await UpdatePoster(id, poster);
+
+            return p;
+        }
     }
 }

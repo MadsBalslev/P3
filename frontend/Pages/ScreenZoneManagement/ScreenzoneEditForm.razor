@@ -1,21 +1,18 @@
-@inherits Shared.Manager.EditForm<User>
 @using MudBlazor
+@using Shared.Manager
+@inherits EditForm<Zone>
 
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <UserFormCommonComponents User="_selectedItem" PasswordFieldIsRequired="@false" />
+            <ScreenzoneFormCommonComponent Zone="_selectedItem" />
             <MudCardActions>
-                <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
-                    Color="Color.Primary">
-                    Apply edit
-                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnEditItem"
+                    FullWidth="true">Apply Edit</MudButton>
             </MudCardActions>
             <MudCardActions>
                 <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
-                    Color="Color.Warning">
-                    Cancel
-                </MudButton>
+                    Color="Color.Warning">Cancel</MudButton>
             </MudCardActions>
             <MudCardActions>
                 <MudButton FullWidth="true" @onclick="OnDelete" Variant="Variant.Filled"
