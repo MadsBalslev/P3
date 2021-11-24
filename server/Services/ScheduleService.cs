@@ -76,8 +76,8 @@ namespace server.Services
             s.Name = schedule.Name;
             s.StartDate = schedule.StartDate;
             s.EndDate = schedule.EndDate;
-            s.Daily = schedule.Daily;
-            s.Weekday = schedule.Weekday;
+            // s.Daily = schedule.Daily;
+            // s.Weekday = schedule.Weekday;
 
             await _context.SaveChangesAsync();
 

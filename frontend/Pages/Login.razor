@@ -2,26 +2,36 @@
 @using System.ComponentModel.DataAnnotations
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
+@inject IHttpClientFactory HttpClientFactory
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@using System.Text.Json
+@using System.Text
+@using System.IO
+@using frontend.Shared.Layout
+@layout BlankMudBlazorPage
+@inject IUser User
 
 @page "/login"
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
         <MudItem xs="4" class="mt-8">
-        <MudCard>
-            <MudCardContent>
-                <MudForm @ref="_loginForm" @bind-IsValid="@_success" @bind-Errors="@_errors">
-                    <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
-                    <MudTextField InputType="InputType.Email" T="string" FullWidth="true" Required="@true"
-                        RequiredError="Email is required" Label="Email"
-                        Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
-                    <MudTextField InputType="InputType.Password" T="string" FullWidth="true" Required="@true"
-                        RequiredError="Password is required" @ref="_pwFieldLogin" Label="Password"></MudTextField>
-                    <MudButton class="mt-2" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Link="/">Login
-                    </MudButton>
-                </MudForm>
-            </MudCardContent>
-        </MudCard>
+            <MudCard>
+                <MudCardContent>
+                    <MudForm @ref="_loginForm" @bind-IsValid="@_success" @bind-Errors="@_errors">
+                        <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
+                        <MudTextField @bind-value="_email" InputType="InputType.Email" T="string"
+                            FullWidth="true" Required="@true" RequiredError="Email is required"
+                            Label="Email"
+                            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+                        <MudTextField @bind-Value="_password" InputType="InputType.Password"
+                            T="string" FullWidth="true" Required="@true"
+                            RequiredError="Password is required" @ref="_pwFieldLogin"
+                            Label="Password"></MudTextField>
+                    </MudForm>
+                </MudCardContent>
+            </MudCard>
         </MudItem>
     </MudGrid>
 </MudContainer>
@@ -32,4 +42,49 @@
     private string[] _errors = { };
     private MudTextField<string> _pwFieldLogin;
     private MudForm _loginForm;
+
+    private string _email;
+
+    private string _password;
+
+    private async Task OnLogin()
+    {
+        try
+        {
+            if (_loginForm.IsValid)
+            {
+                HttpClient client = HttpClientFactory.CreateClient();
+                string requestBody = JsonSerializer.Serialize<object>
+                (
+                new
+                {
+                    password = _password,
+                    email = _email,
+                }
+                );
+
+                HttpContent content = new StringContent(requestBody, Encoding.UTF8, "application/Json");
+                HttpResponseMessage response = await
+                client.PostAsync(Configuration.GetValue<string>("ApiBaseAddress") + "/login", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    using Stream responseStream = await response.Content.ReadAsStreamAsync();
+                    User.password = await JsonSerializer.DeserializeAsync<string>(responseStream);
+                    Snackbar.Add("Login successful", Severity.Success);
+                    NavigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    Snackbar.Add($"Login failed!, status code: {response.StatusCode}", Severity.Error);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add($"Something went wrong: {e.Message}", Severity.Error);
+        }
+    }
+
+}
 }

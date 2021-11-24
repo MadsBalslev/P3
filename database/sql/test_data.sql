@@ -17,9 +17,9 @@ INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('2', 'Biffen_gang');
 INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('3', 'Skråen');
 
 DELETE FROM `database`.`posters`;
-INSERT INTO `database`.`posters` (`id`, `name`, `start_date`, `end_date`, `image_url`, `created_by`) VALUES ('1', 'Poster1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', 'ww.gg.dk', '1');
-INSERT INTO `database`.`posters` (`id`, `name`, `start_date`, `end_date`, `image_url`, `created_by`) VALUES ('2', 'Poster2', '2021-10-26 13:30:45', '2022-10-26 13:30:47', 'ww.gg.dk', '2');
-INSERT INTO `database`.`posters` (`id`, `name`, `start_date`, `end_date`, `image_url`, `created_by`) VALUES ('3', 'Poster3', '2021-10-26 13:30:45', '2022-10-26 13:30:47', 'ww.gg.dk', '3');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('1', 'Poster1', 'ww.gg.dk', '1');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('2', 'Poster2', 'ww.gg.dk', '2');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('3', 'Poster3', 'ww.gg.dk', '3');
 
 DELETE FROM `database`.`screens`;
 INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('1', 'Screen1', '1');

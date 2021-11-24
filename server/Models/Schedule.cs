@@ -11,8 +11,8 @@ namespace server.Entities
                 Name = this.Name,
                 StartDate = this.StartDate,
                 EndDate = this.EndDate,
-                Daily = this.Daily,
-                Weekday = this.Weekday,
+                //Daily = this.Daily,
+                //Weekday = this.Weekday,
             };
         }
     }

@@ -5,6 +5,7 @@ public class Schedule : IManageable
 {
     public int? id { get; set; }
     public int posterId { get; set; }
+    public string name { get; set; }
     public DateTime? startDate { get; set; }
     public DateTime? endDate { get; set; }
     public int daily { get; set; }

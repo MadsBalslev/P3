@@ -1,6 +1,9 @@
 @inherits LayoutComponentBase
 @using MudBlazor
 @inject ISnackbar Snackbar
+@inject IUser User
+@inject NavigationManager NavManager
+
 
 <MudThemeProvider Theme="_currentTheme" />
 <MudDialogProvider />
@@ -28,7 +31,8 @@
             <MudMenuItem>Your Settings</MudMenuItem>
             <MudMenuItem>Logout</MudMenuItem>
         </MudMenu>
-        <MudText>User Name (User Role) - Institution</MudText>
+        @* <MudText>@UserInformation.User.firstName @UserInformation.User.lastName
+            (@UserInformation.User.RoleAsString) - @UserInformation.User.institution.name</MudText> *@
     </MudAppBar>
 
     <MudMainContent>
@@ -46,6 +50,13 @@
         base.OnInitialized();
         _currentTheme = defaultTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+
+        bool userIsNotLoggedIn = User.password == null || User ==
+        null;
+        @* if (userIsNotLoggedIn)
+        {
+            NavManager.NavigateTo("/login");
+        } *@
     }
 
     private bool lightTheme { get; set; } = true;

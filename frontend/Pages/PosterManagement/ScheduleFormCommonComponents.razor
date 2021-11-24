@@ -1,0 +1,62 @@
+@using MudBlazor
+<MudTextField Required="@true" FullWidth="true" @bind-Value="Schedule.name" Label="Schedule Name" />
+<MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date" MinDate="DateTime.Now"
+    MaxDate="Schedule.endDate" @bind-Date="Schedule.startDate" DateFormat="dd/MM/yyyy" />
+<MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
+    @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
+<MudGrid>
+    @* <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Repeat Daily"></MudCheckBox> *@
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudSelect T="string" Label="Standard" Variant="Variant.Text" OffsetY="true"
+            Margin="@(_margin==true?Margin.Dense:Margin.None)" Dense="@_dense">
+            <MudSelectItem Value="@("Tyrannosaur")" />
+            <MudSelectItem Value="@("Triceratops")" />
+            <MudSelectItem Value="@("Oviraptor")" />
+        </MudSelect>
+    </MudItem>
+</MudGrid>
+
+@* <MudGrid Justify="Justify.SpaceEvenly">
+    <MudItem xs="12">
+        <div class = "d-flex flex-row">
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.weekday" Label="Monday" Spacing="12"></MudCheckBox>
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Tuesday" Spacing="1"></MudCheckBox>
+        </div>
+        <div class = "d-flex flex-row">
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Wednesday" Spacing="2"></MudCheckBox>
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Thursday" Spacing="3"></MudCheckBox>
+        </div>
+        <div class = "d-flex flex-row">
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Friday" Spacing="@spacing"></MudCheckBox>
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Saturday" Spacing="@spacing"></MudCheckBox>
+        <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Sunday" Spacing="@spacing"></MudCheckBox>
+        </div>
+    </MudItem>
+</MudGrid> *@
+@*<MudTextField Required="@true" FullWidth="true" @bind-Value="Poster.image"
+    Label="Image url" />*@
+
+@code
+{
+
+    // Weekday
+    // "{Man, Tir, Ons, Tor, Fre, Lør, Søn}"
+    // ---> "{0, 0, 0, 0, 0, 0, 0}"
+
+
+    public string WeekdayChecker() {
+
+        int[] weekdays = new int[7]{0, 1, 0, 1, 1, 0, 0};
+        string result = string.Join(',', weekdays);
+
+        return "{" + result + "}"; // "{0, 1, 0, 1, 1, 0, 0}"
+    }
+    public int spacing { get; set; } = 2;
+    [Parameter]
+    public Schedule Schedule { get; set; }
+
+    bool _margin = true;
+    bool _dense = true;
+
+}
