@@ -1,23 +1,19 @@
 @using MudBlazor
+@using Shared.Manager
 @inherits ApiComponent
+
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Schedule.name" Label="Schedule Name" />
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date" MinDate="DateTime.Now"
     MaxDate="Schedule.endDate" @bind-Date="Schedule.startDate" DateFormat="dd/MM/yyyy" />
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
     @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
-<MudGrid>
-    @* <MudCheckBox Required="@true" @bind-Checked="Schedule.daily" Label="Repeat Daily"></MudCheckBox> *@
 
-    <MudItem xs="12" sm="6" md="4">
-        <MudSelect T="string" Label="Choose Poster:" Variant="Variant.Text" OffsetY="true"
-            Margin="@(_margin==true?Margin.Dense:Margin.None)" Dense="@_dense">
-            @foreach (Poster item in _posters)
-            {
-                <MudSelectItem Value="@(item.name)"></MudSelectItem>
-            }
-        </MudSelect>
-    </MudItem>
-</MudGrid>
+<MudSelect @bind-value="Schedule.posterId" Required="true" T="int?" Placeholder="Select what poster to schedule...">
+    @foreach (Poster poster in _posters)
+    {
+        <MudSelectItem Value="@(poster.id)">@poster.name @poster.id</MudSelectItem>
+    }
+</MudSelect>
 
 @* <MudGrid Justify="Justify.SpaceEvenly">
     <MudItem xs="12">
@@ -42,7 +38,6 @@
 @code
 {
 
-    private List<Schedule> _schedules = new List<Schedule>();
     private List<Poster> _posters = new List<Poster>();
 
 
@@ -53,19 +48,10 @@
 
     [Parameter]
     public Schedule Schedule { get; set; }
-    [Parameter]
-    public Poster Poster
-    {
-        get; set;
-    }
-
-    bool _margin = true;
-    bool _dense = true;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _posters = await RequestHandler<Poster, List<Poster>>(HttpMethod.Get, "/Posters");
     }
-
 }
