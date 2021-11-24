@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
+using System.Text.Json;
 using server.Entities;
 using server.Services;
 using server.Models;
@@ -29,7 +30,8 @@ namespace server.Controllers
             try
             {
                 string AuthString = _loginService.Login(body.Email, body.Password);
-                return AuthString;
+                Object AuthObject = new {password = AuthString};
+                return JsonSerializer.Serialize(AuthString);
             }
             catch (System.Exception)
             {
