@@ -8,7 +8,7 @@
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
     @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
 
-<MudSelect  @bind-value="Schedule.posterId" Required="true" T="int?" Placeholder="Select what poster to schedule...">
+<MudSelect @bind-value="Schedule.posterId" Required="true" T="int?" Placeholder="Select what poster to schedule...">
     @foreach (Poster poster in _posters)
     {
         <MudSelectItem Value="@(poster.id)">@poster.name @poster.id</MudSelectItem>
@@ -53,6 +53,11 @@
     {
         await base.OnInitializedAsync();
         _posters = await RequestHandler<Poster, List<Poster>>(HttpMethod.Get, "/Posters");
-    }
 
+        foreach (Poster poster in _posters)
+        {
+            Console.WriteLine("HAAHAHAHH");
+            Console.WriteLine(poster.id);
+        }
+    }
 }
