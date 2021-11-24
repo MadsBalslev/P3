@@ -5,6 +5,8 @@ INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `passw
 VALUES (2, 'Mads', 'Balslev', 'k@k.dk', 'testpw', "1", NULL, 2);
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
 VALUES (3, 'Simon', 'Andersen', 'k@k.dk', 'testpw', "1", NULL, 2);
+INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
+VALUES (4, 'admin', 'admin', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "0", NULL, 1);
 
 DELETE FROM `database`.`institutions`;
 INSERT INTO `database`.`institutions` (`id`, `name`, `admin`) VALUES ('1', 'Nordkraft', '1');
@@ -39,3 +41,4 @@ INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `en
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
 UPDATE `users` SET `institution` = 2 WHERE `id` = 2;
 UPDATE `users` SET `institution` = 3 WHERE `id` = 3;
+UPDATE `users` SET `institution` = 3 WHERE `id` = 4;
