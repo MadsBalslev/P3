@@ -52,11 +52,12 @@ namespace server.Services
                 uPosters.Add(p.ToJSON());
             }
 
-            return new
-            {
-                userDetail = u.ToJSON(),
-                posters = uPosters,
-            };
+            return u.ToJSON();
+            // return new
+            // {
+            //     userDetail = u.ToJSON(),
+            //     posters = uPosters,
+            // };
         }
 
         public async Task<User> CreateUser(User user)

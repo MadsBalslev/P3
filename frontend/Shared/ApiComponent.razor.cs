@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using frontend.Shared.Manager;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using MudBlazor;
@@ -73,7 +72,7 @@ namespace frontend.Shared
                 Snackbar.Add(popup, severity);
         }
 
-        private async Task<HttpResponseMessage> ApiRequest<InputT>(HttpMethod method,
+        protected async Task<HttpResponseMessage> ApiRequest<InputT>(HttpMethod method,
                                                                    string ApiPath,
                                                                    InputT body) where InputT : IToJSON
         {
@@ -87,7 +86,7 @@ namespace frontend.Shared
 
             string ApiFullAddress = Configuration.GetValue<string>("ApiBaseAddress") + ApiPath;
             HttpRequestMessage request = new HttpRequestMessage(method, ApiFullAddress);
-            request.Headers.Add("Authorization", $"Basic {User.password}");
+            request.Headers.Add("Authorization", $"Basic {User.Authorization}");
             HttpClient client = ClientFactory.CreateClient();
 
             if (body != null)
@@ -106,10 +105,5 @@ namespace frontend.Shared
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<ReturnT>(responseStream);
         }
-    }
-
-    public interface IToJSON
-    {
-        public string ToJSON();
     }
 }
