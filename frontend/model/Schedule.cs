@@ -8,23 +8,6 @@ public class Schedule : IManageable
     public string name { get; set; }
     public DateTime? startDate { get; set; }
     public DateTime? endDate { get; set; }
-    public int daily { get; set; }
-    public string dailyToString
-    {
-        get
-        {
-            if (daily == 0)
-            {
-                return "No";
-            }
-            if (daily == 1)
-            {
-                return "Yes";
-            }
-            return "Error";
-        }
-    }
-    public string weekday { get; set; }
 
     public void InitializeAggregateObjects()
     {
@@ -41,8 +24,6 @@ public class Schedule : IManageable
                 name = this.name,
                 startDate = this.startDate,
                 endDate = this.endDate,
-                // daily = this.dailyToString,
-                // weekday = this.weekday,
             }
         );
     }
