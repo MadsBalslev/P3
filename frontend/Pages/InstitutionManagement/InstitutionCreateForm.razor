@@ -1,14 +1,13 @@
 @using MudBlazor
 @using Shared.Manager
 @inherits CreateForm<Institution>
-@using Pages.UserManagement
 
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
             <InstitutionFormCommonComponents Institution="_precreateItem" />
             <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="createInst"
                     FullWidth="true">Add Institution</MudButton>
             </MudCardActions>
             <MudCardActions>
@@ -18,3 +17,15 @@
         </MudCardContent>
     </MudCard>
 </MudForm>
+
+@code
+{
+    protected async Task createInst()
+        {
+            Institution inst = _precreateItem;
+            User testUser = new User();
+            testUser = await RequestHandler<User, User>(HttpMethod.Get, "/Users/4",testUser);
+            inst.admin = await RequestHandler<User, User>(HttpMethod.Get, "/Users/4",inst.admin);
+            await OnRequestAction(HttpMethod.Post, ManagerService.ApiPath, inst, validate: true);
+        }
+}
