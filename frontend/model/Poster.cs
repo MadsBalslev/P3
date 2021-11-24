@@ -29,6 +29,6 @@ public class Poster : IManageable
                 name = this.name,
                 imageUrl = this.image
             }
-     SX);
+        );
     }
 }
