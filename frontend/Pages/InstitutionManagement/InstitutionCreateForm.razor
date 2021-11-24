@@ -35,8 +35,8 @@
 
     protected async Task createInst()
         {
-            _precreateItem.admin = await RequestHandler<User, User>(HttpMethod.Get, "/Users/" + Convert.ToString(userId),inst.admin);
-            await OnRequestAction(HttpMethod.Post, ManagerService.ApiPath, inst, validate: true);
+            _precreateItem.admin = await RequestHandler<User, User>(HttpMethod.Get, "/Users/" + Convert.ToString(userId),_precreateItem.admin);
+            await OnRequestAction(HttpMethod.Post, ManagerService.ApiPath, _precreateItem, validate: true);
         }
 
     protected override async Task OnInitializedAsync()
