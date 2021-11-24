@@ -31,9 +31,9 @@ DELETE FROM `database`.`metadata`;
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '10');
 
 DELETE FROM `database`.`schedules`;
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', '0', '{0, 0, 0, 1, 0, 0, 1}');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '1', '{0, 0, 0, 0, 0, 0, 0}');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '0', '{1, 1, 0, 0, 0, 0, 0}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47');
 
 
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
