@@ -44,11 +44,8 @@ namespace server.Services
         public async Task<Object> GetScheduleJSON(int id)
         {
             Schedule s = await GetSchedule(id);
-            List<Object> SchedulesList = new List<Object>();
 
-            SchedulesList.Add(s.ToJSON());
-
-            return SchedulesList;
+            return s.ToJSON();
         }
 
         public async Task<Schedule> CreateSchedule(Schedule schedule)
@@ -76,8 +73,6 @@ namespace server.Services
             s.Name = schedule.Name;
             s.StartDate = schedule.StartDate;
             s.EndDate = schedule.EndDate;
-            // s.Daily = schedule.Daily;
-            // s.Weekday = schedule.Weekday;
 
             await _context.SaveChangesAsync();
 

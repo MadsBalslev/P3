@@ -70,29 +70,19 @@
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.endDate">End date
                     </MudTableSortLabel>
                 </MudTh>
-                <!-- <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.dailyToString">Repeat daily
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.weekday">Weekday
-                    </MudTableSortLabel>
-                </MudTh> -->
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@schedule.id</MudTd>
                 <MudTd>@schedule.name</MudTd>
                 <MudTd>@schedule.startDate</MudTd>
                 <MudTd>@schedule.endDate</MudTd>
-                @* <MudTd>@schedule.dailyToString</MudTd>
-                <MudTd>@schedule.weekday</MudTd> *@
             </RowTemplate>
             <CreateForm>
                 <ScheduleCreateForm />
             </CreateForm>
             @* <EditForm>
                 <PosterEditForm />
-            </EditForm> *@
+                </EditForm> *@
         </Manager>
     </MudTabPanel>
 </MudTabs>
@@ -123,11 +113,13 @@
             return true;
         if (schedule.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
+        // if (schedule.posterId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        // return true;
         if (schedule.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (schedule.dailyToString.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (schedule.weekday.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (schedule.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

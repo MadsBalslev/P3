@@ -139,8 +139,6 @@ CREATE TABLE IF NOT EXISTS `database`.`schedules` (
     `name` VARCHAR(255) NOT NULL,
     `start_date` DATETIME NOT NULL,
     `end_date` DATETIME NOT NULL,
-    `daily` INT NOT NULL,
-    `weekday` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `poster_id`
     FOREIGN KEY (`poster_id`)

@@ -14,16 +14,29 @@
         <MudText Typo="Typo.h6">Nordkraft PMS</MudText>
         <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged
             Link="/PosterManagement" Class="pl-6">Poster Management</AppBarButton>
-        <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged
+
+        @if (AccessLevel.InstAdmin <= User.AccessLevel)
+        {
+            <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged
             Link="/UserManagement">
-            User
-            Management</AppBarButton>
-        <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged
+                User
+                Management</AppBarButton>
+        }
+
+        @if (AccessLevel.SysAdmin <= User.AccessLevel)
+        {
+            <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged
             Link="/InstitutionManagement">Institution Management</AppBarButton>
-        <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged
+        }
+
+        @if (AccessLevel.SysAdmin <= User.AccessLevel)
+        {
+            <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged
             Link="/ScreenManagement">
-            Screen
-            Management</AppBarButton>
+                Screen
+                Management</AppBarButton>
+
+        }
         <MudSpacer />
         <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme"
             Label="@(lightTheme ? "Light" : "Dark")" />
@@ -31,8 +44,7 @@
             <MudMenuItem>Your Settings</MudMenuItem>
             <MudMenuItem>Logout</MudMenuItem>
         </MudMenu>
-        @* <MudText>@UserInformation.User.firstName @UserInformation.User.lastName
-            (@UserInformation.User.RoleAsString) - @UserInformation.User.institution.name</MudText> *@
+        <MudText>@User.ToString() </MudText>
     </MudAppBar>
 
     <MudMainContent>
@@ -51,12 +63,11 @@
         _currentTheme = defaultTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
 
-        bool userIsNotLoggedIn = User.password == null || User ==
-        null;
-        @* if (userIsNotLoggedIn)
+        bool userIsNotLoggedIn = User.Authorization == null;
+        if (userIsNotLoggedIn)
         {
             NavManager.NavigateTo("/login");
-        } *@
+        }
     }
 
     private bool lightTheme { get; set; } = true;
