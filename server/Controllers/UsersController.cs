@@ -38,7 +38,7 @@ namespace server.Controllers
         {
             string email = HttpContext.User.Identity.Name;
             User user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
-            return _userService.GetUserJSON(user.Id);
+            return await _userService.GetUserJSON(user.Id);
         }
 
         [HttpGet("{id:int}")]
