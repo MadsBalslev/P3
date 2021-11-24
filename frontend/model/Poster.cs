@@ -15,7 +15,7 @@ public class Poster : IManageable
 
     public void InitializeAggregateObjects()
     {
-        createdBy = new();
+        createdBy = new ();
         institution = new();
     }
 
@@ -29,6 +29,6 @@ public class Poster : IManageable
                 name = this.name,
                 imageUrl = this.image
             }
-        );
+     SX   );
     }
 }

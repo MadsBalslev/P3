@@ -12,7 +12,7 @@ namespace frontend.Shared.Manager
 
         protected async Task OnEditItem()
         {
-            await OnRequestAction(HttpMethod.Post, FullApiAddress(), _selectedItem, validate: true);
+            await OnRequestAction(HttpMethod.Put, FullApiAddress(), _selectedItem, validate: true);
         }
 
         protected async Task OnDelete()
