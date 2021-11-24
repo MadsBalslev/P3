@@ -30,7 +30,7 @@ namespace server.Controllers
             try
             {
                 string AuthString = _loginService.Login(body.Email, body.Password);
-                Object AuthObject = new {password = AuthString};
+                Object AuthObject = new { password = AuthString };
                 return JsonSerializer.Serialize(AuthString);
             }
             catch (System.Exception)
