@@ -4,7 +4,7 @@ using System.Text.Json;
 public class Schedule : IManageable
 {
     public int? id { get; set; }
-    public int posterId { get; set; }
+    public int? posterId { get; set; }
     public string name { get; set; }
     public DateTime? startDate { get; set; }
     public DateTime? endDate { get; set; }
@@ -28,7 +28,6 @@ public class Schedule : IManageable
 
     public void InitializeAggregateObjects()
     {
-        posterId = new();
     }
 
     public string ToJSON()
@@ -37,12 +36,13 @@ public class Schedule : IManageable
         (
             new
             {
-                id = this.id,
+                // id = this.id,
                 posterId = this.posterId,
+                name = this.name,
                 startDate = this.startDate,
                 endDate = this.endDate,
-                daily = this.dailyToString,
-                weekday = this.weekday,
+                // daily = this.dailyToString,
+                // weekday = this.weekday,
             }
         );
     }
