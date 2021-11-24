@@ -30,14 +30,7 @@
     public User User { get; set; } = new();
 
     private List<User> _users = new List<User>();
-    public bool PasswordFieldIsRequired { get; set; } = true;
 
-    private string _confirmedPassword;
-
-    private bool _passwordIsVisible;
-
-    InputType PasswordInput = InputType.Password;
-    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,26 +47,4 @@
             _users = await JsonSerializer.DeserializeAsync<List<User>>(responseStream);
         }
     }
-
-    private bool ValidatePassword(string password)
-    {
-        return password == _confirmedPassword;
-    }
-
-    private void ShowOrHidePassword()
-    {
-        @if (_passwordIsVisible)
-        {
-            _passwordIsVisible = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
-        }
-        else
-        {
-            _passwordIsVisible = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
-        }
-    }
-
 }
