@@ -74,8 +74,6 @@ namespace server.Services
         {
             Poster p = await GetPoster(id);
             p.Name = poster.Name;
-            // p.StartDate = poster.StartDate;
-            // p.EndDate = poster.EndDate;
             p.ImageUrl = poster.ImageUrl;
 
 

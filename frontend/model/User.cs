@@ -34,9 +34,28 @@ public class User : IManageable, IUser
         }
     }
 
+    public AccessLevel AccessLevel
+    {
+        get
+        {
+            switch (role)
+            {
+                case 1:
+                    return AccessLevel.User;
+                case 2:
+                    return AccessLevel.InstAdmin;
+                case 3:
+                    return AccessLevel.SysAdmin;
+                default:
+                    return AccessLevel.User;
+            }
+        }
+    }
+
     public string name { get; set; }
 
     public Institution institution { get; set; }
+    public string Authorization { get; set; }
 
     public void InitializeAggregateObjects()
     {
@@ -58,5 +77,10 @@ public class User : IManageable, IUser
                 password = this.password,
             }
         );
+    }
+
+    public override string ToString()
+    {
+        return $"{firstName} {lastName} ({RoleAsString}) - {institution.name}";
     }
 }

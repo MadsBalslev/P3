@@ -14,14 +14,6 @@
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
                     </MudTableSortLabel>
                 </MudTh>
-                <!-- <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.startDate">Start date
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.endDate">End date
-                    </MudTableSortLabel>
-                </MudTh> -->
                 <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
                     </MudTableSortLabel>
@@ -38,8 +30,6 @@
             <RowTemplate>
                 <MudTd>@poster.id</MudTd>
                 <MudTd>@poster.name</MudTd>
-                <!-- <MudTd>@poster.startDate</MudTd>
-                <MudTd>@poster.endDate</MudTd> -->
                 <MudTd>@poster.createdBy.name</MudTd>
                 <MudTd>@poster.institution.name</MudTd>
                 <MudTd>@poster.image</MudTd>
@@ -58,10 +48,6 @@
                 <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID</MudTableSortLabel>
                 </MudTh>
-                @* <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.posterId">Poster ID
-                    </MudTableSortLabel>
-                </MudTh> *@
                 <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.name">Schedule Name
                     </MudTableSortLabel>
@@ -74,23 +60,22 @@
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.endDate">End date
                     </MudTableSortLabel>
                 </MudTh>
-                <MudTh>
+                <!-- <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.dailyToString">Repeat daily
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.weekday">Weekday
                     </MudTableSortLabel>
-                </MudTh>
+                </MudTh> -->
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@schedule.id</MudTd>
-                @*<MudTd>@schedule.posterId</MudTd>*@
                 <MudTd>@schedule.name</MudTd>
                 <MudTd>@schedule.startDate</MudTd>
                 <MudTd>@schedule.endDate</MudTd>
-                <MudTd>@schedule.dailyToString</MudTd>
-                <MudTd>@schedule.weekday</MudTd>
+                @* <MudTd>@schedule.dailyToString</MudTd>
+                <MudTd>@schedule.weekday</MudTd> *@
             </RowTemplate>
             <CreateForm>
                 <ScheduleCreateForm />
@@ -112,10 +97,6 @@
             return true;
         if (poster.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        // if (poster.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        //     return true;
-        // if (poster.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        //     return true;
         if (poster.createdBy.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (poster.institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
@@ -135,10 +116,10 @@
          // return true;
         if (schedule.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (schedule.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+        // if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //    return true;
+        // if (schedule.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //    return true; *@
         if (schedule.dailyToString.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.weekday.Contains(searchString, StringComparison.OrdinalIgnoreCase))

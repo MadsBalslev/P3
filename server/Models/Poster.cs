@@ -8,8 +8,6 @@ namespace server.Entities
             {
                 Id = this.Id,
                 name = this.Name,
-                // startDate = this.StartDate,
-                // endDate = this.EndDate,
                 image = this.ImageUrl,
                 createdBy = new
                 {
@@ -20,7 +18,7 @@ namespace server.Entities
                 {
                     id = this.CreatedByNavigation.InstitutionNavigation.Id,
                     name = this.CreatedByNavigation.InstitutionNavigation.Name,
-                }
+                },
             };
         }
     }
