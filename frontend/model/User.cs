@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-public class User : IManageable, IUser
+public class User : IManageable
 {
     public int? id { get; set; }
 
@@ -55,7 +55,6 @@ public class User : IManageable, IUser
     public string name { get; set; }
 
     public Institution institution { get; set; }
-    public string Authorization { get; set; }
 
     public void InitializeAggregateObjects()
     {
