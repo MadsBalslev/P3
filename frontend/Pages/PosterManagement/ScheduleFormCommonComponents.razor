@@ -53,11 +53,5 @@
     {
         await base.OnInitializedAsync();
         _posters = await RequestHandler<Poster, List<Poster>>(HttpMethod.Get, "/Posters");
-
-        foreach (Poster poster in _posters)
-        {
-            Console.WriteLine("HAAHAHAHH");
-            Console.WriteLine(poster.id);
-        }
     }
 }
