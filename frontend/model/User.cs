@@ -2,11 +2,37 @@ using System.Text.Json;
 
 public class User : IManageable
 {
+    public User()
+    {
+    }
+
+    public User(int? id,
+                string firstName,
+                string lastName,
+                string email,
+                string phoneNumber,
+                string password,
+                AccessLevel accessLevel,
+                Institution institution)
+    {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.name = $"{firstName} {lastName}";
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        AccessLevel = accessLevel;
+        this.institution = institution;
+    }
+
     public int? id { get; set; }
 
     public string firstName { get; set; }
 
     public string lastName { get; set; }
+
+    public string name { get; set; }
 
     public string email { get; set; }
 
@@ -50,9 +76,26 @@ public class User : IManageable
                     return AccessLevel.User;
             }
         }
+        set
+        {
+            switch (value)
+            {
+                case AccessLevel.User:
+                    role = 1;
+                    break;
+                case AccessLevel.InstAdmin:
+                    role = 2;
+                    break;
+                case AccessLevel.SysAdmin:
+                    role = 3;
+                    break;
+                default:
+                    role = 1;
+                    break;
+            }
+        }
     }
 
-    public string name { get; set; }
 
     public Institution institution { get; set; }
 
