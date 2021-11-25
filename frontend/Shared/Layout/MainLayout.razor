@@ -35,14 +35,14 @@
             Link="/ScreenManagement">
                 Screen
                 Management</AppBarButton>
-
         }
+
         <MudSpacer />
         <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme"
             Label="@(lightTheme ? "Light" : "Dark")" />
         <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
             <MudMenuItem>Your Settings</MudMenuItem>
-            <MudMenuItem>Logout</MudMenuItem>
+            <MudMenuItem OnClick="OnLogout" >Logout</MudMenuItem>
         </MudMenu>
         <MudText>@CurrentUserService.User.ToString() </MudText>
     </MudAppBar>
@@ -76,13 +76,9 @@
     private void DarkMode()
     {
         if (_currentTheme == defaultTheme)
-        {
             _currentTheme = DarkTheme;
-        }
         else
-        {
             _currentTheme = defaultTheme;
-        }
     }
 
     private MudTheme _currentTheme = new MudTheme();
@@ -120,4 +116,11 @@
             TextDisabled = "rgba(255,255,255, 0.2)"
         }
     };
+
+    private void OnLogout()
+    {
+        NavManager.NavigateTo("/login");
+        CurrentUserService.Authorization = null;
+        CurrentUserService.User = new User(0, "", "", "", "", "", AccessLevel.User, new Institution());
+    }
 }
