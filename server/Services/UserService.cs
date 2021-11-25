@@ -93,7 +93,7 @@ namespace server.Services
 
         public async Task<IEnumerable<Object>> GetAllUserJSON(User currentUser)
         {
-            if(currentUser.Role == 1)
+            if (currentUser.Role == 1)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -101,18 +101,18 @@ namespace server.Services
             IEnumerable<User> result = Enumerable.Empty<User>();
             IEnumerable<User> users = await GetAllUsers();
 
-            if(currentUser.Role == 2)
+            if (currentUser.Role == 2)
             {
                 result = users.Where(u => u.Institution == currentUser.Institution);
             }
-            else if(currentUser.Role == 3)
+            else if (currentUser.Role == 3)
             {
                 result = users;
             }
 
             List<Object> json = new List<object>();
 
-            foreach(User u in result)
+            foreach (User u in result)
             {
                 json.Add(u.ToJSON());
             }
