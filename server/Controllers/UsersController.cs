@@ -28,7 +28,17 @@ namespace server.Controllers
         [HttpGet]
         public async Task<IEnumerable<Object>> Get()
         {
-            return await _userService.GetAllUserJSON();
+            // Only return all users if user is sys-admin or inst admin
+            string email = HttpContext.User.Identity.Name;
+            User currentUser = await _userService.GetLoggedInUser(email);
+            try
+            {
+                return await _userService.GetAllUserJSON(currentUser);
+            }
+            catch (System.Exception)
+            {
+                return Enumerable.Empty<object>();
+            }
         }
 
         // Gets currently logged in User
@@ -37,7 +47,7 @@ namespace server.Controllers
         public async Task<ActionResult<Object>> GetUser()
         {
             string email = HttpContext.User.Identity.Name;
-            User user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+            User user = await _userService.GetLoggedInUser(email);
             return await _userService.GetUserJSON(user.Id);
         }
 

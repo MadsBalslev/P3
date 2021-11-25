@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Entities;
 using BCryptNet = BCrypt.Net.BCrypt;
@@ -43,6 +46,13 @@ namespace server.Services
             return user;
         }
 
+        public async Task<User> GetLoggedInUser(string email)
+        {
+            User currentUser = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+
+            return currentUser;
+        }
+
         public async Task<Object> GetUserJSON(int id)
         {
             User u = await GetUser(id);
@@ -81,19 +91,33 @@ namespace server.Services
             return user;
         }
 
-        public async Task<IEnumerable<Object>> GetAllUserJSON()
+        public async Task<IEnumerable<Object>> GetAllUserJSON(User currentUser)
         {
-            IEnumerable<User> users = await GetAllUsers();
-            List<Object> response = new List<Object>();
-
-            foreach (User u in users)
+            if(currentUser.Role == 1)
             {
-                response.Add(
-                    u.ToJSON()
-                );
+                throw new UnauthorizedAccessException();
             }
 
-            return response;
+            IEnumerable<User> result = Enumerable.Empty<User>();
+            IEnumerable<User> users = await GetAllUsers();
+
+            if(currentUser.Role == 2)
+            {
+                result = users.Where(u => u.Institution == currentUser.Institution);
+            }
+            else if(currentUser.Role == 3)
+            {
+                result = users;
+            }
+
+            List<Object> json = new List<object>();
+
+            foreach(User u in result)
+            {
+                json.Add(u.ToJSON());
+            }
+
+            return json;
         }
 
         // PUT request
