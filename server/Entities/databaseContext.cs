@@ -115,10 +115,6 @@ namespace server.Entities
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.Daily)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("daily");
-
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
                 entity.Property(e => e.Name)
@@ -131,11 +127,6 @@ namespace server.Entities
                     .HasColumnName("poster_id");
 
                 entity.Property(e => e.StartDate).HasColumnName("start_date");
-
-                entity.Property(e => e.Weekday)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnName("weekday");
 
                 entity.HasOne(d => d.Poster)
                     .WithMany(p => p.Schedules)

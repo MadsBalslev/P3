@@ -5,6 +5,8 @@ INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `passw
 VALUES (2, 'Mads', 'Balslev', 'k@k.dk', 'testpw', "1", NULL, 2);
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
 VALUES (3, 'Simon', 'Andersen', 'k@k.dk', 'testpw', "1", NULL, 2);
+INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
+VALUES (4, 'admin', 'admin', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "0", NULL, 1);
 
 DELETE FROM `database`.`institutions`;
 INSERT INTO `database`.`institutions` (`id`, `name`, `admin`) VALUES ('1', 'Nordkraft', '1');
@@ -31,11 +33,12 @@ DELETE FROM `database`.`metadata`;
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '10');
 
 DELETE FROM `database`.`schedules`;
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', '0', '{0, 0, 0, 1, 0, 0, 1}');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '1', '{0, 0, 0, 0, 0, 0, 0}');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `daily`, `weekday`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '0', '{1, 1, 0, 0, 0, 0, 0}');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47');
 
 
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
 UPDATE `users` SET `institution` = 2 WHERE `id` = 2;
 UPDATE `users` SET `institution` = 3 WHERE `id` = 3;
+UPDATE `users` SET `institution` = 3 WHERE `id` = 4;

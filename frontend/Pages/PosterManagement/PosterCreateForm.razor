@@ -23,3 +23,11 @@
         </MudCardContent>
     </MudCard>
 </MudForm>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        _precreateItem.createdBy = CurrentUserService.User;
+    }
+}
