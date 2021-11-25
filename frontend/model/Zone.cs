@@ -14,7 +14,6 @@ public class Zone : IManageable
         (
             new
             {
-                id = this.id,
                 name = this.name,
             }
         );

@@ -52,8 +52,8 @@ namespace server.Services
         {
             await _context.Schedules.AddAsync(schedule);
             await _context.SaveChangesAsync();
-
-            return await _context.Schedules.Where(s => s.Id == schedule.Id).FirstOrDefaultAsync();
+            Console.WriteLine("ldkskfjglsjlf" + schedule.Name);
+            return await _context.Schedules.Where(s => s.Name == schedule.Name).FirstOrDefaultAsync();
         }
 
         public async Task<Schedule> DeleteSchedule(int id)
