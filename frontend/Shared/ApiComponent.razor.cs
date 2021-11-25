@@ -65,8 +65,9 @@ namespace frontend.Shared
                 return default;
                 // throw;
 
-                //TODO it's probably better that this catch statement retrows the error, as
-                // RequestHandler() is only responsible for loggin the error to the user.
+                // TODO it's probably better that this catch statement retrows the error, as
+                // RequestHandler() is only responsible for loggin the error to the user, not
+                // fixing it.
                 // Though this will break the system in several places in subtle ways hmmm.
             }
         }
