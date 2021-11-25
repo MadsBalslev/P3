@@ -1,0 +1,28 @@
+@inherits Shared.Manager.EditForm<Institution>
+@using MudBlazor
+
+<MudForm @ref="_form">
+    <MudCard>
+        <MudCardContent>
+            <InstitutionFormCommonComponents Institution="_selectedItem"/>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
+                    Color="Color.Primary">
+                    Apply edit
+                </MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                    Color="Color.Warning">
+                    Cancel
+                </MudButton>
+            </MudCardActions>
+            <MudCardActions>
+                <MudButton FullWidth="true" @onclick="OnDelete" Variant="Variant.Filled"
+                    Color="Color.Secondary">
+                    Delete
+                </MudButton>
+            </MudCardActions>
+        </MudCardContent>
+    </MudCard>
+</MudForm>
