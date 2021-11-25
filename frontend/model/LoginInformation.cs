@@ -1,8 +1,7 @@
 
 using System.Text.Json;
 
-class LoginInformation : IToJSON
-
+public class LoginInformation : IToJSON
 {
     public string email { get; set; }
     public string password { get; set; }

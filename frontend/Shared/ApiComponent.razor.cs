@@ -23,7 +23,7 @@ namespace frontend.Shared
         public IConfiguration Configuration { get; set; }
 
         [Inject]
-        public IUser User { get; set; }
+        public ICurrentUserService CurrentUserService { get; set; }
 
         protected async Task<ReturnT> RequestHandler<InputT, ReturnT>(HttpMethod method,
                                                                       string ApiPath,
@@ -63,6 +63,12 @@ namespace frontend.Shared
             {
                 Snackbar.Add($"{ErrorPopup}{e.Message}", Severity.Error);
                 return default;
+                // throw;
+
+                // TODO it's probably better that this catch statement retrows the error, as
+                // RequestHandler() is only responsible for loggin the error to the user, not
+                // fixing it.
+                // Though this will break the system in several places in subtle ways hmmm.
             }
         }
 
@@ -86,7 +92,7 @@ namespace frontend.Shared
 
             string ApiFullAddress = Configuration.GetValue<string>("ApiBaseAddress") + ApiPath;
             HttpRequestMessage request = new HttpRequestMessage(method, ApiFullAddress);
-            request.Headers.Add("Authorization", $"Basic {User.Authorization}");
+            request.Headers.Add("Authorization", $"Basic {CurrentUserService.Authorization}");
             HttpClient client = ClientFactory.CreateClient();
 
             if (body != null)

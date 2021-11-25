@@ -28,6 +28,6 @@
 {
     protected override void OnInitialized()
     {
-        _precreateItem.createdBy = (User)User; // Yes this typecast is necessary
+        _precreateItem.createdBy = CurrentUserService.User;
     }
 }
