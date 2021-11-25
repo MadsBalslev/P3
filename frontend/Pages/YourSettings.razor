@@ -1,2 +1,86 @@
-
 @page "/YourSettings"
+@using MudBlazor
+@inject NavigationManager NavManager
+@inherits frontend.Shared.Manager.EditForm<User>
+
+<MudContainer>
+    <MudText Typo="Typo.h3" Class="mt-2 mb-4">Your Settings</MudText>
+    <MudGrid>
+        <MudForm>
+            <MudButton Variant="Variant.Filled" Color="Color.Success" @onclick="Editable">Edit</MudButton>
+            <MudTextField Class="mb-2" T="string" @bind-Value="User.firstName" Label="First Name"
+                Placeholder="User.firstName" Disabled="@_editable">
+            </MudTextField>
+            <MudTextField Class="mb-2" T="string" @bind-Value="User.lastName" Label="Last Name"
+                Placeholder="User.lastName" Disabled="@_editable">
+            </MudTextField>
+            <MudTextField Class="mb-2" T="string" @bind-Value="User.email" Label="Email" Placeholder="User.email" Disabled="@_editable">
+            </MudTextField>
+            <MudTextField Class="mb-2" T="string" @bind-Value="User.phoneNumber" Label="Phonenumber"
+                Placeholder="User.phoneNumber" Disabled="@_editable">
+            </MudTextField>
+            <MudTextField Class="mb-2" T="string" @bind-Value="User.password" Label="Password"
+                InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" Disabled="@_editable">
+            </MudTextField>
+            <MudTextField Validation="new Func<string, bool>(ValidatePassword)"
+                @bind-Value="_confirmedPassword" Label="Confirm password" InputType="@PasswordInput"
+                Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" Disabled="@_editable" />
+            <MudSelect Class="mb-2" @bind-Value="User.role" Label="Role" Placeholder="User.RoleAsString" Disabled="@_editable">
+                <MudSelectItem Value="@((int?)1)">Normal user</MudSelectItem>
+                <MudSelectItem Value="@((int?)2)">Institution admin</MudSelectItem>
+                <MudSelectItem Value="@((int?)3)">System admin</MudSelectItem>
+            </MudSelect>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnEditItem" Disabled="@_editable">Apply changes</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" @onclick="OnCancel" Disabled="@_editable">Cancel</MudButton>
+        </MudForm>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    private string _confirmedPassword;
+    private bool _passwordIsVisible;
+    private bool _editable = true;
+
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    private bool ValidatePassword(string password)
+    {
+        return password == _confirmedPassword;
+    }
+
+    private void ShowOrHidePassword()
+    {
+        @if (_passwordIsVisible)
+        {
+            _passwordIsVisible = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            _passwordIsVisible = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private void Editable()
+    {
+        @if (_editable)
+        {
+            _editable = false;
+        }
+        else
+        {
+            _editable = true;
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _selectedItem = CurrentUserService.User;
+    }
+}
