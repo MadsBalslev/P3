@@ -56,12 +56,22 @@ namespace server.Services
         }
 
 
-        public async Task<IEnumerable<Object>> GetAllPosterJSON()
+        public async Task<IEnumerable<Object>> GetAllPosterJSON(User currentUser)
         {
+            IEnumerable<Poster> result = Enumerable.Empty<Poster>();
             IEnumerable<Poster> posters = await GetAllPosters();
+            if (currentUser.Role == 1 || currentUser.Role == 2)
+            {
+                result = posters.Where(p => p.CreatedByNavigation.Institution == currentUser.Institution);
+            }
+            else if (currentUser.Role == 3)
+            {
+                result = posters;
+            }
+
             List<Object> response = new List<object>();
 
-            foreach (Poster p in posters)
+            foreach (Poster p in result)
             {
                 response.Add(p.ToJSON());
             }
