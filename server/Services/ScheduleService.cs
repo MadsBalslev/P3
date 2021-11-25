@@ -15,8 +15,8 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public async Task<IEnumerable<Schedule>> GetAllSchedules() 
-        { 
+        public async Task<IEnumerable<Schedule>> GetAllSchedules()
+        {
             return await _context.Schedules.ToListAsync();
         }
 
@@ -54,7 +54,7 @@ namespace server.Services
         {
             await _context.Schedules.AddAsync(schedule);
             await _context.SaveChangesAsync();
-        
+
             return await _context.Schedules.Where(s => s.PosterId == schedule.PosterId).FirstOrDefaultAsync();
         }
 
