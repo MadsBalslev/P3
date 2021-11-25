@@ -41,6 +41,11 @@ namespace server.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("/{active}")]
+        public async Task<IEnumerable<Object>> GetActive()
+        {
+            return await _scheduleService.GetAllActiveSchedulesJSON();
+        }
 
         [HttpPost]
         public async Task<ActionResult<Object>> Post([FromBody] Schedule schedule)

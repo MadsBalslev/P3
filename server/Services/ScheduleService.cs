@@ -29,6 +29,19 @@ namespace server.Services
             return response;
         }
 
+        public async Task<IEnumerable<Object>> GetAllActiveSchedulesJSON()
+        {
+            DateTime currentTime = DateTime.Now;
+            IEnumerable<Schedule> schedules = await GetAllSchedules();
+            IEnumerable<Schedule> FilteredSchedules = schedules.Where(s => s.StartDate <= currentTime && s.EndDate >= currentTime);
+            List<Object> response = new List<Object>();
+            foreach (Schedule s in FilteredSchedules)
+            {
+                response.Add(s.ToJSON());
+            }
+            return response;
+        }
+
         public async Task<Schedule> GetSchedule(int id)
         {
             Schedule schedule = await _context.Schedules.FindAsync(id);
