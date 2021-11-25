@@ -1,3 +1,4 @@
+@using System
 @using MudBlazor
 @using Shared.Manager
 @inherits ApiComponent
@@ -5,7 +6,8 @@
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Schedule.name" Label="Schedule Name" />
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date" MinDate="DateTime.Now"
     MaxDate="Schedule.endDate" @bind-Date="Schedule.startDate" DateFormat="dd/MM/yyyy" />
-@* <MudTimePicker PickerVariant="PickerVariant.Dialog" Label="Pick time for start date" @bind-Time="time" TimeFormat="HH:mm" /> *@
+@* <MudTimePicker PickerVariant="PickerVariant.Dialog" Label="Pick time for start date" @bind-Time="time"
+    TimeFormat="HH:mm" /> *@
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
     @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
 
@@ -20,7 +22,7 @@
 {
 
 
-    TimeSpan? time = new TimeSpan(00, 00, 00);
+    // TimeSpan? time = new TimeSpan(00, 00, 00);
 
     private List<Poster> _posters = new List<Poster>();
 
