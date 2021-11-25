@@ -6,7 +6,7 @@ VALUES (2, 'Mads', 'Balslev', 'k@k.dk', 'testpw', "1", NULL, 2);
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
 VALUES (3, 'Simon', 'Andersen', 'k@k.dk', 'testpw', "1", NULL, 2);
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
-VALUES (4, 'admin', 'admin', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "0", NULL, 1);
+VALUES (4, 'admin', 'admin', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "0", NULL, 3);
 
 DELETE FROM `database`.`institutions`;
 INSERT INTO `database`.`institutions` (`id`, `name`, `admin`) VALUES ('1', 'Nordkraft', '1');
