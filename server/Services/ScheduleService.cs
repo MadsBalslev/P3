@@ -15,7 +15,10 @@ namespace server.Services
 
         private databaseContext _context;
 
-        public async Task<IEnumerable<Schedule>> GetAllSchedules() => await _context.Schedules.ToListAsync();
+        public async Task<IEnumerable<Schedule>> GetAllSchedules() 
+        { 
+            return await _context.Schedules.ToListAsync();
+        }
 
         public async Task<IEnumerable<Object>> GetAllSchedulesJSON()
         {
@@ -44,7 +47,6 @@ namespace server.Services
         public async Task<Object> GetScheduleJSON(int id)
         {
             Schedule s = await GetSchedule(id);
-
             return s.ToJSON();
         }
 
@@ -52,8 +54,8 @@ namespace server.Services
         {
             await _context.Schedules.AddAsync(schedule);
             await _context.SaveChangesAsync();
-            Console.WriteLine("ldkskfjglsjlf" + schedule.Name);
-            return await _context.Schedules.Where(s => s.Name == schedule.Name).FirstOrDefaultAsync();
+        
+            return await _context.Schedules.Where(s => s.PosterId == schedule.PosterId).FirstOrDefaultAsync();
         }
 
         public async Task<Schedule> DeleteSchedule(int id)
@@ -73,6 +75,7 @@ namespace server.Services
             s.Name = schedule.Name;
             s.StartDate = schedule.StartDate;
             s.EndDate = schedule.EndDate;
+            s.Zone = schedule.Zone;
 
             await _context.SaveChangesAsync();
 
