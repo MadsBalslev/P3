@@ -1,37 +1,32 @@
 @page "/YourSettings"
 @using MudBlazor
-@inject NavigationManager NavManager
-@inherits frontend.Shared.Manager.EditForm<User>
+@using Shared.Manager
+@inherits Shared.Manager.EditForm<User>
 
 <MudContainer>
-    <MudText Typo="Typo.h3" Class="mt-2 mb-4">Your Settings</MudText>
     <MudGrid>
-        <MudForm>
+        <MudForm @ref="_localForm">
+    <MudText Typo="Typo.h3" Class="mt-4 mb-4">Your Settings</MudText>
             <MudButton Variant="Variant.Filled" Color="Color.Success" @onclick="Editable">Edit</MudButton>
-            <MudTextField Class="mb-2" T="string" @bind-Value="User.firstName" Label="First Name"
-                Placeholder="User.firstName" Disabled="@_editable">
+            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.firstName" Label="First Name"
+                Placeholder="_selectedItem.firstName" Disabled="@_editable">
             </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="User.lastName" Label="Last Name"
-                Placeholder="User.lastName" Disabled="@_editable">
+            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.lastName" Label="Last Name"
+                Placeholder="_selectedItem.lastName" Disabled="@_editable">
             </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="User.email" Label="Email" Placeholder="User.email" Disabled="@_editable">
+            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.email" Label="Email" Placeholder="_selectedItem.email" Disabled="@_editable">
             </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="User.phoneNumber" Label="Phonenumber"
-                Placeholder="User.phoneNumber" Disabled="@_editable">
+            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.phoneNumber" Label="Phonenumber"
+                Placeholder="_selectedItem.phoneNumber" Disabled="@_editable">
             </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="User.password" Label="Password"
+            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.password" Label="Password"
                 InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" Disabled="@_editable">
             </MudTextField>
             <MudTextField Validation="new Func<string, bool>(ValidatePassword)"
                 @bind-Value="_confirmedPassword" Label="Confirm password" InputType="@PasswordInput"
                 Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" Disabled="@_editable" />
-            <MudSelect Class="mb-2" @bind-Value="User.role" Label="Role" Placeholder="User.RoleAsString" Disabled="@_editable">
-                <MudSelectItem Value="@((int?)1)">Normal user</MudSelectItem>
-                <MudSelectItem Value="@((int?)2)">Institution admin</MudSelectItem>
-                <MudSelectItem Value="@((int?)3)">System admin</MudSelectItem>
-            </MudSelect>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnEditItem" Disabled="@_editable">Apply changes</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Warning" @onclick="OnCancel" Disabled="@_editable">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@OnEditItem" Disabled="@_editable" Class="mt-2">Apply changes</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" @onclick="@LocalOnCancel" Disabled="@_editable" Class="mt-2">Cancel</MudButton>
         </MudForm>
     </MudGrid>
 </MudContainer>
@@ -41,10 +36,9 @@
     private string _confirmedPassword;
     private bool _passwordIsVisible;
     private bool _editable = true;
-
+    private MudForm _localForm;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-
     private bool ValidatePassword(string password)
     {
         return password == _confirmedPassword;
@@ -76,6 +70,17 @@
         {
             _editable = true;
         }
+    }
+    private async Task LocalOnCancel()
+    {
+        await LocalRefreshManager();
+    }
+
+    protected async Task LocalRefreshManager()
+    {
+        _localForm.Reset();
+        _localForm.ResetValidation();
+        await ManagerService.RequestRefresh();
     }
 
     protected async override Task OnInitializedAsync()
