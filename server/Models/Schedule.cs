@@ -11,6 +11,11 @@ namespace server.Entities
                 Name = this.Name,
                 StartDate = this.StartDate,
                 EndDate = this.EndDate,
+                Zone = new
+                {
+                    id = this.ZoneNavigation.Id,
+                    name = this.ZoneNavigation.Name
+                },
             };
         }
     }

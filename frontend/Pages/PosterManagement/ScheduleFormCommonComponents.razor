@@ -17,6 +17,13 @@
         <MudSelectItem Value="@(poster.id)">@poster.name @poster.id</MudSelectItem>
     }
 </MudSelect>
+<MudSelect @bind-value="Schedule.zone" Required="true" T="int?" Placeholder="Select what zone to schedule in...">
+    @foreach (Zone zone in _zones)
+    {
+        <MudSelectItem Value="@(1)">@zone.name </MudSelectItem>
+    }
+</MudSelect>
+
 
 @code
 {
@@ -25,6 +32,8 @@
     // TimeSpan? time = new TimeSpan(00, 00, 00);
 
     private List<Poster> _posters = new List<Poster>();
+
+    private List<Zone> _zones = new List<Zone>();
 
     // Weekday
     // "{Man, Tir, Ons, Tor, Fre, Lør, Søn}"
@@ -36,6 +45,12 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _posters = await RequestHandler<Poster, List<Poster>>(HttpMethod.Get, "/Posters");
+        _posters = await RequestHandler<None, List<Poster>>(HttpMethod.Get, "/Posters");
+        _zones = await RequestHandler<None, List<Zone>>(HttpMethod.Get, "/Zones");
+
+        foreach (Zone zone in _zones)
+        {
+            System.Console.WriteLine("hello :D " + zone.id);
+        }
     }
 }

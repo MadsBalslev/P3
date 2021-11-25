@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -21,7 +21,6 @@ namespace server.Entities
         public virtual DbSet<Metadata> Metadatas { get; set; }
         public virtual DbSet<Poster> Posters { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
-        public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
 
@@ -111,6 +110,8 @@ namespace server.Entities
 
                 entity.HasIndex(e => e.PosterId, "poster_id");
 
+                entity.HasIndex(e => e.Zone, "zone");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
@@ -128,34 +129,18 @@ namespace server.Entities
 
                 entity.Property(e => e.StartDate).HasColumnName("start_date");
 
+                entity.Property(e => e.Zone)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("zone");
+
                 entity.HasOne(d => d.Poster)
                     .WithMany(p => p.Schedules)
                     .HasForeignKey(d => d.PosterId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("poster_id");
-            });
-
-            modelBuilder.Entity<Screen>(entity =>
-            {
-                entity.ToTable("screens");
-
-                entity.HasIndex(e => e.Zone, "zone");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.Zone)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("zone");
 
                 entity.HasOne(d => d.ZoneNavigation)
-                    .WithMany(p => p.Screens)
+                    .WithMany(p => p.Schedules)
                     .HasForeignKey(d => d.Zone)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("zone");
