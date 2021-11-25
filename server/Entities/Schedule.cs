@@ -13,6 +13,8 @@ namespace server.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+
         public virtual Poster Poster { get; set; }
+        public virtual Zone Zone { get; set; }
     }
 }

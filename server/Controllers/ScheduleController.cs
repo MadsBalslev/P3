@@ -41,7 +41,7 @@ namespace server.Controllers
                 return NotFound();
             }
         }
-        [HttpGet("/{active}")]
+        [HttpGet("/Schedule/active")]
         public async Task<IEnumerable<Object>> GetActive()
         {
             return await _scheduleService.GetAllActiveSchedulesJSON();
