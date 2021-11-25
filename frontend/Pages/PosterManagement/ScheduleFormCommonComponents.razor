@@ -14,13 +14,13 @@
 <MudSelect @bind-value="Schedule.posterId" Required="true" T="int?" Placeholder="Select what poster to schedule...">
     @foreach (Poster poster in _posters)
     {
-        <MudSelectItem Value="@(poster.id)">@poster.name @poster.id</MudSelectItem>
+        <MudSelectItem Value="@(poster.id)">@poster.name</MudSelectItem>
     }
 </MudSelect>
-<MudSelect @bind-value="Schedule.zone" Required="true" T="int?" Placeholder="Select what zone to schedule in...">
+<MudSelect @bind-value="Schedule.zone" Required="true" T="Zone" Placeholder="Select what zone to schedule in...">
     @foreach (Zone zone in _zones)
     {
-        <MudSelectItem Value="@(1)">@zone.name </MudSelectItem>
+        <MudSelectItem Value="@(zone)">@zone.name</MudSelectItem>
     }
 </MudSelect>
 
@@ -47,10 +47,5 @@
         await base.OnInitializedAsync();
         _posters = await RequestHandler<None, List<Poster>>(HttpMethod.Get, "/Posters");
         _zones = await RequestHandler<None, List<Zone>>(HttpMethod.Get, "/Zones");
-
-        foreach (Zone zone in _zones)
-        {
-            System.Console.WriteLine("hello :D " + zone.id);
-        }
     }
 }

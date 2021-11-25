@@ -26,7 +26,7 @@ public class Schedule : IManageable
                 name = this.name,
                 startDate = this.startDate,
                 endDate = this.endDate,
-                zone = this.zone,
+                zone = this.zone.id,
             }
         );
     }
