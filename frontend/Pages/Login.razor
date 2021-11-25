@@ -43,24 +43,18 @@
     private async Task OnLogin()
     {
         // Get hashed password, set password in the user service.
-        string authorization = await RequestHandler<LoginInformation, string>(HttpMethod.Post, "/Login", _loginInformation);
+        string authorization = await RequestHandler<LoginInformation, string>(HttpMethod.Post, "/Login", _loginInformation, optionalForm: _loginForm);
+        User proxyUser = null;
         if (authorization != null)
         {
-            User.Authorization = authorization;
+            CurrentUserService.Authorization = authorization;
+            proxyUser = await RequestHandler<User, User>(HttpMethod.Get, "/Users/GetUser");
         }
 
         // Get User information, set information.
-        User proxyUser = await RequestHandler<User, User>(HttpMethod.Get, "/Users/GetUser");
         if (proxyUser != null)
         {
-            User.id = proxyUser.id;
-            User.firstName = proxyUser.firstName;
-            User.lastName = proxyUser.lastName;
-            User.email = proxyUser.email;
-            User.phoneNumber = proxyUser.phoneNumber;
-            User.password = proxyUser.password;
-            User.role = proxyUser.role;
-            User.institution = proxyUser.institution;
+            CurrentUserService.User = proxyUser;
             NavigationManager.NavigateTo("/");
         }
     }

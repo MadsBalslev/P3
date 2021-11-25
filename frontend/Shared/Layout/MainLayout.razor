@@ -1,7 +1,7 @@
 @inherits LayoutComponentBase
 @using MudBlazor
 @inject ISnackbar Snackbar
-@inject IUser User
+@inject ICurrentUserService CurrentUserService
 @inject NavigationManager NavManager
 
 
@@ -15,7 +15,7 @@
         <AppBarButton StartIcon="@Icons.Filled.Image" OnClickCallBack=@StateHasChanged
             Link="/PosterManagement" Class="pl-6">Poster Management</AppBarButton>
 
-        @if (AccessLevel.InstAdmin <= User.AccessLevel)
+        @if (AccessLevel.InstAdmin <= CurrentUserService.User.AccessLevel)
         {
             <AppBarButton StartIcon="@Icons.Filled.Person" OnClickCallBack=@StateHasChanged
             Link="/UserManagement">
@@ -23,28 +23,28 @@
                 Management</AppBarButton>
         }
 
-        @if (AccessLevel.SysAdmin <= User.AccessLevel)
+        @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
         {
             <AppBarButton StartIcon="@Icons.Filled.HolidayVillage" OnClickCallBack=@StateHasChanged
             Link="/InstitutionManagement">Institution Management</AppBarButton>
         }
 
-        @if (AccessLevel.SysAdmin <= User.AccessLevel)
+        @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
         {
             <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged
             Link="/ScreenManagement">
                 Screen
                 Management</AppBarButton>
-
         }
+
         <MudSpacer />
         <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme"
             Label="@(lightTheme ? "Light" : "Dark")" />
         <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
             <MudMenuItem>Your Settings</MudMenuItem>
-            <MudMenuItem>Logout</MudMenuItem>
+            <MudMenuItem OnClick="OnLogout" >Logout</MudMenuItem>
         </MudMenu>
-        <MudText>@User.ToString() </MudText>
+        <MudText>@CurrentUserService.User.ToString() </MudText>
     </MudAppBar>
 
     <MudMainContent>
@@ -63,8 +63,7 @@
         _currentTheme = defaultTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
 
-        bool userIsNotLoggedIn = User.Authorization == null;
-        if (userIsNotLoggedIn)
+        if (CurrentUserService.isLoggedIn)
         {
             NavManager.NavigateTo("/login");
         }
@@ -75,13 +74,9 @@
     private void DarkMode()
     {
         if (_currentTheme == defaultTheme)
-        {
             _currentTheme = DarkTheme;
-        }
         else
-        {
             _currentTheme = defaultTheme;
-        }
     }
 
     private MudTheme _currentTheme = new MudTheme();
@@ -119,4 +114,10 @@
             TextDisabled = "rgba(255,255,255, 0.2)"
         }
     };
+
+    private void OnLogout()
+    {
+        NavManager.NavigateTo("/login");
+        CurrentUserService.Logout();
+    }
 }
