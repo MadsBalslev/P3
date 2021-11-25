@@ -63,9 +63,7 @@
         _currentTheme = defaultTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
 
-        bool userIsNotLoggedIn = CurrentUserService.Authorization == null
-                                 || CurrentUserService.User == null;
-        if (userIsNotLoggedIn)
+        if (CurrentUserService.isLoggedIn)
         {
             NavManager.NavigateTo("/login");
         }
@@ -120,6 +118,6 @@
     private void OnLogout()
     {
         NavManager.NavigateTo("/login");
-        CurrentUserService.Clear();
+        CurrentUserService.Logout();
     }
 }
