@@ -16,16 +16,28 @@ namespace server.Controllers
     {
         //private readonly databaseContext _context;
         private PosterService _posterService;
+        private UserService _userService;
 
         public PostersController(databaseContext context)
         {
             _posterService = new PosterService(context);
+            _userService = new UserService(context);
         }
 
         [HttpGet]
         public async Task<IEnumerable<Object>> Get()
         {
-            return await _posterService.GetAllPosterJSON();
+            string email = HttpContext.User.Identity.Name;
+            User currentUser = await _userService.GetLoggedInUser(email);
+            try
+            {
+                return await _posterService.GetAllPosterJSON(currentUser);
+            }
+            catch (System.Exception)
+            {
+                System.Console.WriteLine("This fucked up");
+                return Enumerable.Empty<Object>();
+            }
         }
 
         [HttpGet("{id:int}")]
