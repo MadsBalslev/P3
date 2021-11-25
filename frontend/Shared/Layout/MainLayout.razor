@@ -120,7 +120,6 @@
     private void OnLogout()
     {
         NavManager.NavigateTo("/login");
-        CurrentUserService.Authorization = null;
-        CurrentUserService.User = new User(0, "", "", "", "", "", AccessLevel.User, new Institution());
+        CurrentUserService.Clear();
     }
 }
