@@ -4,23 +4,33 @@
 @using Microsoft.Extensions.Configuration
 @inject IHttpClientFactory ClientFactory
 @inject IConfiguration Configuration
+@inherits ApiComponent
 
+@* <MudText Typo ="Typo.h6">Insert Institution Admin information</MudText>
+<MudTextField Required="@true" @bind-Value="User.firstName" Label="First name" />
+<MudTextField Required="@true" @bind-Value="User.lastName" Label="Last name" />
+<MudTextField Required="@true" @bind-Value="User.phoneNumber" Label="Phone number" />
+<MudTextField Required="@true" @bind-Value="User.email" Label="Email address" />
+<MudTextField Required="PasswordFieldIsRequired" @bind-Value="User.password" Label="Password"
+    InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon"
+    OnAdornmentClick="ShowOrHidePassword" />
+<MudTextField Required="PasswordFieldIsRequired"
+    Validation="new Func<string, bool>(ValidatePassword)" @bind-Value="_confirmedPassword"
+    Label="Confirm password" InputType="@PasswordInput" Adornment="Adornment.End"
+    AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" /> *@
+
+<MudText Typo ="Typo.h6">Insert Institution information</MudText>
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Institution.name"
     Label="Institution name" />
-<MudSelect Required="@true" T="int?" @bind-Value="Institution.admin.id"
-    Placeholder="Select what institution the user belongs to">
-    @foreach (User user in _users)
-    {
-        <MudSelectItem Value="@(user.id)">@user.firstName @user.lastName</MudSelectItem>
-    }
-</MudSelect>
 
 @code
 {
     [Parameter]
     public Institution Institution { get; set; }
+    public User User { get; set; } = new();
 
     private List<User> _users = new List<User>();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,5 +47,4 @@
             _users = await JsonSerializer.DeserializeAsync<List<User>>(responseStream);
         }
     }
-
 }

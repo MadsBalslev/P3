@@ -1,5 +1,8 @@
 @using MudBlazor
 @using Shared.Manager
+@using System.Text.Json
+@using System.IO
+@using Microsoft.Extensions.Configuration;
 @inherits CreateForm<Institution>
 
 <MudForm @ref="_form">
@@ -7,7 +10,14 @@
         <MudCardContent>
             <InstitutionFormCommonComponents Institution="_precreateItem" />
             <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
+            <MudSelect Required="@true" T="int?" @bind-Value="userId"
+                Placeholder="Select user to make admin">
+                @foreach (User user in _UserList)
+                {
+                    <MudSelectItem Value="@(user.id)">@user.firstName @user.lastName</MudSelectItem>
+                }
+            </MudSelect>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="createInst"
                     FullWidth="true">Add Institution</MudButton>
             </MudCardActions>
             <MudCardActions>
@@ -17,3 +27,20 @@
         </MudCardContent>
     </MudCard>
 </MudForm>
+
+@code
+{
+    private List<User> _UserList = new List<User>();
+    private int? userId;
+
+    protected async Task createInst()
+        {
+            _precreateItem.admin = await RequestHandler<User, User>(HttpMethod.Get, "/Users/" + Convert.ToString(userId),_precreateItem.admin);
+            await OnRequestAction(HttpMethod.Post, ManagerService.ApiPath, _precreateItem, validate: true);
+        }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _UserList = await RequestHandler<None, List<User>>(HttpMethod.Get, "/Users");
+    }
+}

@@ -1,6 +1,4 @@
-using frontend.Shared;
-
-class None : IToJSON
+public class None : IToJSON
 {
     public string ToJSON()
     {
