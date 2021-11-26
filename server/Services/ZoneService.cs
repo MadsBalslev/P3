@@ -58,7 +58,7 @@ namespace server.Services
             await _context.Zones.AddAsync(zone);
             await _context.SaveChangesAsync();
 
-            return await _context.Zones.Where(z => z.Name == zone.Name).FirstOrDefaultAsync();
+            return zone;
         }
 
         // Delete requests
