@@ -3,7 +3,7 @@
 @using frontend.Shared.Manager
 @inherits ApiComponent
 
-<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true">
     <MudTabPanel Text="Posters">
         <Manager T="@Poster" ApiPath="/Posters" Context="poster" Filter="FilterFunc">
             <HeaderContent>
@@ -12,10 +12,6 @@
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
@@ -30,7 +26,6 @@
             <RowTemplate>
                 <MudTd>@poster.id</MudTd>
                 <MudTd>@poster.name</MudTd>
-                <MudTd>@poster.createdBy.name</MudTd>
                 <MudTd>@poster.institution.name</MudTd>
                 <MudTd>@poster.image</MudTd>
             </RowTemplate>
@@ -43,7 +38,7 @@
         </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
-        <MudContainer>
+        <MudContainer Class="mt-3">
         <MudGrid>
             <MudItem xs="4">
                 <MudSlider @bind-Value="Metadata.timerValue" Min="1000" Max="60000" Step="1000">Timer: @(Metadata.timerValue/1000) seconds</MudSlider>
@@ -107,8 +102,6 @@
             return true;
         if (poster.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (poster.createdBy.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
         if (poster.institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (poster.image.Contains(searchString, StringComparison.OrdinalIgnoreCase))
@@ -142,6 +135,5 @@
     {
         await base.OnInitializedAsync();
         Metadata = await RequestHandler<None, Metadata>(HttpMethod.Get, "/Metadata/1");
-            Console.WriteLine(Metadata.timerValue);
     }
 }

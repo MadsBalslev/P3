@@ -15,9 +15,9 @@ namespace server.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
-        public int? CreatedBy { get; set; }
+        public int? Institution { get; set; }
 
-        public virtual User CreatedByNavigation { get; set; }
+        public virtual Institution InstitutionNavigation { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
     }
 }

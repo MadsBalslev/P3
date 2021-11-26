@@ -57,10 +57,10 @@ namespace server.Services
         {
             User u = await GetUser(id);
             List<Object> uPosters = new List<Object>();
-            foreach (Poster p in u.Posters)
-            {
-                uPosters.Add(p.ToJSON());
-            }
+            // foreach (Poster p in u.Posters)
+            // {
+            //     uPosters.Add(p.ToJSON());
+            // }
 
             return u.ToJSON();
             // return new
@@ -129,6 +129,10 @@ namespace server.Services
             u.Email = user.Email;
             u.PhoneNumber = user.PhoneNumber;
             u.Role = user.Role;
+
+            if (!(String.IsNullOrWhiteSpace(user.Password) || String.IsNullOrEmpty(user.Password)))
+                u.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
 
             await _context.SaveChangesAsync();
 
