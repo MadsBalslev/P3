@@ -69,5 +69,11 @@ namespace server.Controllers
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Object>> Put([FromBody] Zone z, int id) => await _zoneService.UpdateZoneJSON(id, z);
+
+        [HttpGet("/Zones/Active/{zone_id:int}")]
+        public async Task<IEnumerable<Object>> GetActiveSchedulesInZone(int zone_id)
+        {
+            return await _zoneService.GetActiveSchedulesInZoneJSON(zone_id);
+        }
     }
 }

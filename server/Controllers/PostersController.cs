@@ -35,7 +35,6 @@ namespace server.Controllers
             }
             catch (System.Exception)
             {
-                System.Console.WriteLine("This fucked up");
                 return Enumerable.Empty<Object>();
             }
         }
