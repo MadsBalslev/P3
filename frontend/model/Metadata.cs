@@ -17,7 +17,7 @@ public class Metadata : IManageable
         (
             new
             {
-                timerValue = this.timerValue
+                timer = this.timerValue
             }
         );
     }
