@@ -130,6 +130,10 @@ namespace server.Services
             u.PhoneNumber = user.PhoneNumber;
             u.Role = user.Role;
 
+            if (!(String.IsNullOrWhiteSpace(user.Password) || String.IsNullOrEmpty(user.Password)))
+                u.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+
             await _context.SaveChangesAsync();
 
             return u;
