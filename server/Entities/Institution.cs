@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -15,9 +15,7 @@ namespace server.Entities
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? Admin { get; set; }
 
-        public virtual User AdminNavigation { get; set; }
         public virtual ICollection<Poster> Posters { get; set; }
         public virtual ICollection<User> Users { get; set; }
     }

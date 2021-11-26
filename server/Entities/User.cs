@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -7,11 +7,6 @@ namespace server.Entities
 {
     public partial class User
     {
-        public User()
-        {
-            Institutions = new HashSet<Institution>();
-        }
-
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,6 +17,5 @@ namespace server.Entities
         public int Role { get; set; }
 
         public virtual Institution InstitutionNavigation { get; set; }
-        public virtual ICollection<Institution> Institutions { get; set; }
     }
 }

@@ -20,7 +20,6 @@ namespace server.Services
         public async Task<IEnumerable<Institution>> GetAllInstitutions()
         {
             IEnumerable<Institution> insts = await _context.Institutions
-            .Include(i => i.AdminNavigation)
             .ToListAsync();
 
             return insts;
@@ -31,7 +30,6 @@ namespace server.Services
             if (id == null)
                 throw new NullReferenceException("Instituion null");
             Institution institution = await _context.Institutions
-                .Include(i => i.AdminNavigation)
                 .Include(i => i.Users)
                 .Where(i => i.Id == id)
                 .FirstOrDefaultAsync();
@@ -49,7 +47,6 @@ namespace server.Services
             await _context.SaveChangesAsync();
 
             Institution inst = await _context.Institutions
-                .Include(i => i.AdminNavigation)
                 .Where(i => i.Name == institution.Name)
                 .FirstOrDefaultAsync();
 
@@ -69,8 +66,6 @@ namespace server.Services
         {
             Institution inst = await GetInstitution(id);
             inst.Name = institution.Name;
-            inst.Admin = institution.Admin;
-
 
             await _context.SaveChangesAsync();
 
