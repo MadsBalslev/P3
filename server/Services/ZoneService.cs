@@ -45,16 +45,10 @@ namespace server.Services
         public async Task<Object> GetZoneJSON(int id)
         {
             Zone z = await GetZone(id);
-            List<Object> zScreens = new List<Object>();
-            foreach (Screen s in z.Screens)
-            {
-                zScreens.Add(s.ToJSON());
-            }
 
             return new
             {
                 zoneDetaile = z.ToJSON(),
-                screens = zScreens,
             };
         }
 

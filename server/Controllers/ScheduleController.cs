@@ -52,7 +52,7 @@ namespace server.Controllers
             }
             catch (System.Exception)
             {
-                return NotFound();
+                return NotFound("HEHE");
             }
         }
 

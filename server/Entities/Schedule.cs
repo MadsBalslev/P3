@@ -12,7 +12,9 @@ namespace server.Entities
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int? Zone { get; set; }
 
         public virtual Poster Poster { get; set; }
+        public virtual Zone ZoneNavigation { get; set; }
     }
 }
