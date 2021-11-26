@@ -77,31 +77,31 @@ namespace server.Entities
             {
                 entity.ToTable("posters");
 
-                entity.HasIndex(e => e.CreatedBy, "created_by");
+                entity.HasIndex(e => e.Institution, "institution_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
-
-                entity.Property(e => e.CreatedBy)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("created_by");
 
                 entity.Property(e => e.ImageUrl)
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("image_url");
 
+                entity.Property(e => e.Institution)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("institution");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("name");
 
-                entity.HasOne(d => d.CreatedByNavigation)
+                entity.HasOne(d => d.InstitutionNavigation)
                     .WithMany(p => p.Posters)
-                    .HasForeignKey(d => d.CreatedBy)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("created_by");
+                    .HasForeignKey(d => d.Institution)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("institution_id");
             });
 
             modelBuilder.Entity<Schedule>(entity =>

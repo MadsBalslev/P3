@@ -42,8 +42,17 @@ namespace server.Services
         {
             await _context.Posters.AddAsync(poster);
             await _context.SaveChangesAsync();
-
-            return await _context.Posters.Where(p => p.Name == poster.Name && p.CreatedBy == poster.CreatedBy).FirstOrDefaultAsync();
+            try
+            {
+                Poster createdPoster = await _context.Posters.Where(p => p.Name == poster.Name && p.Institution == poster.Institution).FirstOrDefaultAsync();
+                Console.WriteLine($"Found poster with id: {createdPoster.Id}");
+                return createdPoster;
+            }
+            catch (System.Exception)
+            {
+                System.Console.WriteLine($"Poster named {poster.Name} and Instition {poster.Institution} not found");
+                return new Poster();
+            }
         }
 
         public async Task<Poster> DeletePoster(int id)
@@ -60,9 +69,13 @@ namespace server.Services
         {
             IEnumerable<Poster> result = Enumerable.Empty<Poster>();
             IEnumerable<Poster> posters = await GetAllPosters();
+            System.Console.WriteLine($"Num of posters in result: {result.Count()}");
+            System.Console.WriteLine($"Num of posters: {posters.Count()}");
             if (currentUser.Role == 1 || currentUser.Role == 2)
             {
-                result = posters.Where(p => p.CreatedByNavigation.Institution == currentUser.Institution);
+                System.Console.WriteLine("Filtering out posters not related to institution");
+                result = posters.Where(p => p.Institution == currentUser.Institution);
+                System.Console.WriteLine($"Num of posters in result: {result.Count()}");
             }
             else if (currentUser.Role == 3)
             {
@@ -73,9 +86,10 @@ namespace server.Services
 
             foreach (Poster p in result)
             {
+                System.Console.WriteLine("Adding Poster to response");
                 response.Add(p.ToJSON());
             }
-
+            System.Console.WriteLine($"Posters in response: {response.Count()}");
             return response;
         }
 

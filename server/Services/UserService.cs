@@ -57,10 +57,10 @@ namespace server.Services
         {
             User u = await GetUser(id);
             List<Object> uPosters = new List<Object>();
-            foreach (Poster p in u.Posters)
-            {
-                uPosters.Add(p.ToJSON());
-            }
+            // foreach (Poster p in u.Posters)
+            // {
+            //     uPosters.Add(p.ToJSON());
+            // }
 
             return u.ToJSON();
             // return new

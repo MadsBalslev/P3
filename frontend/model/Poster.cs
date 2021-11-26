@@ -9,13 +9,10 @@ public class Poster : IManageable
 
     public string image { get; set; }
 
-    public User createdBy { get; set; }
-
     public Institution institution { get; set; }
 
     public void InitializeAggregateObjects()
     {
-        createdBy = new();
         institution = new();
     }
 
@@ -25,8 +22,8 @@ public class Poster : IManageable
         (
             new
             {
-                createdBy = this.createdBy.id,
                 name = this.name,
+                institution = this.institution.id,
                 imageUrl = this.image
             }
         );

@@ -28,6 +28,6 @@
 {
     protected override void OnInitialized()
     {
-        _precreateItem.createdBy = CurrentUserService.User;
+        _precreateItem.institution = CurrentUserService.User.institution;
     }
 }
