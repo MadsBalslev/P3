@@ -32,15 +32,15 @@
         @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
         {
             <AppBarButton StartIcon="@Icons.Filled.Tv" OnClickCallBack=@StateHasChanged
-            Link="/ScreenManagement">
-                Screen
+            Link="/ZoneManagement">
+                Zone
                 Management</AppBarButton>
         }
 
         <MudSpacer />
         <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme"
             Label="@(lightTheme ? "Light" : "Dark")" />
-        <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
+        <MudMenu Dense="true" DisableRipple="true" ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
             <MudMenuItem Link="/YourSettings">Your Settings</MudMenuItem>
             <MudMenuItem OnClick="OnLogout" >Logout</MudMenuItem>
         </MudMenu>
@@ -60,7 +60,7 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _currentTheme = defaultTheme;
+        _currentTheme = DarkTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
 
         if (CurrentUserService.isLoggedIn)
@@ -69,14 +69,14 @@
         }
     }
 
-    private bool lightTheme { get; set; } = true;
+    private bool lightTheme { get; set; } = false;
 
     private void DarkMode()
     {
-        if (_currentTheme == defaultTheme)
-            _currentTheme = DarkTheme;
-        else
+        if (lightTheme == false)
             _currentTheme = defaultTheme;
+        else
+            _currentTheme = DarkTheme;
     }
 
     private MudTheme _currentTheme = new MudTheme();
@@ -84,7 +84,24 @@
     {
         Palette = new Palette()
         {
-            Black = "#272c34"
+            Black = "#27272f",
+            DrawerBackground = "#27272f",
+            Surface = "rgba(255,255,255, 1.00)",
+            DrawerText = "rgba(255,255,255, 0.50)",
+            DrawerIcon = "rgba(255,255,255, 0.50)",
+            AppbarBackground = "rgba(255,255,255, 0.90)",
+            AppbarText = "rgba(0,0,0, 0.70)",
+            TextPrimary = "rgba(0,0,0, 0.70)",
+            TextSecondary = "rgba(0,0,0, 0.50)",
+            ActionDefault = "rgba(0,0,0, 0.50)",
+            ActionDisabled = "rgba(0,0,0, 0.26)",
+            ActionDisabledBackground = "rgba(255,255,255, 0.12)",
+            Divider = "rgba(0,0,0, 0.12)",
+            DividerLight = "rgba(0,0,0, 0.06)",
+            TableLines = "rgba(0,0,0, 0.12)",
+            LinesDefault = "rgba(0,0,0, 0.12)",
+            LinesInputs = "rgba(0,0,0, 0.3)",
+            TextDisabled = "rgba(255,255,255, 0.2)"
         }
     };
 
@@ -103,7 +120,7 @@
             AppbarText = "rgba(255,255,255, 0.70)",
             TextPrimary = "rgba(255,255,255, 0.70)",
             TextSecondary = "rgba(255,255,255, 0.50)",
-            ActionDefault = "#adadb1",
+            ActionDefault = "rgba(255,255,255, 0.70)",
             ActionDisabled = "rgba(255,255,255, 0.26)",
             ActionDisabledBackground = "rgba(255,255,255, 0.12)",
             Divider = "rgba(255,255,255, 0.12)",
