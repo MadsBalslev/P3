@@ -1,47 +1,60 @@
 @page "/YourSettings"
 @using MudBlazor
 @using Shared.Manager
-@inherits Shared.Manager.EditForm<User>
+@inherits ApiComponent
 
-<MudContainer>
+
+
+<MudContainer Class="mt-7">
     <MudGrid>
         <MudForm @ref="_localForm">
-    <MudText Typo="Typo.h3" Class="mt-4 mb-4">Your Settings</MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Success" @onclick="Editable">Edit</MudButton>
-            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.firstName" Label="First Name"
-                Placeholder="_selectedItem.firstName" Disabled="@_editable">
-            </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.lastName" Label="Last Name"
-                Placeholder="_selectedItem.lastName" Disabled="@_editable">
-            </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.email" Label="Email" Placeholder="_selectedItem.email" Disabled="@_editable">
-            </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.phoneNumber" Label="Phonenumber"
-                Placeholder="_selectedItem.phoneNumber" Disabled="@_editable">
-            </MudTextField>
-            <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.password" Label="Password"
-                InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" Disabled="@_editable">
-            </MudTextField>
-            <MudTextField Validation="new Func<string, bool>(ValidatePassword)"
-                @bind-Value="_confirmedPassword" Label="Confirm password" InputType="@PasswordInput"
-                Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" Disabled="@_editable" />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@OnEditItem" Disabled="@_editable" Class="mt-2">Apply changes</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Warning" @onclick="@LocalOnCancel" Disabled="@_editable" Class="mt-2">Cancel</MudButton>
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h3" Class="mt-4 mb-4">Your Settings</MudText>
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.firstName"
+                        Label="First Name" Placeholder="_user.firstName">
+                    </MudTextField>
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.lastName"
+                        Label="Last Name" Placeholder="_user.lastName">
+                    </MudTextField>
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.email"
+                        Label="Email" Placeholder="_user.email">
+                    </MudTextField>
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.phoneNumber"
+                        Label="Phonenumber" Placeholder="_user.phoneNumber">
+                    </MudTextField>
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.password"
+                        Label="Password" InputType="@PasswordInput" Adornment="Adornment.End"
+                        AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword">
+                    </MudTextField>
+                    <MudTextField Validation="new Func<string, string>(PasswordMatch)"
+                        @bind-Value="_confirmedPassword" Label="Confirm password"
+                        InputType="@PasswordInput" Adornment="Adornment.End"
+                        AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" />
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
+                            @onclick="@OnEditItem" Class="mt-2">Apply changes</MudButton>
+                    </MudCardActions>
+                </MudCardContent>
+            </MudCard>
         </MudForm>
     </MudGrid>
 </MudContainer>
 
 @code
 {
+    private User _user;
     private string _confirmedPassword;
     private bool _passwordIsVisible;
-    private bool _editable = true;
     private MudForm _localForm;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-    private bool ValidatePassword(string password)
+
+    private string PasswordMatch(string arg)
     {
-        return password == _confirmedPassword;
+        if (_user.password != arg)
+            return "Passwords don't match";
+        return null;
     }
 
     private void ShowOrHidePassword()
@@ -60,32 +73,14 @@
         }
     }
 
-    private void Editable()
-    {
-        @if (_editable)
-        {
-            _editable = false;
-        }
-        else
-        {
-            _editable = true;
-        }
-    }
-    private async Task LocalOnCancel()
-    {
-        await LocalRefreshManager();
-    }
-
-    protected async Task LocalRefreshManager()
-    {
-        _localForm.Reset();
-        _localForm.ResetValidation();
-        await ManagerService.RequestRefresh();
-    }
-
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _selectedItem = CurrentUserService.User;
+        _user = CurrentUserService.User;
+    }
+
+    private async Task OnEditItem()
+    {
+        await RequestHandler<User, User>(HttpMethod.Put, $"/Users/{_user.id}", _user, _localForm, "Information updated");
     }
 }
