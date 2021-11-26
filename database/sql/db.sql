@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `database`.`institutions` (
   CONSTRAINT `admin`
     FOREIGN KEY (`admin`)
     REFERENCES `database`.`users` (`id`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
@@ -139,3 +139,14 @@ AUTO_INCREMENT=1;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
+VALUES (1, 'Admin', 'Adminson', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "", null, 3);
+
+INSERT INTO `database`.`institutions` (`id`, `name`, `admin`) VALUES ('1', 'Nordkraft', '1');
+
+UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
+
+INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '5000');
+
+INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('1', 'Nordkraft');
