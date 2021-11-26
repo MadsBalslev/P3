@@ -41,7 +41,7 @@
         <MudSwitch @onclick="DarkMode" @bind-Checked="lightTheme"
             Label="@(lightTheme ? "Light" : "Dark")" />
         <MudMenu ActivationEvent=@MouseEvent.MouseOver Icon="@Icons.Material.Filled.Settings">
-            <MudMenuItem>Your Settings</MudMenuItem>
+            <MudMenuItem Link="/YourSettings">Your Settings</MudMenuItem>
             <MudMenuItem OnClick="OnLogout" >Logout</MudMenuItem>
         </MudMenu>
         <MudText>@CurrentUserService.User.ToString() </MudText>
