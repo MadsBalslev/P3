@@ -10,6 +10,7 @@ using server.Services;
 
 namespace server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ZonesController : ControllerBase
