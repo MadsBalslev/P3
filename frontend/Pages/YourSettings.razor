@@ -27,7 +27,7 @@
                         Label="Password" InputType="@PasswordInput" Adornment="Adornment.End"
                         AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword">
                     </MudTextField>
-                    <MudTextField Validation="new Func<string, bool>(ValidatePassword)"
+                    <MudTextField Validation="new Func<string, string>(PasswordMatch)"
                         @bind-Value="_confirmedPassword" Label="Confirm password"
                         InputType="@PasswordInput" Adornment="Adornment.End"
                         AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword" />
@@ -48,9 +48,12 @@
     private MudForm _localForm;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-    private bool ValidatePassword(string password)
+
+    private string PasswordMatch(string arg)
     {
-        return password == _confirmedPassword;
+        if (_selectedItem.password != arg)
+            return "Passwords don't match";
+        return null;
     }
 
     private void ShowOrHidePassword()
