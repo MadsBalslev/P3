@@ -44,9 +44,9 @@ namespace server.Services
             await _context.SaveChangesAsync();
             try
             {
-                 Poster createdPoster = await _context.Posters.Where(p => p.Name == poster.Name && p.Institution == poster.Institution).FirstOrDefaultAsync();
-                 Console.WriteLine($"Found poster with id: {createdPoster.Id}");
-                 return createdPoster;
+                Poster createdPoster = await _context.Posters.Where(p => p.Name == poster.Name && p.Institution == poster.Institution).FirstOrDefaultAsync();
+                Console.WriteLine($"Found poster with id: {createdPoster.Id}");
+                return createdPoster;
             }
             catch (System.Exception)
             {

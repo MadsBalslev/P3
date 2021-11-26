@@ -6,16 +6,18 @@ namespace server.Entities
     {
         private object getInst()
         {
-            if(this.Institution == null)
+            if (this.Institution == null)
             {
-                return new {
+                return new
+                {
                     id = 0,
                     name = "No Institution"
                 };
             }
             else
             {
-                return new {
+                return new
+                {
                     id = this.Institution,
                     name = this.InstitutionNavigation.Name
                 };
