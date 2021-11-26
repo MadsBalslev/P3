@@ -38,7 +38,7 @@
         </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
-        <MudContainer>
+        <MudContainer Class="mt-3">
         <MudGrid>
             <MudItem xs="4">
                 <MudSlider @bind-Value="Metadata.timerValue" Min="1000" Max="60000" Step="1000">Timer: @(Metadata.timerValue/1000) seconds</MudSlider>
@@ -131,6 +131,5 @@
     {
         await base.OnInitializedAsync();
         Metadata = await RequestHandler<None, Metadata>(HttpMethod.Get, "/Metadata/1");
-            Console.WriteLine(Metadata.timerValue);
     }
 }
