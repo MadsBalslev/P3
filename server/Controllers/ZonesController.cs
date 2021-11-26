@@ -70,6 +70,32 @@ namespace server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Object>> Put([FromBody] Zone z, int id) => await _zoneService.UpdateZoneJSON(id, z);
+        public async Task<ActionResult<Object>> Put([FromBody] Zone z, int id)
+        {
+            try
+            {
+                return await _zoneService.UpdateZoneJSON(id, z);
+            }
+            catch (System.Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        [HttpGet("/Zones/Active/{zone_id:int}")]
+        // Remember to switch back to GetActiveSchedulesInZoneJSON ( NOT TRUE XD )
+        public async Task<IEnumerable<Object>> GetActivePostersJSON(int zone_id)
+        {
+            try
+            {
+                return await _zoneService.GetActivePostersJSON(zone_id);
+            }
+            catch (System.Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+
     }
 }

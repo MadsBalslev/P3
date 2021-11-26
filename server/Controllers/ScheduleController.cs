@@ -75,7 +75,30 @@ namespace server.Controllers
 
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Object>> Put([FromBody] Schedule s, int id) => await _scheduleService.UpdateScheduleJSON(id, s);
+        public async Task<ActionResult<Object>> Put([FromBody] Schedule s, int id)
+        {
+            try
+            {
+                return await _scheduleService.UpdateScheduleJSON(id, s);
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("/Schedule/Active/{poster_id:int}")]
+        public async Task<IEnumerable<Object>> GetActive(int poster_id)
+        {
+            try
+            {
+                return await _scheduleService.GetActiveSchedulesJSON(poster_id);
+            }
+            catch (System.Exception)
+            {
+                throw new Exception();
+            }
+        }
     }
 
 }
