@@ -15,6 +15,11 @@ namespace frontend.Shared.Manager
             await OnRequestAction(HttpMethod.Put, FullApiAddress(), _selectedItem, validate: true);
         }
 
+        protected async Task OnShowPosters()
+        {
+            await RequestHandler<None, Schedule>(HttpMethod.Get, "/Zones/Active/1");
+        }
+
         protected async Task OnDelete()
         {
             await OnRequestAction(HttpMethod.Delete, FullApiAddress(), _selectedItem, validate: false);

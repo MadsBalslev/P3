@@ -7,7 +7,11 @@ namespace server.Entities
             return new
             {
                 Id = this.Id,
-                PosterId = this.PosterId,
+                Poster = new
+                {
+                    id = this.Poster.Id,
+                    url = this.Poster.ImageUrl,
+                },
                 Name = this.Name,
                 StartDate = this.StartDate,
                 EndDate = this.EndDate,
@@ -16,6 +20,14 @@ namespace server.Entities
                     id = this.ZoneNavigation.Id,
                     name = this.ZoneNavigation.Name
                 },
+            };
+        }
+        public object PosterToJSON()
+        {
+            return new
+            {
+                Id = this.Poster.Id,
+                ImageUrl = this.Poster.ImageUrl,
             };
         }
     }
