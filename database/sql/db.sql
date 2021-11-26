@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `database`.`users` (
   CONSTRAINT `institution`
     FOREIGN KEY (`institution`)
     REFERENCES `database`.`institutions` (`id`)
-    ON DELETE SET NULL
+    ON DELETE  CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT

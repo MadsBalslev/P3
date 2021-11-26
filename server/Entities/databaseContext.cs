@@ -180,7 +180,7 @@ namespace server.Entities
                 entity.HasOne(d => d.InstitutionNavigation)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.Institution)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("institution");
             });
 
