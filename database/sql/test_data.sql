@@ -19,9 +19,9 @@ INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('2', 'Biffen_gang');
 INSERT INTO `database`.`zones` (`id`, `name`) VALUES ('3', 'Skråen');
 
 DELETE FROM `database`.`posters`;
-INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('1', 'Poster1', 'ww.gg.dk', '1');
-INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('2', 'Poster2', 'ww.gg.dk', '2');
-INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('3', 'Poster3', 'ww.gg.dk', '3');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `institution`) VALUES ('1', 'Poster1', 'ww.gg.dk', '1');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `institution`) VALUES ('2', 'Poster2', 'ww.gg.dk', '2');
+INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `institution`) VALUES ('3', 'Poster3', 'ww.gg.dk', '3');
 
 DELETE FROM `database`.`metadata`;
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '10');
