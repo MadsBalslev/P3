@@ -87,5 +87,43 @@ namespace server.Services
             Zone z = await UpdateZone(id, zone);
             return z.ToJSON();
         }
+
+        public async Task<IEnumerable<Object>> GetActiveSchedulesInZoneJSON(int zone_id)
+        {
+            DateTime currentTime = DateTime.Now;
+
+            IEnumerable<Schedule> schedules = await _context.Schedules.ToListAsync();
+            IEnumerable<Schedule> FilteredSchedules = schedules.Where(s => s.StartDate <= currentTime && s.EndDate >= currentTime && s.Zone == zone_id);
+
+            List<Object> response = new List<Object>();
+            foreach (Schedule s in FilteredSchedules)
+            {
+                response.Add(s.ToJSON());
+            }
+
+            return response;
+        }
+
+        public async Task<IEnumerable<Object>> GetActivePostersJSON(int zone_id)
+        {
+            DateTime currentTime = DateTime.Now;
+
+            //IEnumerable<Poster> posters = await _context.Posters.ToListAsync();
+            IEnumerable<Schedule> schedules = await _context.Schedules.ToListAsync();
+
+            IEnumerable<Schedule> FilteredSchedules = schedules.Where(s => s.StartDate <= currentTime && s.EndDate >= currentTime && s.Zone == zone_id);
+
+            //List<Object> PosterResponse = new List<Object>();
+
+            List<Object> response = new List<Object>();
+            foreach (Schedule s in FilteredSchedules)
+            {
+                response.Add(s.PosterToJSON());
+            }
+
+            return response;
+        }
+
+
     }
 }
