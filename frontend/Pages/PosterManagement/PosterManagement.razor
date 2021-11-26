@@ -70,12 +70,17 @@
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.endDate">End date
                     </MudTableSortLabel>
                 </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.zone.name">Zone
+                    </MudTableSortLabel>
+                </MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@schedule.id</MudTd>
                 <MudTd>@schedule.name</MudTd>
                 <MudTd>@schedule.startDate</MudTd>
                 <MudTd>@schedule.endDate</MudTd>
+                <MudTd>@schedule.zone.name</MudTd>
             </RowTemplate>
             <CreateForm>
                 <ScheduleCreateForm />
@@ -120,6 +125,8 @@
         if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.endDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.zone.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

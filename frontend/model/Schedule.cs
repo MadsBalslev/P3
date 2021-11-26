@@ -9,6 +9,8 @@ public class Schedule : IManageable
     public DateTime? startDate { get; set; }
     public DateTime? endDate { get; set; }
 
+    public Zone zone { get; set; }
+
     public void InitializeAggregateObjects()
     {
     }
@@ -24,6 +26,7 @@ public class Schedule : IManageable
                 name = this.name,
                 startDate = this.startDate,
                 endDate = this.endDate,
+                zone = this.zone.id,
             }
         );
     }

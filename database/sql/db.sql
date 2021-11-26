@@ -94,26 +94,6 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
 AUTO_INCREMENT=1;
 
-
--- -----------------------------------------------------
--- Table `database`.`screens`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `database`.`screens` ;
-
-CREATE TABLE IF NOT EXISTS `database`.`screens` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  `zone` INT,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `zone`
-    FOREIGN KEY (`zone`)
-    REFERENCES `database`.`zones` (`id`)
-    ON DELETE SET NULL
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = DEFAULT
-AUTO_INCREMENT=1;
-
 -- -----------------------------------------------------
 -- Table `database`.`metadata`
 -- -----------------------------------------------------
@@ -139,10 +119,16 @@ CREATE TABLE IF NOT EXISTS `database`.`schedules` (
     `name` VARCHAR(255) NOT NULL,
     `start_date` DATETIME NOT NULL,
     `end_date` DATETIME NOT NULL,
+    `zone` INT,
   PRIMARY KEY (`id`),
   CONSTRAINT `poster_id`
     FOREIGN KEY (`poster_id`)
     REFERENCES `database`.`posters` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE NO ACTION,
+  CONSTRAINT `zone`
+    FOREIGN KEY (`zone`)
+    REFERENCES `database`.`zones` (`id`)
     ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

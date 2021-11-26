@@ -96,7 +96,7 @@ namespace server.Services
         {
             Poster p = await UpdatePoster(id, poster);
 
-            return p;
+            return p.ToJSON();
         }
     }
 }

@@ -23,19 +23,13 @@ INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUE
 INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('2', 'Poster2', 'ww.gg.dk', '2');
 INSERT INTO `database`.`posters` (`id`, `name`, `image_url`, `created_by`) VALUES ('3', 'Poster3', 'ww.gg.dk', '3');
 
-DELETE FROM `database`.`screens`;
-INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('1', 'Screen1', '1');
-INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('2', 'Screen2', '2');
-INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('3', 'Screen3', '2');
-INSERT INTO `database`.`screens` (`id`, `name`, `zone`) VALUES ('4', 'Screen4', '3');
-
 DELETE FROM `database`.`metadata`;
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '10');
 
 DELETE FROM `database`.`schedules`;
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47');
-INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `zone`) VALUES ('1', '1', 'Schedule1', '2021-10-26 13:30:45', '2022-10-26 13:30:47', '1');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `zone`) VALUES ('2', '2', 'PIZZA-tilbud', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '2');
+INSERT INTO `database`.`schedules` (`id`, `poster_id`, `name`, `start_date`, `end_date`, `zone`) VALUES ('3', '3', 'Schedule-3', '2021-10-26 13:30:45', '2022-12-26 13:30:47', '3');
 
 
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;

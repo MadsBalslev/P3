@@ -96,26 +96,6 @@ AUTO_INCREMENT=1;
 
 
 -- -----------------------------------------------------
--- Table `NordkraftPMS`.`screens`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `NordkraftPMS`.`screens` ;
-
-CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`screens` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  `zone` INT,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `zone`
-    FOREIGN KEY (`zone`)
-    REFERENCES `NordkraftPMS`.`zones` (`id`)
-    ON DELETE SET NULL
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = DEFAULT
-AUTO_INCREMENT=1;
-
-
--- -----------------------------------------------------
 -- Table `NordkraftPMS`.`metadata`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `NordkraftPMS`.`metadata` ;
@@ -140,10 +120,16 @@ CREATE TABLE IF NOT EXISTS `NordkraftPMS`.`schedules` (
     `name` VARCHAR(255) NOT NULL,
     `start_date` DATETIME NOT NULL,
     `end_date` DATETIME NOT NULL,
+    `zone` INT,
   PRIMARY KEY (`id`),
   CONSTRAINT `poster_id`
     FOREIGN KEY (`poster_id`)
     REFERENCES `NordkraftPMS`.`posters` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE NO ACTION,
+  CONSTRAINT `zone`
+    FOREIGN KEY (`zone`)
+    REFERENCES `NordkraftPMS`.`zones` (`id`)
     ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
