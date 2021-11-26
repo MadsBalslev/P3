@@ -42,17 +42,20 @@ namespace server.Services
         {
             await _context.Posters.AddAsync(poster);
             await _context.SaveChangesAsync();
-            try
-            {
-                Poster createdPoster = await _context.Posters.Where(p => p.Name == poster.Name && p.Institution == poster.Institution).FirstOrDefaultAsync();
-                Console.WriteLine($"Found poster with id: {createdPoster.Id}");
-                return createdPoster;
-            }
-            catch (System.Exception)
-            {
-                System.Console.WriteLine($"Poster named {poster.Name} and Instition {poster.Institution} not found");
-                return new Poster();
-            }
+            return poster;
+
+
+            // try
+            // {
+            //     // Poster createdPoster = await _context.Posters.Where(p => p.Name == poster.Name && p.Institution == poster.Institution).FirstOrDefaultAsync();
+            //     // Console.WriteLine($"Found poster with id: {createdPoster.Id}");
+            //     // return createdPoster;
+            // }
+            // catch (System.Exception)
+            // {
+            //     System.Console.WriteLine($"Poster named {poster.Name} and Instition {poster.Institution} not found");
+            //     return new Poster();
+            // }
         }
 
         public async Task<Poster> DeletePoster(int id)
