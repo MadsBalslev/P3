@@ -63,8 +63,6 @@ namespace server.Controllers
             }
             catch (System.Exception e)
             {
-                System.Console.WriteLine("Hej Patrick det her virkede ikke :)");
-                System.Console.WriteLine(e);
                 return NotFound();
             }
         }
