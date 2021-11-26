@@ -15,10 +15,6 @@
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.createdBy.name">Creator
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.institution.name">Institution
                     </MudTableSortLabel>
                 </MudTh>
@@ -30,7 +26,6 @@
             <RowTemplate>
                 <MudTd>@poster.id</MudTd>
                 <MudTd>@poster.name</MudTd>
-                <MudTd>@poster.createdBy.name</MudTd>
                 <MudTd>@poster.institution.name</MudTd>
                 <MudTd>@poster.image</MudTd>
             </RowTemplate>
@@ -102,8 +97,6 @@
         if (poster.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (poster.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (poster.createdBy.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (poster.institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;

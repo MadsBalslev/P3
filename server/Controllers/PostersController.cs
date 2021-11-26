@@ -59,10 +59,12 @@ namespace server.Controllers
             try
             {
                 Poster p = await _posterService.CreatePoster(poster);
-                return await _posterService.GetPosterJSON(p.Id);
+                return p.ToJSON();
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
+                System.Console.WriteLine("Hej Patrick det her virkede ikke :)");
+                System.Console.WriteLine(e);
                 return NotFound();
             }
         }

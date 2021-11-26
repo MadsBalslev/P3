@@ -68,12 +68,12 @@ CREATE TABLE IF NOT EXISTS `database`.`posters` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   `image_url` VARCHAR(256) NOT NULL,
-  `created_by` INT,
+  `institution` INT,
   PRIMARY KEY (`id`),
-  CONSTRAINT `created_by`
-    FOREIGN KEY (`created_by`)
-    REFERENCES `database`.`users` (`id`)
-    ON DELETE SET NULL
+  CONSTRAINT `institution_id`
+    FOREIGN KEY (`institution`)
+    REFERENCES `database`.`institutions` (`id`)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT

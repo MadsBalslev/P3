@@ -2,6 +2,24 @@ namespace server.Entities
 {
     public partial class Poster
     {
+        private object getInst()
+        {
+            if(this.Institution == null)
+            {
+                return new {
+                    id = 0,
+                    name = "No Institution"
+                };
+            }
+            else
+            {
+                return new {
+                    id = this.Institution,
+                    name = this.InstitutionNavigation.Name,
+                };
+            }
+        }
+
         public object ToJSON()
         {
             return new
@@ -9,16 +27,7 @@ namespace server.Entities
                 Id = this.Id,
                 name = this.Name,
                 image = this.ImageUrl,
-                createdBy = new
-                {
-                    id = this.CreatedBy,
-                    name = $"{this.CreatedByNavigation.FirstName} {this.CreatedByNavigation.LastName}"
-                },
-                institution = new
-                {
-                    id = this.CreatedByNavigation.InstitutionNavigation.Id,
-                    name = this.CreatedByNavigation.InstitutionNavigation.Name,
-                },
+                institution = getInst()
             };
         }
     }
