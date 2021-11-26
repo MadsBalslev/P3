@@ -10,14 +10,7 @@
         <MudCardContent>
             <InstitutionFormCommonComponents Institution="_precreateItem" />
             <MudCardActions>
-            <MudSelect Required="@true" T="int?" @bind-Value="userId"
-                Placeholder="Select user to make admin">
-                @foreach (User user in _UserList)
-                {
-                    <MudSelectItem Value="@(user.id)">@user.firstName @user.lastName</MudSelectItem>
-                }
-            </MudSelect>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="createInst"
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
                     FullWidth="true">Add Institution</MudButton>
             </MudCardActions>
             <MudCardActions>
@@ -33,11 +26,6 @@
     private List<User> _UserList = new List<User>();
     private int? userId;
 
-    protected async Task createInst()
-        {
-            _precreateItem.admin = await RequestHandler<User, User>(HttpMethod.Get, "/Users/" + Convert.ToString(userId),_precreateItem.admin);
-            await OnRequestAction(HttpMethod.Post, ManagerService.ApiPath, _precreateItem, validate: true);
-        }
 
     protected override async Task OnInitializedAsync()
     {

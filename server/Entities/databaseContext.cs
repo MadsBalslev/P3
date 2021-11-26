@@ -38,26 +38,14 @@ namespace server.Entities
             {
                 entity.ToTable("institutions");
 
-                entity.HasIndex(e => e.Admin, "admin");
-
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
-
-                entity.Property(e => e.Admin)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("admin");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("name");
-
-                entity.HasOne(d => d.AdminNavigation)
-                    .WithMany(p => p.Institutions)
-                    .HasForeignKey(d => d.Admin)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("admin");
             });
 
             modelBuilder.Entity<Metadata>(entity =>
@@ -192,7 +180,7 @@ namespace server.Entities
                 entity.HasOne(d => d.InstitutionNavigation)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.Institution)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("institution");
             });
 

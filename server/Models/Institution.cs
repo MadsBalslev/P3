@@ -8,11 +8,6 @@ namespace server.Entities
             {
                 Id = this.Id,
                 name = this.Name,
-                admin = new
-                {
-                    id = this.AdminNavigation.Id,
-                    name = $"{this.AdminNavigation.FirstName} {this.AdminNavigation.LastName}"
-                },
             };
         }
     }

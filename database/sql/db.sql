@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `database`.`users` (
   CONSTRAINT `institution`
     FOREIGN KEY (`institution`)
     REFERENCES `database`.`institutions` (`id`)
-    ON DELETE SET NULL
+    ON DELETE  CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
@@ -47,13 +47,8 @@ DROP TABLE IF EXISTS `database`.`institutions` ;
 CREATE TABLE IF NOT EXISTS `database`.`institutions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
-  `admin` INT,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `admin`
-    FOREIGN KEY (`admin`)
-    REFERENCES `database`.`users` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`)
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
 AUTO_INCREMENT=1;
@@ -143,7 +138,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
 VALUES (1, 'Admin', 'Adminson', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "", null, 3);
 
-INSERT INTO `database`.`institutions` (`id`, `name`, `admin`) VALUES ('1', 'Nordkraft', '1');
+INSERT INTO `database`.`institutions` (`id`, `name`) VALUES ('1', 'Nordkraft');
 
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
 
