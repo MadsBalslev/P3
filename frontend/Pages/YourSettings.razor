@@ -1,29 +1,29 @@
 @page "/YourSettings"
 @using MudBlazor
 @using Shared.Manager
-@inherits Shared.Manager.EditForm<User>
+@inherits ApiComponent
 
 
 
 <MudContainer Class="mt-7">
     <MudGrid>
-        <MudForm @ref="_form">
+        <MudForm @ref="_localForm">
             <MudCard>
                 <MudCardContent>
                     <MudText Typo="Typo.h3" Class="mt-4 mb-4">Your Settings</MudText>
-                    <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.firstName"
-                        Label="First Name" Placeholder="_selectedItem.firstName">
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.firstName"
+                        Label="First Name" Placeholder="_user.firstName">
                     </MudTextField>
-                    <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.lastName"
-                        Label="Last Name" Placeholder="_selectedItem.lastName">
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.lastName"
+                        Label="Last Name" Placeholder="_user.lastName">
                     </MudTextField>
-                    <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.email"
-                        Label="Email" Placeholder="_selectedItem.email">
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.email"
+                        Label="Email" Placeholder="_user.email">
                     </MudTextField>
-                    <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.phoneNumber"
-                        Label="Phonenumber" Placeholder="_selectedItem.phoneNumber">
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.phoneNumber"
+                        Label="Phonenumber" Placeholder="_user.phoneNumber">
                     </MudTextField>
-                    <MudTextField Class="mb-2" T="string" @bind-Value="_selectedItem.password"
+                    <MudTextField Class="mb-2" T="string" @bind-Value="_user.password"
                         Label="Password" InputType="@PasswordInput" Adornment="Adornment.End"
                         AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowOrHidePassword">
                     </MudTextField>
@@ -43,6 +43,7 @@
 
 @code
 {
+    private User _user;
     private string _confirmedPassword;
     private bool _passwordIsVisible;
     private MudForm _localForm;
@@ -51,7 +52,7 @@
 
     private string PasswordMatch(string arg)
     {
-        if (_selectedItem.password != arg)
+        if (_user.password != arg)
             return "Passwords don't match";
         return null;
     }
@@ -72,16 +73,14 @@
         }
     }
 
-    protected async Task LocalRefreshManager()
-    {
-        _localForm.Reset();
-        _localForm.ResetValidation();
-        await ManagerService.RequestRefresh();
-    }
-
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _selectedItem = CurrentUserService.User;
+        _user = CurrentUserService.User;
+    }
+
+    private async Task OnEditItem()
+    {
+        await RequestHandler<User, User>(HttpMethod.Put, $"/Users/{_user.id}", _user, _localForm, "Information updated");
     }
 }
