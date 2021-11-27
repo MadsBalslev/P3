@@ -42,7 +42,7 @@ namespace server.Services
         {
             await _context.Posters.AddAsync(poster);
             await _context.SaveChangesAsync();
-            return poster;
+            return await _context.Posters.Where(p => p.Id == poster.Id).Include(p => p.InstitutionNavigation).FirstOrDefaultAsync();
 
 
             // try
