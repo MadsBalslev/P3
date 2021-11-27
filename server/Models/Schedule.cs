@@ -10,7 +10,7 @@ namespace server.Entities
                 Poster = new
                 {
                     id = this.Poster.Id,
-                    url = this.Poster.ImageUrl,
+                    image = this.Poster.ImageUrl,
                 },
                 Name = this.Name,
                 StartDate = this.StartDate,
@@ -26,8 +26,8 @@ namespace server.Entities
         {
             return new
             {
-                Id = this.Poster.Id,
-                ImageUrl = this.Poster.ImageUrl,
+                id = this.Poster.Id,
+                image = this.Poster.ImageUrl,
             };
         }
     }
