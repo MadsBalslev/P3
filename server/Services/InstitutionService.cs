@@ -45,12 +45,7 @@ namespace server.Services
         {
             await _context.Institutions.AddAsync(institution);
             await _context.SaveChangesAsync();
-
-            Institution inst = await _context.Institutions
-                .Where(i => i.Name == institution.Name)
-                .FirstOrDefaultAsync();
-
-            return inst;
+            return institution;
         }
         public async Task<Institution> DeleteInstitution(int id)
         {

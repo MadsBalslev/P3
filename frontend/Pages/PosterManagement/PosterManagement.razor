@@ -54,7 +54,7 @@
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy=" (x) => x.posterId">Poster ID</MudTableSortLabel>
+                    <MudTableSortLabel T=@Schedule SortBy=" (x) => x.poster.id">Poster ID</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.name">Schedule Name
@@ -75,7 +75,7 @@
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@schedule.id</MudTd>
-                <MudTd>@schedule.posterId</MudTd>
+                <MudTd>@schedule.poster.id</MudTd>
                 <MudTd>@schedule.name</MudTd>
                 <MudTd>@schedule.startDate</MudTd>
                 <MudTd>@schedule.endDate</MudTd>
@@ -115,7 +115,7 @@
             return true;
         if (schedule.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (schedule.posterId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (schedule.poster.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
          return true;
         if (schedule.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;

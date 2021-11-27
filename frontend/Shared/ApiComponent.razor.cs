@@ -98,7 +98,6 @@ namespace frontend.Shared
             if (body != null)
             {
                 string requestMessage = body.ToJSON();
-                Console.WriteLine("REQUEST:" + requestMessage);
                 request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
             }
 
