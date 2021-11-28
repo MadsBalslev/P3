@@ -35,9 +35,10 @@ function getTimerValueThenGetPostersThenDisplayPosters(loopCount) {
 }
 
 function getPostersThenDisplayPosters(timerValue, loopCount) {
+    id = window.location.pathname.split("/")[2];
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
-    req.open('GET', API_BASE_ADDRESS + "/Zones/Active/1", true);
+    req.open('GET', API_BASE_ADDRESS + "/Zones/Active/" + id, true);
     req.onload = function () {
         var posters = JSON.parse(req.responseText);
         setTimeout(displayPosters, timerValue, timerValue, posters, 0, loopCount);
