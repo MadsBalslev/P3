@@ -1,32 +1,45 @@
 @page "/PosterManagement"
 @using MudBlazor
 @using frontend.Shared.Manager
+@inject ICurrentUserService CurrentUserService
 @inherits ApiComponent
 
 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true">
     <MudTabPanel Text="Posters">
         <Manager T="@Poster" ApiPath="/Posters" Context="poster" Filter="FilterFunc">
             <HeaderContent>
-                <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.id">ID</MudTableSortLabel>
-                </MudTh>
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+                {
+                    <MudTh>
+                        <MudTableSortLabel T=@Poster SortBy="(x) => x.id">ID</MudTableSortLabel>
+                    </MudTh>
+                }
                 <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.name">Name
                     </MudTableSortLabel>
                 </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T=@Poster SortBy="(x) => x.institution.name">Institution
-                    </MudTableSortLabel>
-                </MudTh>
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+                {
+                    <MudTh>
+                        <MudTableSortLabel T=@Poster SortBy="(x) => x.institution.name">Institution
+                        </MudTableSortLabel>
+                    </MudTh>
+                }
                 <MudTh>
                     <MudTableSortLabel T=@Poster SortBy="(x) => x.image">Image url
                     </MudTableSortLabel>
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@poster.id</MudTd>
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+                {
+                    <MudTd>@poster.id</MudTd>
+                }
                 <MudTd>@poster.name</MudTd>
-                <MudTd>@poster.institution.name</MudTd>
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+                {
+                    <MudTd>@poster.institution.name</MudTd>
+                }
                 <MudTd>@poster.image</MudTd>
             </RowTemplate>
             <CreateForm>
@@ -39,22 +52,25 @@
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
         <MudContainer Class="mt-3">
-        <MudGrid>
-            <MudItem xs="4">
-                <MudSlider @bind-Value="Metadata.timerValue" Min="1000" Max="60000" Step="1000">Timer: @(Metadata.timerValue/1000) seconds</MudSlider>
-            </MudItem>
-            <MudItem>
-                <MudButton OnClick="@OnApply" Variant=" Variant.Outlined">Apply</MudButton>
-            </MudItem>
-        </MudGrid>
+            <MudGrid>
+                <MudItem xs="4">
+                    <MudSlider @bind-Value="Metadata.timerValue" Min="1000" Max="60000" Step="1000">
+                        Timer: @(Metadata.timerValue/1000) seconds</MudSlider>
+                </MudItem>
+                <MudItem>
+                    <MudButton OnClick="@OnApply" Variant=" Variant.Outlined">Apply</MudButton>
+                </MudItem>
+            </MudGrid>
         </MudContainer>
         <Manager T="@Schedule" ApiPath="/Schedule" Context="schedule" Filter="FilterFuncSchedule">
             <HeaderContent>
                 <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID</MudTableSortLabel>
+                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID
+                    </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy=" (x) => x.poster.id">Poster ID</MudTableSortLabel>
+                    <MudTableSortLabel T=@Schedule SortBy=" (x) => x.poster.id">Poster ID
+                    </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel T=@Schedule SortBy="(x) => x.name">Schedule Name
@@ -116,7 +132,7 @@
         if (schedule.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.poster.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-         return true;
+            return true;
         if (schedule.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.startDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
@@ -129,7 +145,8 @@
     }
     private async Task OnApply()
     {
-        await RequestHandler<Metadata, Metadata>(HttpMethod.Put, "/Metadata/1", Metadata, requestSuccessPopup: "Timer was updated");
+        await RequestHandler<Metadata, Metadata>(HttpMethod.Put, "/Metadata/1", Metadata,
+        requestSuccessPopup: "Timer was updated");
     }
     protected override async Task OnInitializedAsync()
     {
