@@ -35,7 +35,7 @@ namespace server
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("*");
+                        builder.WithOrigins("*").AllowAnyHeader();
                     }
                 );
             });
