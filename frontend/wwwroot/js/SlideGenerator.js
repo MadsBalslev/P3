@@ -1,6 +1,5 @@
 const MAX_LOOP_COUNT = 100;
 const API_BASE_ADDRESS = "http://localhost:5000";
-const API_KEY = "c2NyZWVuOiQyYSQxMSRVNTk4Ykx2NVJ4NERaUVFQbHUwSFAuMlIzMmE5QldQZzFRMnJZT2JOVkxxR1VOQ3Q4OS5maQ=="
 
 function startPosterScreen() {
     initializePage();
@@ -28,7 +27,6 @@ function getTimerValueThenGetPostersThenDisplayPosters(loopCount) {
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open('GET', API_BASE_ADDRESS + "/metadata/1", true);
-    req.setRequestHeader("Authorization", "Basic" + " " + API_KEY)
     req.onload = function () {
         var timerValue = JSON.parse(req.responseText).timerValue;
         getPostersThenDisplayPosters(timerValue, loopCount);
@@ -41,7 +39,6 @@ function getPostersThenDisplayPosters(timerValue, loopCount) {
     var req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open('GET', API_BASE_ADDRESS + "/Zones/Active/" + id, true);
-    req.setRequestHeader("Authorization", "Basic" + " " + API_KEY)
     req.onload = function () {
         var posters = JSON.parse(req.responseText);
         setTimeout(displayPosters, timerValue, timerValue, posters, 0, loopCount);

@@ -82,6 +82,7 @@ namespace server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("/Zones/Active/{zone_id:int}")]
         // Remember to switch back to GetActiveSchedulesInZoneJSON ( NOT TRUE XD )
         public async Task<IEnumerable<Object>> GetActivePostersJSON(int zone_id)
