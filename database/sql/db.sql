@@ -138,9 +138,13 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
 VALUES (1, 'Admin', 'Adminson', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "", null, 3);
 
+INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
+VALUES (2, 'Screen', 'Screenson', 'screen', '$2a$11$U598bLv5Rx4DZQQPlu0HP.2R32a9BWPg1Q2rYObNVLqGUNCt89.fi', "", null, 3);
+
 INSERT INTO `database`.`institutions` (`id`, `name`) VALUES ('1', 'Nordkraft');
 
 UPDATE `users` SET `institution` = 1 WHERE `id` = 1;
+UPDATE `users` SET `institution` = 1 WHERE `id` = 2;
 
 INSERT INTO `database`.`metadata` (`id`, `timer`) VALUES ('1', '5000');
 
