@@ -8,6 +8,7 @@ public class Zone : IManageable
     public void InitializeAggregateObjects()
     {
     }
+
     public string ToJSON()
     {
         return JsonSerializer.Serialize<object>
