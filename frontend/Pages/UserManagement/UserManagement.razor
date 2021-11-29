@@ -1,12 +1,16 @@
 @page "/UserManagement"
 @using frontend.Shared.Manager
 @using MudBlazor
+@inject ICurrentUserService CurrentUserService
 
 <Manager T="@User" ApiPath="/Users" Context="user" Filter="FilterFunc">
     <HeaderContent>
-        <MudTh>
-            <MudTableSortLabel T=@User SortBy="(x) => x.id">ID</MudTableSortLabel>
-        </MudTh>
+        @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+        {
+            <MudTh>
+                <MudTableSortLabel T=@User SortBy="(x) => x.id">ID</MudTableSortLabel>
+            </MudTh>
+        }
         <MudTh>
             <MudTableSortLabel T=@User SortBy="(x) => x.firstName">First name
             </MudTableSortLabel>
@@ -31,7 +35,10 @@
         </MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd>@user.id</MudTd>
+        @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+        {
+            <MudTd>@user.id</MudTd>
+        }
         <MudTd>@user.firstName</MudTd>
         <MudTd>@user.lastName</MudTd>
         <MudTd>@user.RoleAsString</MudTd>
