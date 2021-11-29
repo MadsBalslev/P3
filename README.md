@@ -1,5 +1,6 @@
 # Semesterprojekt 3. Semester - NordkraftPMS
-This repository has been developed in cooperation with Nordkraft(www.nordkraft.dk).
+This repository has been developed in cooperation with
+[Nordkraft](https://nordkraft.dk/forside.aspx).
 
 <div id="top"></div>
 <!--
@@ -25,15 +26,14 @@ This repository has been developed in cooperation with Nordkraft(www.nordkraft.d
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/P3">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/MadsBalslev/P3">
+    <img src="frontend/wwwroot/favicon_nordkraft.ico" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">NordkraftPMS</h3>
@@ -43,7 +43,7 @@ This repository has been developed in cooperation with Nordkraft(www.nordkraft.d
 To ensure the different institutions do not interfere with each other, a user- and institution system has been implemented.
 Therefore an authentication system is also in place.
     <br />
-    <a href="https://github.com/github_username/P3"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/MadsBalslev/P3"><strong>Explore the docs »</strong></a>
     <br />
     <br />
   </p>
@@ -82,9 +82,9 @@ Therefore an authentication system is also in place.
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img src="frontend/wwwroot/image/../images/frontpage.png" alt="Frontpage" width="1913" height="973">
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `P3`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `NordkraftPMS`, `The goal of this webapplication was to create a system for Nordkraft, to manage, upload, display and schedule different posters.
+The goal of this webapplication was to create a system for Nordkraft, to manage, upload, display and schedule different posters.
 To ensure the different institutions do not interfere with each other, a user- and institution system has been implemented.
 Therefore an authentication system is also in place.`
 
@@ -96,8 +96,7 @@ Therefore an authentication system is also in place.`
 
 * [MariaDB 10.1.19](https://mariadb.org/mariadb-10-1-19-release-now-available/)
 * [ASP.NET CORE 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
+* [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -110,23 +109,20 @@ This is an example of how you may give instructions on setting up your project l
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+The project is divided into a frontend and server folder. To install the neccesary packages `cd` into each folder and run:
+```sh
+dotnet restore
+```
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+
 
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/P3.git
+   git clone https://github.com/MadsBalslev/P3.git
    ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
+2. Install prequisites mentioned above
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -156,9 +152,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
 
-Project Link: [https://github.com/github_username/P3](https://github.com/github_username/P3)
+Project Link: [https://github.com/MadsBalslev/P3](https://github.com/MadsBalslev/P3)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -177,16 +172,16 @@ Project Link: [https://github.com/github_username/P3](https://github.com/github_
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/P3.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/P3/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/P3.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/P3/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/P3.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/P3/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/P3.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/P3/issues
-[license-shield]: https://img.shields.io/github/license/github_username/P3.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/P3/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/MadsBalslev/P3.svg?style=for-the-badge
+[contributors-url]: https://github.com/MadsBalslev/P3/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/MadsBalslev/P3.svg?style=for-the-badge
+[forks-url]: https://github.com/MadsBalslev/P3/network/members
+[stars-shield]: https://img.shields.io/github/stars/MadsBalslev/P3.svg?style=for-the-badge
+[stars-url]: https://github.com/MadsBalslev/P3/stargazers
+[issues-shield]: https://img.shields.io/github/issues/MadsBalslev/P3.svg?style=for-the-badge
+[issues-url]: https://github.com/MadsBalslev/P3/issues
+[license-shield]: https://img.shields.io/github/license/MadsBalslev/P3.svg?style=for-the-badge
+[license-url]: https://github.com/MadsBalslev/P3/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
