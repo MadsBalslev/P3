@@ -60,7 +60,7 @@ namespace server.Controllers
                 Poster p = await _posterService.CreatePoster(poster);
                 return p.ToJSON();
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return NotFound();
             }
