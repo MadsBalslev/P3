@@ -1,6 +1,6 @@
 @page "/YourSettings"
 @using MudBlazor
-@using Shared.Manager
+@inject NavigationManager NavigationManager
 @inherits ApiComponent
 
 
@@ -11,6 +11,7 @@
             <MudCard>
                 <MudCardContent>
                     <MudText Typo="Typo.h3" Class="mt-4 mb-4">Your Settings</MudText>
+                    <MudText Class="mt-4 mb-4">(Changeing your settings will log you out.)</MudText>
                     <MudTextField Class="mb-2" T="string" @bind-Value="_user.firstName"
                         Label="First Name" Placeholder="_user.firstName">
                     </MudTextField>
@@ -79,8 +80,12 @@
         _user = CurrentUserService.User;
     }
 
+    private LoginInformation _loginInformation = new();
+
     private async Task OnEditItem()
     {
         await RequestHandler<User, User>(HttpMethod.Put, $"/Users/{_user.id}", _user, _localForm, "Information updated");
+        CurrentUserService.Logout();
+        NavigationManager.NavigateTo("/login");
     }
 }
