@@ -131,9 +131,15 @@ dotnet restore
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+After installing ALL the prequisites, open two(2) terminals, one in P3/frontend and the other in P3/server.
+Proceed to write, in both terminals:
+```sh
+dotnet run
+```
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Now that the frontend and backend are up and running, you can go to localhost:8080 and login with the default sys-admin user, admin/admin.
+
+You can now proceed to use the system.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
