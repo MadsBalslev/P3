@@ -11,7 +11,7 @@
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
     @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
 
-<MudSelect @bind-value="Schedule.posterId" Required="true" T="int?" Placeholder="Select what poster to schedule...">
+<MudSelect @bind-value="Schedule.poster.id" Required="true" T="int?" Placeholder="Select what poster to schedule...">
     @foreach (Poster poster in _posters)
     {
         <MudSelectItem Value="@(poster.id)">@poster.name</MudSelectItem>

@@ -12,15 +12,10 @@
             <MudTableSortLabel T=@Institution SortBy="(x) => x.name">Name
             </MudTableSortLabel>
         </MudTh>
-        <MudTh>
-            <MudTableSortLabel T=@Institution SortBy="(x) => x.admin.name">Admin
-            </MudTableSortLabel>
-        </MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@institution.id</MudTd>
         <MudTd>@institution.name</MudTd>
-        <MudTd>@institution.admin.name</MudTd>
     </RowTemplate>
     <CreateForm>
         <InstitutionCreateForm />
@@ -39,10 +34,6 @@
         if (institution.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (institution.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (institution.admin.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (institution.admin.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

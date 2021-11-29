@@ -1,0 +1,12 @@
+@page "/Screen/{ZoneId}"
+@using frontend.Shared.Layout
+@layout PosterScreenLayout
+
+<body style="background-color:black;" onload=startPosterScreen();>
+</body>
+
+@code
+{
+    [Parameter]
+    public string? ZoneId { get; set; }
+}

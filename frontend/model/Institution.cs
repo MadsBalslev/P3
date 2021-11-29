@@ -6,11 +6,11 @@ public class Institution : IManageable
 
     public string name { get; set; }
 
-    public User admin { get; set; }
+
 
     public void InitializeAggregateObjects()
     {
-        admin = new();
+
     }
 
     public string ToJSON()
@@ -20,7 +20,7 @@ public class Institution : IManageable
             new
             {
                 name = this.name,
-                admin = this.admin.id,
+
             }
         );
     }
