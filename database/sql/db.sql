@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `database`.`schedules` (
   CONSTRAINT `zone`
     FOREIGN KEY (`zone`)
     REFERENCES `database`.`zones` (`id`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
