@@ -33,7 +33,7 @@ This repository has been developed in cooperation with
 <br />
 <div align="center">
   <a href="https://github.com/MadsBalslev/P3">
-    <img src="frontend/wwwroot/favicon_nordkraft.ico" alt="Logo" width="80" height="80">
+    <img src="./frontend/wwwroot/favicon_nordkraft.ico" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">NordkraftPMS</h3>
@@ -82,11 +82,9 @@ Therefore an authentication system is also in place.
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="frontend/wwwroot/image/../images/frontpage.png" alt="Frontpage" width="1913" height="973">
-
 The goal of this webapplication was to create a system for Nordkraft, to manage, upload, display and schedule different posters.
 To ensure the different institutions do not interfere with each other, a user- and institution system has been implemented.
-Therefore an authentication system is also in place.`
+Therefore an authentication system is also in place.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -118,11 +116,11 @@ dotnet restore
 
 ### Installation
 
-1. Clone the repo
+1. Clone the repo:
    ```sh
    git clone https://github.com/MadsBalslev/P3.git
    ```
-2. Install prequisites mentioned above
+2. Install prequisites mentioned above.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -130,8 +128,11 @@ dotnet restore
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+Start by running the .sql file from `P3/database/db.sql` in MariaDB.
+The default login is host:localhost, user:root and password:123.
+(You can change these yourself later) and update them in  the connection string in `server/appsettings.json`.
 
-After installing ALL the prequisites, open two(2) terminals, one in P3/frontend and the other in P3/server.
+After installing ALL the prequisites, open two(2) terminals, one in `P3/frontend` and the other in `P3/server`.
 Proceed to write, in both terminals:
 ```sh
 dotnet run
@@ -157,8 +158,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contact
-
-
 Project Link: [https://github.com/MadsBalslev/P3](https://github.com/MadsBalslev/P3)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -167,10 +166,17 @@ Project Link: [https://github.com/MadsBalslev/P3](https://github.com/MadsBalslev
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+### Guidance
+* Christian Hove from [Nordkraft](https://nordkraft.dk/)
+* [Florian Echtler](https://vbn.aau.dk/en/persons/149493)
 
-* []()
-* []()
-* []()
+### Development
+* [Simon M. P. Andersen](https://github.com/uglenDX)
+* [Nicolai Bruun Nielsen](https://github.com/Mightyhaha)
+* [Casper Ståhl](https://github.com/CasperStaahl)
+* [Patrick Bertelsen](https://github.com/pberte20)
+* [Frederik Møller](https://github.com/Frederikmoeller)
+* [Mads P. Balslev](https://github.com/MadsBalslev)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
