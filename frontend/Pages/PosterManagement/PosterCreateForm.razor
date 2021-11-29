@@ -7,11 +7,11 @@
         <MudCardContent>
             <PosterFormCommonComponents Poster="_precreateItem" />
             @* <InputFile id="fileInput" hidden accept=".jpg, .jpeg, .png" /> *@
-            <MudCardActions>
+            @* <MudCardActions>
                 <MudButton Disabled="@true" Variant="Variant.Filled"
                     StartIcon="@Icons.Filled.CloudUpload" for="fileInput" FullWidth="true">
                     Upload poster</MudButton>
-            </MudCardActions>
+            </MudCardActions> *@
             <MudCardActions>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnAddItem"
                     FullWidth="true">Add Poster</MudButton>

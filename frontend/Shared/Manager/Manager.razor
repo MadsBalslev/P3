@@ -26,7 +26,7 @@
         ManagerMode.Edit)
             _tableSize = 8;
         <MudItem xs="_tableSize">
-            <MudTable Loading="@_loading" Height="586px" FixedHeader="@true" Items="@_items"
+            <MudTable Loading="@_loading" Height="588px" FixedHeader="@true" Items="@_items"
                 Hover="@true" CanCancelEdit="@true" Filter="@_filter"
                 @bind-SelectedItem="_selectedItem" SortLabel="Sort By" @ref="_table"
                 OnRowClick="RowClickEvent" T="T" RowClassFunc="@SelectedRowClassFunc"
