@@ -4,25 +4,38 @@
 <MudForm @ref="_form">
     <MudCard>
         <MudCardContent>
-            <UserFormCommonComponents User="_selectedItem" PasswordFieldIsRequired="@false" />
-            <MudCardActions>
-                <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
+            @if (CurrentUserService.User.id == _selectedItem.id)
+            {
+                <MudText>Go to Your Settings to edit your own information.</MudText>
+            }
+            else if (CurrentUserService.User.AccessLevel > _selectedItem.AccessLevel
+                 || CurrentUserService.User.AccessLevel == AccessLevel.SysAdmin)
+            {
+                <UserFormCommonComponents User="_selectedItem" PasswordFieldIsRequired="@false" />
+                <MudCardActions>
+                    <MudButton FullWidth="true" @onclick="OnEditItem" Variant="Variant.Filled"
                     Color="Color.Primary">
-                    Apply edit
-                </MudButton>
-            </MudCardActions>
-            <MudCardActions>
-                <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
+                        Apply edit
+                    </MudButton>
+                </MudCardActions>
+                <MudCardActions>
+                    <MudButton FullWidth="true" @onclick="OnCancel" Variant="Variant.Filled"
                     Color="Color.Warning">
-                    Cancel
-                </MudButton>
-            </MudCardActions>
-            <MudCardActions>
-                <MudButton FullWidth="true" @onclick="OnDelete" Variant="Variant.Filled"
+                        Cancel
+                    </MudButton>
+                </MudCardActions>
+                <MudCardActions>
+                    <MudButton FullWidth="true" @onclick="OnDelete" Variant="Variant.Filled"
                     Color="Color.Secondary">
-                    Delete
-                </MudButton>
-            </MudCardActions>
+                        Delete
+                    </MudButton>
+                </MudCardActions>
+
+            }
+            else
+            {
+                <MudText>You can't edit a user with same or higher role than you.</MudText>
+            }
         </MudCardContent>
     </MudCard>
 </MudForm>
