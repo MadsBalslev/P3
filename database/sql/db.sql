@@ -119,12 +119,12 @@ CREATE TABLE IF NOT EXISTS `database`.`schedules` (
   CONSTRAINT `poster_id`
     FOREIGN KEY (`poster_id`)
     REFERENCES `database`.`posters` (`id`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `zone`
     FOREIGN KEY (`zone`)
     REFERENCES `database`.`zones` (`id`)
-    ON DELETE CASCADE
+    ON DELETE Set NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = DEFAULT
