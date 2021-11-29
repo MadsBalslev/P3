@@ -51,25 +51,35 @@
         </Manager>
     </MudTabPanel>
     <MudTabPanel Text="Poster Schedules">
-        <MudContainer Class="mt-3">
-            <MudGrid>
-                <MudItem xs="4">
-                    <MudSlider @bind-Value="Metadata.timerValue" Min="1000" Max="60000" Step="1000">
-                        Timer: @(Metadata.timerValue/1000) seconds</MudSlider>
-                </MudItem>
-                <MudItem>
-                    <MudButton OnClick="@OnApply" Variant=" Variant.Outlined">Apply</MudButton>
-                </MudItem>
-            </MudGrid>
-        </MudContainer>
+        @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+        {
+            <MudContainer Class="mt-3">
+                <MudGrid>
+                    <MudItem xs="4">
+                        <MudSlider @bind-Value="Metadata.timerValue" Min="1000" Max="60000" Step="1000">
+                            Timer: @(Metadata.timerValue/1000) seconds</MudSlider>
+                    </MudItem>
+                    <MudItem>
+                        <MudButton OnClick="@OnApply" Variant=" Variant.Outlined">Apply</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        }
         <Manager T="@Schedule" ApiPath="/Schedule" Context="schedule" Filter="FilterFuncSchedule">
             <HeaderContent>
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+                {
+                    <MudTh>
+                        <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID
+                        </MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel T=@Schedule SortBy=" (x) => x.poster.id">Poster ID
+                        </MudTableSortLabel>
+                    </MudTh>
+                }
                 <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy="(x) => x.id">Schedule ID
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T=@Schedule SortBy=" (x) => x.poster.id">Poster ID
+                    <MudTableSortLabel T=@Schedule SortBy=" (x) => x.poster.id">Poster Name
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
@@ -90,8 +100,12 @@
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@schedule.id</MudTd>
-                <MudTd>@schedule.poster.id</MudTd>
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
+                {
+                    <MudTd>@schedule.id</MudTd>
+                    <MudTd>@schedule.poster.id</MudTd>
+                }
+                <MudTd>@schedule.poster.name</MudTd>
                 <MudTd>@schedule.name</MudTd>
                 <MudTd>@schedule.startDate</MudTd>
                 <MudTd>@schedule.endDate</MudTd>
@@ -132,6 +146,8 @@
         if (schedule.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.poster.id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (schedule.poster.name.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (schedule.name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;

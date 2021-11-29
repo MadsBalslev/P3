@@ -1,7 +1,4 @@
 @using MudBlazor
-@using System.Text.Json
-@using System.IO
-@using Microsoft.Extensions.Configuration;
 @inherits Shared.Manager.CreateForm<User>
 
 <MudForm @ref="_form">
@@ -10,9 +7,22 @@
             <UserFormCommonComponents User=@_precreateItem />
             <MudSelect Required="@true" T="int?" @bind-Value="_precreateItem.institution.id"
                 Placeholder="Select what institution the user belongs to">
-                @foreach (Institution institution in _institutionList)
+                @if (AccessLevel.SysAdmin <= CurrentUserService.User.AccessLevel)
                 {
-                    <MudSelectItem Value="@(institution.id)">@institution.name</MudSelectItem>
+                    foreach (Institution institution in _institutionList)
+                    {
+                        <MudSelectItem Value="@(institution.id)">@institution.name</MudSelectItem>
+                    }
+                }
+                else
+                {
+                    foreach (Institution institution in _institutionList)
+                    {
+                        if (institution.id == CurrentUserService.User.institution.id)
+                        {
+                            <MudSelectItem Value="@(institution.id)">@institution.name</MudSelectItem>
+                        }
+                    }
                 }
             </MudSelect>
             <MudCardActions>

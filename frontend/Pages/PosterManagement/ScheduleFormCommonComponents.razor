@@ -1,36 +1,32 @@
 @using System
 @using MudBlazor
-@using Shared.Manager
 @inherits ApiComponent
 
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Schedule.name" Label="Schedule Name" />
-<MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date" MinDate="DateTime.Now"
-    MaxDate="Schedule.endDate" @bind-Date="Schedule.startDate" DateFormat="dd/MM/yyyy" />
-@* <MudTimePicker PickerVariant="PickerVariant.Dialog" Label="Pick time for start date" @bind-Time="time"
-    TimeFormat="HH:mm" /> *@
+<MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date"
+    MinDate="DateTime.Now.AddDays(-1)" MaxDate="Schedule.endDate" @bind-Date="Schedule.startDate"
+    DateFormat="dd/MM/yyyy" />
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
     @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
 
-<MudSelect @bind-value="Schedule.poster.id" Required="true" T="int?" Placeholder="Select what poster to schedule...">
+<MudSelect @bind-value="Schedule.poster.id" Required="true" T="int?"
+    Placeholder="Select what poster to schedule...">
     @foreach (Poster poster in _posters)
     {
         <MudSelectItem Value="@(poster.id)">@poster.name</MudSelectItem>
     }
 </MudSelect>
-<MudSelect @bind-value="Schedule.zone" Required="true" T="Zone" Placeholder="Select what zone to schedule in...">
+<MudSelect @bind-value="Schedule.zone.id" Required="true" T="int?"
+    Placeholder="Select what zone to schedule in...">
     @foreach (Zone zone in _zones)
     {
-        <MudSelectItem Value="@(zone)">@zone.name</MudSelectItem>
+        <MudSelectItem Value="@(zone.id)">@zone.name</MudSelectItem>
     }
 </MudSelect>
 
 
 @code
 {
-
-
-    // TimeSpan? time = new TimeSpan(00, 00, 00);
-
     private List<Poster> _posters = new List<Poster>();
 
     private List<Zone> _zones = new List<Zone>();
@@ -40,7 +36,7 @@
     // ---> "{0, 0, 0, 0, 0, 0, 0}"
 
     [Parameter]
-    public Schedule Schedule{ get; set; }
+    public Schedule Schedule { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

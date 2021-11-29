@@ -7,7 +7,6 @@ public class Schedule : IManageable
     public string name { get; set; }
     public DateTime? startDate { get; set; }
     public DateTime? endDate { get; set; }
-
     public Zone zone { get; set; }
     public Poster poster { get; set; }
 

@@ -11,6 +11,7 @@ namespace server.Entities
                 {
                     id = this.Poster.Id,
                     image = this.Poster.ImageUrl,
+                    name = this.Poster.Name,
                 },
                 Name = this.Name,
                 StartDate = this.StartDate,

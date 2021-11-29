@@ -63,7 +63,7 @@
         _currentTheme = DarkTheme;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
 
-        if (CurrentUserService.isLoggedIn)
+        if (!CurrentUserService.isLoggedIn)
         {
             NavManager.NavigateTo("/login");
         }
