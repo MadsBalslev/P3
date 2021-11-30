@@ -17,7 +17,8 @@ function initializePage() {
     Image.src = "/images/Nordkraft.png"
     Image.id = ("imageId");
     Image.classList = "image";
-    Image.style.height = "100vh";
+    Image.style.objectFit = "cover";
+    Image.style.height = "100%";
     Image.style.width = "100%";
 
     document.body.appendChild(screenDiv);
