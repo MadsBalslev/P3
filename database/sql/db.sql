@@ -136,7 +136,7 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 INSERT INTO `database`.`users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `institution`, `role`)
-VALUES (1, 'Admin', 'Adminson', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "", null, 3);
+VALUES (1, 'Admin', 'Adminson', 'admin', '$2a$11$gXTWUmhjbhbjOqzT6AnfVORfPjVXT/w4UQhPXkr3G6vsVs7xQ3a/C', "", null, 2);
 
 INSERT INTO `database`.`institutions` (`id`, `name`) VALUES ('1', 'Nordkraft');
 
