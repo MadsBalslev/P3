@@ -8,12 +8,12 @@
     MinDate="Schedule.StartDateMinDate" MaxDate="Schedule.StartDateMaxDate"
     @bind-Date="Schedule.StartDateDate" DateFormat="dd/MM/yyyy" />
 
-<MudTimePicker Required="true" Label="24 hours" @bind-Time="Schedule.StartDateTime" />
+<MudTimePicker Required="true" Label="Start time" @bind-Time="Schedule.StartDateTime" />
 
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date"
     MinDate="Schedule.EndDateMinDate" @bind-Date="Schedule.EndDateDate" DateFormat="dd/MM/yyyy" />
 
-<MudTimePicker Required="true" Label="24 hours" @bind-Time="Schedule.EndDateTime" />
+<MudTimePicker Required="true" Label="End time" @bind-Time="Schedule.EndDateTime" />
 
 <MudSelect @bind-value="Schedule.poster.id" Required="true" T="int?"
     Placeholder="Select what poster to schedule...">
