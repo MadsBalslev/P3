@@ -3,11 +3,17 @@
 @inherits ApiComponent
 
 <MudTextField Required="@true" FullWidth="true" @bind-Value="Schedule.name" Label="Schedule Name" />
+
 <MudDatePicker Required="@true" ShowWeekNumbers="true" Label="Start date"
-    MinDate="DateTime.Now.AddDays(-1)" MaxDate="Schedule.endDate" @bind-Date="Schedule.startDate"
-    DateFormat="dd/MM/yyyy" />
-<MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date" MinDate="Schedule.startDate"
-    @bind-Date="Schedule.endDate" DateFormat="dd/MM/yyyy" />
+    MinDate="Schedule.StartDateMinDate" MaxDate="Schedule.StartDateMaxDate"
+    @bind-Date="Schedule.StartDateDate" DateFormat="dd/MM/yyyy" />
+
+<MudTimePicker Required="true" Label="Start time" @bind-Time="Schedule.StartDateTime" />
+
+<MudDatePicker Required="@true" ShowWeekNumbers="true" Label="End date"
+    MinDate="Schedule.EndDateMinDate" @bind-Date="Schedule.EndDateDate" DateFormat="dd/MM/yyyy" />
+
+<MudTimePicker Required="true" Label="End time" @bind-Time="Schedule.EndDateTime" />
 
 <MudSelect @bind-value="Schedule.poster.id" Required="true" T="int?"
     Placeholder="Select what poster to schedule...">
@@ -16,6 +22,7 @@
         <MudSelectItem Value="@(poster.id)">@poster.name</MudSelectItem>
     }
 </MudSelect>
+
 <MudSelect @bind-value="Schedule.zone.id" Required="true" T="int?"
     Placeholder="Select what zone to schedule in...">
     @foreach (Zone zone in _zones)
@@ -24,17 +31,14 @@
     }
 </MudSelect>
 
+@if (Schedule.endDate <= Schedule.startDate)
+{
+    <MudText>Notice that this schedule will not be displayed as the starting date is the same as or before the ending
+        date</MudText>
+}
 
 @code
 {
-    private List<Poster> _posters = new List<Poster>();
-
-    private List<Zone> _zones = new List<Zone>();
-
-    // Weekday
-    // "{Man, Tir, Ons, Tor, Fre, Lør, Søn}"
-    // ---> "{0, 0, 0, 0, 0, 0, 0}"
-
     [Parameter]
     public Schedule Schedule { get; set; }
 
@@ -44,4 +48,8 @@
         _posters = await RequestHandler<None, List<Poster>>(HttpMethod.Get, "/Posters");
         _zones = await RequestHandler<None, List<Zone>>(HttpMethod.Get, "/Zones");
     }
+
+    private List<Poster> _posters = new List<Poster>();
+
+    private List<Zone> _zones = new List<Zone>();
 }
