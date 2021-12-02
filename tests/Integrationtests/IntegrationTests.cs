@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -20,21 +21,23 @@ namespace tests.Integrationtests
             _client = _factory.CreateClient();
         }
 
-        public async Task<(HttpResponseMessage, ResponseT)> request<RequestT, ResponseT>(HttpMethod method, string url, RequestT requestBody = default) where RequestT : IToJSON
+        public async Task<(HttpResponseMessage, responseT)>
+            Request<responseT>(HttpMethod method, string url, IDictionary<string, dynamic> requestBody = null)
         {
             HttpRequestMessage request = new HttpRequestMessage(method, url);
             request.Headers.Add("Authorization", "Basic YWRtaW46JDJhJDExJGdYVFdVbWhqYmhiak9xelQ2QW5mVk9SZlBqVlhUL3c0VVFoUFhrcjNHNnZzVnM3eFEzYS9D");
 
             if (requestBody != null)
             {
-                string requestMessage = requestBody.ToJSON();
+                string requestMessage = JsonSerializer.Serialize(requestBody);
                 request.Content = new StringContent(requestMessage, Encoding.UTF8, "application/Json");
             }
 
             HttpResponseMessage response = await _client.SendAsync(request);
 
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            ResponseT responseBody = await JsonSerializer.DeserializeAsync<ResponseT>(responseStream);
+            responseT responseBody =
+                await JsonSerializer.DeserializeAsync<responseT>(responseStream);
 
             return (response, responseBody);
         }
