@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\frontend\frontend.csproj" />
         <ProjectReference Include="..\server\server.csproj" />
         <InternalsVisibleTo Include="..\server\server.csproj" />
     </ItemGroup>
