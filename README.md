@@ -140,6 +140,11 @@ Now that the frontend and backend are up and running, you can go to localhost:80
 
 You can now proceed to use the system.
 
+#### Changing ports
+The ports on which the server and frontend is run can be changed in each folders `properties/launchsettings.json`-file. 
+This can also be changed to be `0.0.0.0:PORT` to open up for incomming requests not comming from the localhost. 
+The changes to the server PORT must also be applied to the `frontend/wwwroot/js/SlideGenerator.js`-file, which handles the API call to the server.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
