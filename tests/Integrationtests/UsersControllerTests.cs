@@ -7,7 +7,7 @@ using Xunit;
 
 namespace tests.Integrationtests
 {
-    // // [Collection("API tests")]
+    // [Collection("API tests")]
     public class UsersControllerTests : IntegrationTests
     {
         // https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings
@@ -35,10 +35,12 @@ namespace tests.Integrationtests
             requestBody.Add("password", "casperErSej123");
 
             //When
-            (HttpResponseMessage Message, IDictionary<String, dynamic> Body) postResponse =
-                await Request<IDictionary<String, dynamic>>(HttpMethod.Post, "/Users", requestBody);
+            //Post item to server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) postResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Users", requestBody);
 
-            (HttpResponseMessage Message, List<IDictionary<String, dynamic>> Body) getResponse =
+            //Get item from server
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) getResponse =
                 await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Users");
             var getResponseBody = getResponse.Body.Find(x =>
                 x["id"].ToString() == postResponse.Body["id"].ToString());
@@ -90,24 +92,25 @@ namespace tests.Integrationtests
             putRequestBody.Add("password", "MadsErSej123");
 
             //When
-            (HttpResponseMessage Message, IDictionary<String, dynamic> Body) postResponse =
-                await Request<IDictionary<String, dynamic>>(HttpMethod.Post, "/Users", postRequestBody);
+            //Post item to server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) postResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Users", postRequestBody);
             string id = postResponse.Body["id"].ToString();
 
-            (HttpResponseMessage Message, IDictionary<String, dynamic> Body) putResponse =
-                await Request<IDictionary<String, dynamic>>(HttpMethod.Put,
+            //Update(put) item on server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) putResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Put,
                                                             $"/Users/{id}",
                                                             putRequestBody);
 
-            (HttpResponseMessage Message, List<IDictionary<String, dynamic>> Body) getResponse =
+            //Get item from server
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) getResponse =
                 await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Users");
             var getResponseBody = getResponse.Body.Find(x =>
                 x["id"].ToString() == postResponse.Body["id"].ToString());
 
-            // holy fucking shit never have i ever....
-
             //Then
-            Assert.Equal("OK", postResponse.Message.StatusCode.ToString());
+            Assert.Equal("OK", putResponse.Message.StatusCode.ToString());
 
             Assert.Equal(putRequestBody["firstName"].ToString(),
                          getResponseBody["firstName"].ToString());
@@ -141,51 +144,25 @@ namespace tests.Integrationtests
             postRequestBody.Add("role", 1);
             postRequestBody.Add("password", "casperErSej123");
 
-            Dictionary<string, dynamic> putRequestBody = new();
-            putRequestBody.Add("firstName", "Mads");
-            putRequestBody.Add("lastName", "Madsen");
-            putRequestBody.Add("email", RandomString(10));
-            putRequestBody.Add("phoneNumber", "33292522");
-            putRequestBody.Add("role", 2);
-            putRequestBody.Add("password", "MadsErSej123");
-
             //When
-            (HttpResponseMessage Message, IDictionary<String, dynamic> Body) postResponse =
-                await Request<IDictionary<String, dynamic>>(HttpMethod.Post, "/Users", postRequestBody);
+            //Post item to the server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) postResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Users", postRequestBody);
             string id = postResponse.Body["id"].ToString();
 
-            (HttpResponseMessage Message, IDictionary<String, dynamic> Body) putResponse =
-                await Request<IDictionary<String, dynamic>>(HttpMethod.Put,
-                                                            $"/Users/{id}",
-                                                            putRequestBody);
+            //Delete item from server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) deleteResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Delete, $"/Users/{id}");
 
-            (HttpResponseMessage Message, List<IDictionary<String, dynamic>> Body) getResponse =
+            //Get item from server
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) getResponse =
                 await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Users");
             var getResponseBody = getResponse.Body.Find(x =>
                 x["id"].ToString() == postResponse.Body["id"].ToString());
 
-            // holy fucking shit never have i ever....
-
             //Then
-            Assert.Equal("OK", postResponse.Message.StatusCode.ToString());
-
-            Assert.Equal(putRequestBody["firstName"].ToString(),
-                         getResponseBody["firstName"].ToString());
-
-            Assert.Equal(putRequestBody["lastName"].ToString(),
-                         getResponseBody["lastName"].ToString());
-
-            Assert.Equal(putRequestBody["email"].ToString(),
-                         getResponseBody["email"].ToString());
-
-            Assert.Equal(putRequestBody["phoneNumber"].ToString(),
-                         getResponseBody["phoneNumber"].ToString());
-
-            Assert.Equal(putRequestBody["role"].ToString(),
-                         getResponseBody["role"].ToString());
-
-            //Clean
-            await Request<None>(HttpMethod.Delete, $"/Users/{postResponse.Body["id"]}");
+            Assert.Equal("OK", deleteResponse.Message.StatusCode.ToString());
+            Assert.Null(getResponseBody);
         }
     }
 }
