@@ -141,30 +141,48 @@ namespace tests.Integrationtests
         public async Task Delete()
         {
             //Given
-            Dictionary<string, dynamic> postRequestBody = new();
-            postRequestBody.Add("name", "Placeholder Poster");
-            postRequestBody.Add("imageUrl", "https://via.placeholder.com/1080x1920");
-            postRequestBody.Add("institution", 1);
+            Dictionary<string, dynamic> posterRequestBody = new();
+            posterRequestBody.Add("name", "Placeholder Poster");
+            posterRequestBody.Add("imageUrl", "https://via.placeholder.com/1080x1920");
+            posterRequestBody.Add("institution", 1);
+
+            //Post poster to server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) posterResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post,
+                                                            "/Posters",
+                                                            posterRequestBody);
+            string posterId = posterResponse.Body["id"].ToString();
+
+            Dictionary<string, dynamic> scheduleRequestBody = new();
+            scheduleRequestBody.Add("posterId", posterId);
+            scheduleRequestBody.Add("name", "Placeholder poster schedule");
+            scheduleRequestBody.Add("startDate", DateTime.Now);
+            scheduleRequestBody.Add("endDate", DateTime.Now.AddDays(+1));
+            scheduleRequestBody.Add("zone", 1);
 
             //When
-            //Post item to the server
-            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) postResponse =
-                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Schedule", postRequestBody);
-            string id = postResponse.Body["zoneDetaile"].GetProperty("id").ToString();
+            //Post schedule attached to poster to server
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) schedulePostResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post,
+                                                            "/Schedule",
+                                                            scheduleRequestBody);
+            string scheduleId = schedulePostResponse.Body["id"].ToString();
 
-            //Delete item from server
-            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) deleteResponse =
-                await Request<IDictionary<string, dynamic>>(HttpMethod.Delete, $"/Schedule/{id}");
+            //Delete that schedule
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) scheduleDeleteResponse =
+                await Request<IDictionary<String, dynamic>>(HttpMethod.Delete, $"/Schedule/{scheduleId}");
 
-            //Get item from server
+            //Get schedule from server
             (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) getResponse =
                 await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Schedule");
-            var getResponseBody = getResponse.Body.Find(x =>
-                x["id"].ToString() == id);
+            var getResponseBody = getResponse.Body.Find(x => x["id"].ToString() == scheduleId);
 
             //Then
-            Assert.Equal("OK", deleteResponse.Message.StatusCode.ToString());
+            Assert.Equal("OK", scheduleDeleteResponse.Message.StatusCode.ToString());
             Assert.Null(getResponseBody);
+
+            //Clean
+            await Request<None>(HttpMethod.Delete, $"/Posters/{posterId}");
         }
     }
 }
