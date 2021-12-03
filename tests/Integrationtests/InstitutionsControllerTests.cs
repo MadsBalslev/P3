@@ -81,9 +81,7 @@ namespace tests.Integrationtests
         {
             //Given
             Dictionary<string, dynamic> postRequestBody = new();
-            postRequestBody.Add("name", "Placeholder Poster");
-            postRequestBody.Add("imageUrl", "https://via.placeholder.com/1080x1920");
-            postRequestBody.Add("institution", 1);
+            postRequestBody.Add("name", "AAU");
 
             //When
             //Post item to the server
@@ -105,5 +103,29 @@ namespace tests.Integrationtests
             Assert.Equal("OK", deleteResponse.Message.StatusCode.ToString());
             Assert.Null(getResponseBody);
         }
-    }
+
+        [Fact]
+        public async Task Cascade()
+        {
+            //Given
+            Dictionary<string, dynamic> inst1 = new();
+            inst1.Add("Name", "AAU");
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) postResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Institutions", inst1);
+            string inst1Id = inst1PostResponse.Body["institutionDetails"]
+                                              .GetProperty("id")
+                                              .ToString();
+
+
+            Dictionary<string, dynamic> user2 = new();
+
+            Dictionary<string, dynamic> inst2 = new();
+            inst1.Add("Name", "Biffen");
+
+            //When
+
+            //Then
+        }
+p
 }
