@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -11,6 +13,7 @@ namespace tests.Integrationtests
 {
     public class IntegrationTests
     {
+        protected static Random random = new Random();
         protected readonly HttpClient _client;
 
         protected readonly WebApplicationFactory<Startup> _factory;
@@ -19,6 +22,14 @@ namespace tests.Integrationtests
         {
             _factory = new WebApplicationFactory<Startup>();
             _client = _factory.CreateClient();
+        }
+
+        // https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings
+        protected static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public async Task<(HttpResponseMessage, responseT)>
