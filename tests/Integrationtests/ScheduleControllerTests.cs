@@ -137,7 +137,7 @@ namespace tests.Integrationtests
             await Request<None>(HttpMethod.Delete, $"/Posters/{posterId}");
         }
 
-        // [Fact]
+        [Fact]
         public async Task Delete()
         {
             //Given
@@ -183,6 +183,137 @@ namespace tests.Integrationtests
 
             //Clean
             await Request<None>(HttpMethod.Delete, $"/Posters/{posterId}");
+        }
+
+        [Theory]
+        [InlineData(1, 0, 0, 1, 0, 0)]
+        [InlineData(0, 1, 0, 0, 1, 0)]
+        [InlineData(0, 0, 1, 0, 0, 1)]
+        [InlineData(7, 4, 3, 2, 8, 4)]
+        public async Task ActiveSchedulesReturnSchedulesThatAreActiveAndWithinZone(int startDateMinutesOffset,
+                                                                                   int startDateHoursOffset,
+                                                                                   int startDateDaysOffset,
+                                                                                   int endDateMinutesOffset,
+                                                                                   int endDateHoursOffset,
+                                                                                   int endDateDaysOffset)
+        {
+            //Given
+            Dictionary<string, dynamic> poster = new();
+            poster.Add("Name", "Active Poster");
+            poster.Add("imageUrl", "https://via.placeholder.com/1080x1920");
+            poster.Add("institution", 1);
+
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) posterResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Posters", poster);
+
+            Dictionary<string, dynamic> schedule = new();
+            schedule.Add("posterId", posterResponse.Body["id"]);
+            schedule.Add("name", "Active Poster Schedule");
+            schedule.Add("startDate", DateTime.Now
+                                              .AddMinutes(-startDateMinutesOffset)
+                                              .AddHours(-startDateHoursOffset)
+                                              .AddDays(-startDateDaysOffset));
+            schedule.Add("endDate", DateTime.Now
+                                            .AddMinutes(endDateMinutesOffset)
+                                            .AddHours(endDateHoursOffset)
+                                            .AddDays(endDateDaysOffset));
+            schedule.Add("zone", 1);
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) scheduleResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Schedule", schedule);
+
+            //When
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) posters =
+                await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Zones/Active/1");
+            var foundActivePoster = posters.Body.Find(x =>
+                x["id"].ToString() == posterResponse.Body["id"].ToString());
+
+            //Then
+            Assert.Equal(poster["imageUrl"].ToString(), foundActivePoster["image"].ToString());
+
+            //clean
+            await Request<None>(HttpMethod.Delete, $"/Posters/{posterResponse.Body["id"]}");
+        }
+
+        [Fact]
+        public async Task ActiveShedulesDoesNotReturnShedulesNotWitninDateLimit()
+        {
+            //Given
+            Dictionary<string, dynamic> poster = new();
+            poster.Add("Name", "Active Poster");
+            poster.Add("imageUrl", "https://via.placeholder.com/1080x1920");
+            poster.Add("institution", 1);
+
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) posterResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Posters", poster);
+
+            Dictionary<string, dynamic> schedule = new();
+            schedule.Add("posterId", posterResponse.Body["id"]);
+            schedule.Add("name", "Active Poster Schedule");
+            schedule.Add("startDate", DateTime.Now.AddDays(1));
+            schedule.Add("endDate", DateTime.Now.AddDays(-1));
+            schedule.Add("zone", 1);
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) scheduleResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Schedule", schedule);
+
+            //When
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) posters =
+                await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Zones/Active/1");
+            var shouldNotBeFound = posters.Body.Find(x =>
+                x["id"].ToString() == posterResponse.Body["id"].ToString());
+
+            //Then
+            Assert.Null(shouldNotBeFound);
+
+            //clean
+            await Request<None>(HttpMethod.Delete, $"/Posters/{posterResponse.Body["id"]}");
+        }
+
+        [Fact]
+        public async Task ActiveShedulesDoesNotReturnShedulesNotWitninZone()
+        {
+            //Given
+            Dictionary<string, dynamic> poster = new();
+            poster.Add("Name", "Active Poster");
+            poster.Add("imageUrl", "https://via.placeholder.com/1080x1920");
+            poster.Add("institution", 1);
+
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) posterResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Posters", poster);
+
+            Dictionary<string, dynamic> zone = new();
+            zone.Add("Name", "Active Zone");
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) zoneResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Zones", zone);
+            string zoneId = zoneResponse.Body["zoneDetaile"].GetProperty("id").ToString();
+
+            Dictionary<string, dynamic> schedule = new();
+            schedule.Add("posterId", posterResponse.Body["id"]);
+            schedule.Add("name", "Active Poster Schedule");
+            schedule.Add("startDate", DateTime.Now.AddDays(1));
+            schedule.Add("endDate", DateTime.Now.AddDays(-1));
+            schedule.Add("zone", zoneId);
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) scheduleResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Schedule", schedule);
+
+            //When
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) posters =
+                await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, $"/Zones/Active/{zoneId}");
+            var shouldNotBeFound = posters.Body.Find(x =>
+                x["id"].ToString() == posterResponse.Body["id"].ToString());
+
+            //Then
+            Assert.Null(shouldNotBeFound);
+
+            //clean
+            await Request<None>(HttpMethod.Delete, $"/Posters/{posterResponse.Body["id"]}");
+            await Request<None>(HttpMethod.Delete, $"/Zones/{zoneId}");
         }
     }
 }
