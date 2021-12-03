@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -105,27 +106,66 @@ namespace tests.Integrationtests
         }
 
         [Fact]
-        public async Task Cascade()
+        public async Task DeletingInstitutionCascadesToAggregates()
         {
             //Given
-            Dictionary<string, dynamic> inst1 = new();
-            inst1.Add("Name", "AAU");
+            Dictionary<string, dynamic> inst = new();
+            inst.Add("Name", "AAU");
 
-            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) postResponse =
-                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Institutions", inst1);
-            string inst1Id = inst1PostResponse.Body["institutionDetails"]
-                                              .GetProperty("id")
-                                              .ToString();
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) instResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Institutions", inst);
+            string instId = instResponse.Body["institutionDetails"]
+                                        .GetProperty("id")
+                                        .ToString();
 
+            Dictionary<string, dynamic> user = new();
+            user.Add("firstName", "Casper");
+            user.Add("lastName", "Caspersen");
+            user.Add("email", RandomString(10));
+            user.Add("phoneNumber", "20234011");
+            user.Add("institution", instId);
+            user.Add("role", 1);
+            user.Add("password", "casperErSej");
 
-            Dictionary<string, dynamic> user2 = new();
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) userResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Users", user);
+            string userId = userResponse.Body["id"].ToString();
 
-            Dictionary<string, dynamic> inst2 = new();
-            inst1.Add("Name", "Biffen");
+            Dictionary<string, dynamic> poster = new();
+            poster.Add("name", "Placeholder Poster");
+            poster.Add("imageUrl", "https://via.placeholder.com/1080x1920");
+            poster.Add("institution", instId);
+
+            (HttpResponseMessage Message, IDictionary<string, dynamic> Body) posterResponse =
+                await Request<IDictionary<string, dynamic>>(HttpMethod.Post, "/Posters", poster);
+            string posterId = posterResponse.Body["id"].ToString();
+
+            Dictionary<string, dynamic> schedule = new();
+            schedule.Add("posterId", posterId);
+            schedule.Add("name", "Placeholder Poster Schedule");
+            schedule.Add("startDate", DateTime.Now);
+            schedule.Add("endDate", DateTime.Now.AddDays(1));
+            schedule.Add("zone", 1);
 
             //When
+            await Request<None>(HttpMethod.Delete, $"/Institutions/{instId}");
+
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) users =
+                await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Users");
+            var deletedUser =  users.Body.Find(x => x["id"].ToString() == userId);
+
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) posters =
+                await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Posters");
+            var deletedPoster =  users.Body.Find(x => x["id"].ToString() == userId);
+
+            (HttpResponseMessage Message, List<IDictionary<string, dynamic>> Body) schedules =
+                await Request<List<IDictionary<string, dynamic>>>(HttpMethod.Get, "/Users");
+            var deletedSchedule =  users.Body.Find(x => x["id"].ToString() == userId);
 
             //Then
+            Assert.Null(deletedUser);
+            Assert.Null(deletedPoster);
+            Assert.Null(deletedSchedule);
         }
-p
+    }
 }
