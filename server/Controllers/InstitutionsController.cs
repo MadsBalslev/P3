@@ -51,7 +51,7 @@ namespace server.Controllers
             try
             {
                 Institution i = await _institutionService.CreateInstitution(institution);
-                return _institutionService.GetInstitutionJSON(i.Id);
+                return await _institutionService.GetInstitutionJSON(i.Id);
             }
             catch (System.Exception)
             {
