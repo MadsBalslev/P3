@@ -41,7 +41,7 @@ namespace tests.Integrationtests
                          getResponseBody["institution"].GetProperty("id").ToString());
 
             //Clean
-            await Request<None>(HttpMethod.Delete, $"/Users/{postResponse.Body["id"]}");
+            await Request<None>(HttpMethod.Delete, $"/Posters/{postResponse.Body["id"]}");
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace tests.Integrationtests
                          getResponseBody["image"].ToString());
 
             //Clean
-            await Request<None>(HttpMethod.Delete, $"/Users/{postResponse.Body["id"]}");
+            await Request<None>(HttpMethod.Delete, $"/Posters/{postResponse.Body["id"]}");
         }
 
         [Fact]
