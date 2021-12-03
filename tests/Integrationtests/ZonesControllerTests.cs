@@ -106,4 +106,5 @@ namespace tests.Integrationtests
             Assert.Equal("OK", deleteResponse.Message.StatusCode.ToString());
             Assert.Null(getResponseBody);
         }
-    }}
+    }
+}
