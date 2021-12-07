@@ -30,13 +30,13 @@ namespace tests.Integrationtests
         public async Task EndpointsReturnNotAuthorizedWithNoAuthorizationHeader(string method,
                                                                                 string url)
         {
-            // Arrange
+            //Given
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), url);
 
-            // Act
+            //When
             HttpResponseMessage response = await _client.SendAsync(request);
 
-            // Assert
+            //Then
             Assert.Equal("Unauthorized", response.StatusCode.ToString());
         }
 
@@ -45,11 +45,11 @@ namespace tests.Integrationtests
         [InlineData("/Zones/Active/1")]
         public async Task Get_EndpointsReturnOkNoAuthorizationHeader(string url)
         {
-            // Arrange
-            // Act
+            //Given
+            //When
             var response = await _client.GetAsync(url);
 
-            // Assert
+            //Then
             Assert.Equal("OK", response.StatusCode.ToString());
         }
 
@@ -61,14 +61,14 @@ namespace tests.Integrationtests
         [InlineData("/Zones")]
         public async Task Get_EndpointsReturnOkWithValidAuthorizationHeader(string url)
         {
-            // Arrange
+            //Given
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Authorization", "Basic YWRtaW46JDJhJDExJGdYVFdVbWhqYmhiak9xelQ2QW5mVk9SZlBqVlhUL3c0VVFoUFhrcjNHNnZzVnM3eFEzYS9D");
 
-            // Act
+            //When
             HttpResponseMessage response = await _client.SendAsync(request);
 
-            // Assert
+            //Then
             Assert.Equal("OK", response.StatusCode.ToString());
         }
 
@@ -97,14 +97,14 @@ namespace tests.Integrationtests
                                                                                     string url,
                                                                                     string auth)
         {
-            // Arrange
+            //Given
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), url);
             request.Headers.Add("Authorization", $"Basic {auth}");
 
-            // Act
+            //When
             HttpResponseMessage response = await _client.SendAsync(request);
 
-            // Assert
+            //Then
             Assert.Equal("Unauthorized", response.StatusCode.ToString());
         }
     }
