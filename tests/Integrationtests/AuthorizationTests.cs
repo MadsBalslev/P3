@@ -54,15 +54,31 @@ namespace tests.Integrationtests
         }
 
         [Theory]
-        [InlineData("/Institutions")]
-        [InlineData("/Posters")]
-        [InlineData("/Schedule")]
-        [InlineData("/Users")]
-        [InlineData("/Zones")]
-        public async Task Get_EndpointsReturnOkWithValidAuthorizationHeader(string url)
+        [InlineData("GET", "/Institutions")]
+        [InlineData("POST", "/Institutions")]
+        [InlineData("PUT", "/Institutions/1")]
+        [InlineData("DELETE", "/Institutions/1")]
+        [InlineData("GET", "/Posters")]
+        [InlineData("POST", "/Posters")]
+        [InlineData("PUT", "/Posters/1")]
+        [InlineData("DELETE", "/Posters/1")]
+        [InlineData("GET", "/Schedule")]
+        [InlineData("POST", "/Schedule")]
+        [InlineData("PUT", "/Schedule/1")]
+        [InlineData("DELETE", "/Schedule/1")]
+        [InlineData("GET", "/Users")]
+        [InlineData("POST", "/Users")]
+        [InlineData("PUT", "/Users/1")]
+        [InlineData("DELETE", "/Users/1")]
+        [InlineData("GET", "/Zones")]
+        [InlineData("POST", "/Zones")]
+        [InlineData("PUT", "/Zones/1")]
+        [InlineData("DELETE", "/Zones/1")]
+        public async Task Get_EndpointsReturnOkWithValidAuthorizationHeader(string method,
+                                                                            string url)
         {
             // Arrange
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+            HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), url);
             request.Headers.Add("Authorization", "Basic YWRtaW46JDJhJDExJGdYVFdVbWhqYmhiak9xelQ2QW5mVk9SZlBqVlhUL3c0VVFoUFhrcjNHNnZzVnM3eFEzYS9D");
 
             // Act
