@@ -99,7 +99,7 @@ namespace tests.Integrationtests
         {
             // Arrange
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), url);
-            request.Headers.Add("Authorization", "Basic {auth}");
+            request.Headers.Add("Authorization", $"Basic {auth}");
 
             // Act
             HttpResponseMessage response = await _client.SendAsync(request);
