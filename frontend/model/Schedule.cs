@@ -7,43 +7,52 @@ public class Schedule : IManageable
 
     public string name { get; set; }
 
-    public DateTime? startDate { get; set; }
-
-    public DateTime? StartDateDate
+    public DateTime? startDate
     {
-        get => GetDate(startDate);
-        set => startDate = UpdateDate(value, this.startDate, StartDateTime);
+        get
+        {
+            return StartDateDate + StartDateTime;
+        }
+        set
+        {
+            DateTime dateTime = (DateTime)value;
+            StartDateDate = dateTime.Date;
+            StartDateTime = dateTime.TimeOfDay;
+        }
     }
+    public DateTime? StartDateDate { get; set; }
+    public TimeSpan? StartDateTime { get; set; }
 
-    public TimeSpan? StartDateTime
+    public DateTime? endDate
     {
-        get => GetTime(startDate);
-        set => startDate = UpdateTime(value, startDate);
-    }
+        get
+        {
+            return EndDateDate + EndDateTime;
+        }
+        set
+        {
+            DateTime dateTime = (DateTime)value;
+            EndDateDate = dateTime.Date;
+            EndDateTime = dateTime.TimeOfDay;
+        }
 
-    public DateTime? endDate { get; set; }
-
-    public DateTime? EndDateDate
-    {
-        get => GetDate(endDate);
-        set => endDate = UpdateDate(value, endDate, StartDateTime);
     }
-
-    public TimeSpan? EndDateTime
-    {
-        get => GetTime(endDate);
-        set => endDate = UpdateTime(value, endDate);
-    }
+    public DateTime? EndDateDate { get; set; }
+    public TimeSpan? EndDateTime { get; set; }
 
     public DateTime? StartDateMinDate { get => DateTime.Now.AddDays(-1); }
-
     public DateTime? StartDateMaxDate { get => EndDateDate; }
+    public DateTime? EndDateMinDate
+    {
+        get
+        {
+            if (DateTime.Now < StartDateDate)
+                return StartDateDate;
+            else
+                return DateTime.Now.AddDays(-1);
+        }
+    }
 
-    public TimeSpan? StartDateMaxTime { get => TimeConstraintHelper(EndDateTime); }
-
-    public DateTime? EndDateMinDate { get => StartDateDate; }
-
-    public TimeSpan? EndDateMinTime { get => TimeConstraintHelper(StartDateTime); }
 
     public Zone zone { get; set; }
 
@@ -68,53 +77,5 @@ public class Schedule : IManageable
                 zone = this.zone.id,
             }
         );
-    }
-
-    private DateTime? GetDate(DateTime? source)
-    {
-        if (source != null)
-        {
-            DateTime sourceCast = (DateTime)source;
-            return sourceCast.Date;
-        }
-        return null;
-    }
-
-    private DateTime? UpdateDate(DateTime? value, DateTime? update, TimeSpan? timeOffset)
-    {
-        if (value != null && update != null)
-            return value + timeOffset;
-        else if (value != null && update == null)
-            return value;
-        else
-            return null;
-    }
-
-    private TimeSpan? GetTime(DateTime? source)
-    {
-        if (source != null)
-        {
-            DateTime sourceCast = (DateTime)source;
-            return sourceCast.TimeOfDay;
-        }
-        return null;
-    }
-
-    private DateTime? UpdateTime(TimeSpan? value, DateTime? update)
-    {
-        if (value != null && update != null)
-            return update + value;
-        else if (value != null && update == null)
-            return DateTime.Now.AddDays(-1) + value;
-        else
-            return null;
-    }
-
-    private TimeSpan? TimeConstraintHelper(TimeSpan? source)
-    {
-        if (StartDateDate == EndDateDate)
-            return source;
-        else
-            return null;
     }
 }
