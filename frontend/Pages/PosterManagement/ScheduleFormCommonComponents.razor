@@ -31,7 +31,7 @@
     }
 </MudSelect>
 
-@if (Schedule.endDate <= Schedule.startDate)
+@if (Schedule.EndDateDate == Schedule.StartDateDate && Schedule.EndDateTime < Schedule.StartDateTime )
 {
     <MudText>Notice that this schedule will not be displayed as the starting date is the same as or before the ending
         date</MudText>
