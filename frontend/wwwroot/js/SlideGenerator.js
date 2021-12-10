@@ -12,14 +12,20 @@ function initializePage() {
 
     screenDiv.id = ("screenDiv");
     screenDiv.classList = "container";
+    screenDiv.style.height = "100%"
+    screenDiv.style.display = "flex";
+    screenDiv.style.flexDirection = "column";
+    screenDiv.style.justifyContent = "center";
+    screenDiv.style.alignItems = "center";
     screenDiv.appendChild(Image);
 
     Image.src = "/images/Nordkraft.png"
     Image.id = ("imageId");
     Image.classList = "image";
     Image.style.objectFit = "cover";
-    Image.style.height = "100%";
+    Image.style.height = "auto";
     Image.style.width = "100%";
+
 
     document.body.appendChild(screenDiv);
 }
